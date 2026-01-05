@@ -1,0 +1,376 @@
+[
+  {
+    "id": "puzzle-001",
+    "title": "Puzzle 1: 151 palabras",
+    "center": "r",
+    "outer": [
+      "e",
+      "o",
+      "p",
+      "q",
+      "s",
+      "u"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 106
+  },
+  {
+    "id": "puzzle-002",
+    "title": "Puzzle 2: 128 palabras",
+    "center": "u",
+    "outer": [
+      "a",
+      "b",
+      "e",
+      "j",
+      "m",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 106
+  },
+  {
+    "id": "puzzle-003",
+    "title": "Puzzle 3: 263 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "d",
+      "g",
+      "i",
+      "s",
+      "u"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 164
+  },
+  {
+    "id": "puzzle-004",
+    "title": "Puzzle 4: 189 palabras",
+    "center": "b",
+    "outer": [
+      "a",
+      "i",
+      "n",
+      "o",
+      "s",
+      "t"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 135
+  },
+  {
+    "id": "puzzle-005",
+    "title": "Puzzle 5: 256 palabras",
+    "center": "r",
+    "outer": [
+      "c",
+      "e",
+      "f",
+      "m",
+      "n",
+      "o"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 190
+  },
+  {
+    "id": "puzzle-006",
+    "title": "Puzzle 6: 286 palabras",
+    "center": "o",
+    "outer": [
+      "a",
+      "d",
+      "e",
+      "l",
+      "n",
+      "t"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 224
+  },
+  {
+    "id": "puzzle-007",
+    "title": "Puzzle 7: 133 palabras",
+    "center": "o",
+    "outer": [
+      "a",
+      "e",
+      "h",
+      "i",
+      "n",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 114
+  },
+  {
+    "id": "puzzle-008",
+    "title": "Puzzle 8: 208 palabras",
+    "center": "o",
+    "outer": [
+      "a",
+      "f",
+      "g",
+      "i",
+      "r",
+      "t"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 179
+  },
+  {
+    "id": "puzzle-009",
+    "title": "Puzzle 9: 108 palabras",
+    "center": "e",
+    "outer": [
+      "a",
+      "b",
+      "d",
+      "j",
+      "m",
+      "o"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 87
+  },
+  {
+    "id": "puzzle-010",
+    "title": "Puzzle 10: 214 palabras",
+    "center": "l",
+    "outer": [
+      "a",
+      "e",
+      "i",
+      "n",
+      "t",
+      "v"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 165
+  },
+  {
+    "id": "puzzle-011",
+    "title": "Puzzle 11: 211 palabras",
+    "center": "n",
+    "outer": [
+      "a",
+      "c",
+      "e",
+      "h",
+      "t",
+      "v"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 155
+  },
+  {
+    "id": "puzzle-012",
+    "title": "Puzzle 12: 178 palabras",
+    "center": "s",
+    "outer": [
+      "a",
+      "c",
+      "h",
+      "i",
+      "n",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 101
+  },
+  {
+    "id": "puzzle-013",
+    "title": "Puzzle 13: 270 palabras",
+    "center": "i",
+    "outer": [
+      "a",
+      "c",
+      "e",
+      "l",
+      "n",
+      "t"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 203
+  },
+  {
+    "id": "puzzle-014",
+    "title": "Puzzle 14: 163 palabras",
+    "center": "s",
+    "outer": [
+      "a",
+      "c",
+      "e",
+      "l",
+      "u",
+      "v"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 103
+  },
+  {
+    "id": "puzzle-015",
+    "title": "Puzzle 15: 150 palabras",
+    "center": "i",
+    "outer": [
+      "a",
+      "b",
+      "l",
+      "n",
+      "o",
+      "p"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 122
+  },
+  {
+    "id": "puzzle-016",
+    "title": "Puzzle 16: 206 palabras",
+    "center": "a",
+    "outer": [
+      "i",
+      "n",
+      "o",
+      "r",
+      "s",
+      "u"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 163
+  },
+  {
+    "id": "puzzle-017",
+    "title": "Puzzle 17: 113 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "e",
+      "i",
+      "q",
+      "u",
+      "v"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 90
+  },
+  {
+    "id": "puzzle-018",
+    "title": "Puzzle 18: 148 palabras",
+    "center": "u",
+    "outer": [
+      "a",
+      "d",
+      "e",
+      "f",
+      "n",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 111
+  },
+  {
+    "id": "puzzle-019",
+    "title": "Puzzle 19: 197 palabras",
+    "center": "c",
+    "outer": [
+      "a",
+      "e",
+      "h",
+      "m",
+      "o",
+      "p"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 149
+  },
+  {
+    "id": "puzzle-020",
+    "title": "Puzzle 20: 275 palabras",
+    "center": "l",
+    "outer": [
+      "a",
+      "e",
+      "f",
+      "o",
+      "p",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 240
+  },
+  {
+    "id": "puzzle-021",
+    "title": "Puzzle 21: 167 palabras",
+    "center": "o",
+    "outer": [
+      "g",
+      "i",
+      "m",
+      "r",
+      "s",
+      "t"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 129
+  },
+  {
+    "id": "puzzle-022",
+    "title": "Puzzle 22: 295 palabras",
+    "center": "e",
+    "outer": [
+      "a",
+      "b",
+      "d",
+      "j",
+      "o",
+      "r"
+    ],
+    "mode": "classic",
+    "minLen": 3,
+    "allowEnye": false,
+    "solutionCount": 258
+  }
+]

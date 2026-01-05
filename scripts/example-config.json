@@ -1,0 +1,51 @@
+{
+  "description": "Configuración de ejemplo para el generador de puzzles",
+  "configurations": {
+    "standard": {
+      "command": "node scripts/generatePuzzles.cjs --candidates 5000",
+      "description": "Configuración estándar para producción"
+    },
+    "quick_test": {
+      "command": "node scripts/generatePuzzles.cjs --candidates 500 --output test-puzzles.json",
+      "description": "Test rápido con pocos candidatos"
+    },
+    "easy_puzzles": {
+      "command": "node scripts/generatePuzzles.cjs --candidates 5000 --daily-min 50 --daily-max 100 --classic-min 100 --classic-max 200",
+      "description": "Puzzles más fáciles (menos soluciones)"
+    },
+    "hard_puzzles": {
+      "command": "node scripts/generatePuzzles.cjs --candidates 5000 --daily-min 100 --daily-max 180 --classic-min 200 --classic-max 400",
+      "description": "Puzzles más difíciles (más soluciones)"
+    },
+    "with_enye": {
+      "command": "node scripts/generatePuzzles.cjs --candidates 5000 --allow-enye",
+      "description": "Permite letra ñ en los puzzles"
+    },
+    "custom_ranges": {
+      "dailyMin": 70,
+      "dailyMax": 140,
+      "classicMin": 140,
+      "classicMax": 300,
+      "candidates": 5000,
+      "minLen": 3,
+      "allowEnye": false,
+      "notes": "Rangos predeterminados del generador"
+    }
+  },
+  "dictionary_requirements": {
+    "min_words": 50000,
+    "format": "one word per line, lowercase",
+    "encoding": "UTF-8",
+    "suggested_sources": [
+      "https://github.com/words/an-array-of-spanish-words",
+      "https://www.rae.es/ (extracción manual)",
+      "OpenOffice Spanish dictionary"
+    ]
+  },
+  "expected_output": {
+    "daily_puzzles": "~50-200 puzzles (depends on dictionary and candidates)",
+    "classic_puzzles": "~30-150 puzzles (depends on dictionary and candidates)",
+    "generation_time": "5-30 seconds for 5000 candidates",
+    "file_size": "~50-200KB"
+  }
+}
