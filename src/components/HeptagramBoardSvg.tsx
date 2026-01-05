@@ -13,15 +13,15 @@ interface HeptagramBoardSvgProps {
 const SVG_SIZE = 300;
 const CENTER_X = 150;
 const CENTER_Y = 150;
-const HEX_RADIUS = 60; // Radio del hexágono central (centro -> vértice)
+const HEX_RADIUS = 66; // Radio del hexágono central (centro -> vértice) - aumentado 10%
 
 // Variables de espaciado y forma
 // g: Gap único para separación radial y lateral (en unidades viewBox)
 const g = 6;
 
 // depth: Profundidad del trapecio (distancia entre línea interior y exterior)
-// Aumentado 50% para trapecios más grandes: 28 → 42
-const depth = 42;
+// Aumentado ~96% para trapecios más grandes: 28 → 55
+const depth = 55;
 
 // t: Recorte lateral de los segmentos (derivado de g)
 // - Si quieres MENOS separación lateral (trapecios más juntos): reduce t (ej. g * 0.5)
