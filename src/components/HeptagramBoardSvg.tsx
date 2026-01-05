@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, forwardRef, useImperativeHandle } from 'react';
 
 interface HeptagramBoardSvgProps {
   center: string;
   outer: string[]; // 6 letras
   onLetterClick?: (letter: string) => void;
   successAnimation?: boolean;
+  onShuffleOuter?: (shuffled: string[]) => void;
 }
 
 // ============================================
@@ -100,7 +101,11 @@ function getTrapezoidCenter(points: { x: number; y: number }[]) {
   return { x: sumX / points.length, y: sumY / points.length };
 }
 
-export default function HeptagramBoardSvg({ center, outer, onLetterClick, successAnimation }: HeptagramBoardSvgProps) {
+export interface HeptagramBoardHandle {
+  shuffle: () => void;
+}
+
+const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProps>(({ center, outer, onLetterClick, successAnimation, onShuffleOuter }, ref) => {
   const [outerLetters, setOuterLetters] = useState(outer);
 
   const shuffleOuter = () => {
@@ -110,8 +115,12 @@ export default function HeptagramBoardSvg({ center, outer, onLetterClick, succes
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     setOuterLetters(shuffled);
+    onShuffleOuter?.(shuffled);
   };
-
+  // Exponer la función shuffle al componente padre
+  useImperativeHandle(ref, () => ({
+    shuffle: shuffleOuter
+  }));
   // Obtener colores del tema actual desde CSS variables
   const centerStart = getComputedStyle(document.documentElement).getPropertyValue('--theme-center-start').trim();
   const centerEnd = getComputedStyle(document.documentElement).getPropertyValue('--theme-center-end').trim();
@@ -142,9 +151,6 @@ export default function HeptagramBoardSvg({ center, outer, onLetterClick, succes
 
   return (
     <div className="heptagram-section">
-      <button className="btn-shuffle" onClick={shuffleOuter} title="Reordenar">
-        🔄
-      </button>
       <div className={`svg-container ${successAnimation ? 'success-bounce' : ''}`}>
         <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} className="heptagram-svg">
           {/* Definir gradientes */}
@@ -209,4 +215,6 @@ export default function HeptagramBoardSvg({ center, outer, onLetterClick, succes
       </div>
     </div>
   );
-}
+});
+
+export default HeptagramBoardSvg;

@@ -6,10 +6,11 @@ interface WordInputProps {
   clickedWord?: string;
   onClearClicked?: () => void;
   onBackspace?: () => void;
+  onShuffle?: () => void;
   successAnimation?: boolean;
 }
 
-export default function WordInput({ onSubmit, message, clickedWord = '', onClearClicked, onBackspace, successAnimation }: WordInputProps) {
+export default function WordInput({ onSubmit, message, clickedWord = '', onClearClicked, onBackspace, onShuffle, successAnimation }: WordInputProps) {
   const [input, setInput] = useState('');
 
   // Sincronizar input con palabra clickeada
@@ -57,14 +58,19 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
           className={`word-input ${successAnimation ? 'success-flash' : ''}`}
         />
         <div className="button-row">
-          <button onClick={handleSubmit} className="btn-action btn-submit">
-            Enviar
-          </button>
           {input && (
             <button onClick={handleClear} className="btn-action btn-clear">
               Borrar
             </button>
           )}
+          {onShuffle && (
+            <button onClick={onShuffle} className="btn-action btn-shuffle-inline" title="Reordenar">
+              🔄
+            </button>
+          )}
+          <button onClick={handleSubmit} className="btn-action btn-submit">
+            Enviar
+          </button>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import HeptagramBoardSvg from './HeptagramBoardSvg';
+import { useState, useEffect, useRef } from 'react';
+import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSvg';
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PuzzleStats from './PuzzleStats';
@@ -47,6 +47,8 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   } | null>(null);
   const [exoticLetter, setExoticLetter] = useState<string | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
+  const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
+  const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
   // Determinar ID de progreso: usar dailyProgressId si está en modo diario, sino puzzleId
   const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
@@ -288,10 +290,12 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       )}
 
       <HeptagramBoardSvg 
+        ref={heptagramRef}
         center={currentPuzzle.center} 
-        outer={currentPuzzle.outer}
+        outer={shuffledOuter}
         onLetterClick={handleLetterClick}
         successAnimation={showSuccessAnim}
+        onShuffleOuter={setShuffledOuter}
       />
 
       <WordInput 
@@ -300,6 +304,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         clickedWord={clickedWord}
         onClearClicked={handleClearClicked}
         onBackspace={handleBackspace}
+        onShuffle={() => heptagramRef.current?.shuffle()}
         successAnimation={showSuccessAnim}
       />
 
