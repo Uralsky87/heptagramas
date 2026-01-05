@@ -262,7 +262,9 @@
 .btn-shuffle-inline {
   background: linear-gradient(135deg, #7d8a99 0%, #6b7b8c 100%);
   font-size: 20px;
-  padding: 0 16px;
+  padding: 0;
+  flex: 0 0 52px;
+  width: 52px;
 }
 
 .btn-shuffle-inline:hover {
