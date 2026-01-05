@@ -45,8 +45,9 @@ export async function loadDictionary(wordlistContent?: string): Promise<Dictiona
       text = wordlistContent;
     } else {
       // Cargar desde public/wordlist.txt (para navegador)
-      console.log('Iniciando carga de diccionario desde /wordlist.txt...');
-      const response = await fetch('/wordlist.txt');
+      const wordlistUrl = `${import.meta.env.BASE_URL}wordlist.txt`;
+      console.log('Iniciando carga de diccionario desde', wordlistUrl);
+      const response = await fetch(wordlistUrl);
       console.log('Respuesta del fetch:', response.status, response.statusText);
       
       if (!response.ok) {
