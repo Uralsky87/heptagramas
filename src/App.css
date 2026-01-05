@@ -212,7 +212,7 @@
 /* Responsive para móviles */
 @media (max-width: 400px) {
   .svg-container {
-    max-width: 300px;
+    max-width: 375px; /* Aumentado 25% para móvil: 300 * 1.25 = 375 */
   }
   
   .hex-letter {
