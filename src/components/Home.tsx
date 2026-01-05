@@ -92,6 +92,10 @@ export default function Home({ onNavigate }: HomeProps) {
       {showThemeSelector && (
         <ThemeSelector onClose={() => setShowThemeSelector(false)} />
       )}
+      
+      <div className="app-version">
+        Heptagramas v0.3
+      </div>
     </div>
   );
 }
