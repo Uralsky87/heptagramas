@@ -127,7 +127,7 @@
 
 .svg-container {
   width: 100%;
-  max-width: 340px;
+  max-width: 425px; /* Aumentado 25%: 340 * 1.25 = 425 */
   margin: 0 auto;
   padding: 10px;
 }
