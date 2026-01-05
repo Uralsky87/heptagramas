@@ -47,7 +47,7 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
 
   return (
     <section className="input-section">
-      <div className={`input-row ${successAnimation ? 'success-pulse' : ''}`}>
+      <div className={`input-container ${successAnimation ? 'success-pulse' : ''}`}>
         <input
           type="text"
           value={input}
@@ -56,14 +56,16 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
           placeholder="Escribe o haz clic en las letras..."
           className={`word-input ${successAnimation ? 'success-flash' : ''}`}
         />
-        {input && (
-          <button onClick={handleClear} className="btn-clear" title="Limpiar">
-            ✕
+        <div className="button-row">
+          <button onClick={handleSubmit} className="btn-action btn-submit">
+            Enviar
           </button>
-        )}
-        <button onClick={handleSubmit} className="btn-submit">
-          Enviar
-        </button>
+          {input && (
+            <button onClick={handleClear} className="btn-action btn-clear">
+              Borrar
+            </button>
+          )}
+        </div>
       </div>
 
       {message && <p className="message">{message}</p>}

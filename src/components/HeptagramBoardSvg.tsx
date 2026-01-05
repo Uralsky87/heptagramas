@@ -142,6 +142,9 @@ export default function HeptagramBoardSvg({ center, outer, onLetterClick, succes
 
   return (
     <div className="heptagram-section">
+      <button className="btn-shuffle" onClick={shuffleOuter} title="Reordenar">
+        🔄
+      </button>
       <div className={`svg-container ${successAnimation ? 'success-bounce' : ''}`}>
         <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} className="heptagram-svg">
           {/* Definir gradientes */}
@@ -204,10 +207,6 @@ export default function HeptagramBoardSvg({ center, outer, onLetterClick, succes
           </g>
         </svg>
       </div>
-
-      <button className="btn-shuffle" onClick={shuffleOuter}>
-        🔄 Reordenar
-      </button>
     </div>
   );
 }
