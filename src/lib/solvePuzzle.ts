@@ -22,7 +22,7 @@ function lettersMask(letters: string[]): number {
 
 /**
  * Genera clave de caché única para un puzzle
- * Incluye: center + outer ordenadas + minLen + exoticLetter opcional
+ * Incluye: center + outer ordenadas + minLen + exoticLetter opcional (NO USAR en Diario/Clásicos)
  */
 function getCacheKey(center: string, outer: string[], minLen: number, exoticLetter?: string): string {
   const sorted = [...outer].sort().join('');
@@ -41,7 +41,7 @@ function getCacheKey(center: string, outer: string[], minLen: number, exoticLett
  * @param dictionary - Diccionario preprocesado
  * @param minLen - Longitud mínima (default: 3)
  * @param allowEnye - Si permite ñ (default: false para modo clásico)
- * @param exoticLetter - Letra extra opcional para modo exótico (8 letras total)
+ * @param exoticLetter - Letra extra opcional para modo exótico (8 letras total). NO USAR en Diario/Clásicos.
  * @returns Array de palabras válidas (normalizadas)
  */
 export function solvePuzzle(

@@ -27,7 +27,7 @@ export function isSuperHepta(word: string, puzzle: Puzzle): boolean {
  * Valida si una palabra es correcta para el puzzle dado
  * y no está ya encontrada.
  * @param solutions - Array de soluciones válidas (debe venir de solvePuzzle)
- * @param exoticLetter - Letra extra opcional para modo exótico
+ * @param exoticLetter - Letra extra opcional para modo exótico (NO USAR en Diario/Clásicos)
  */
 export function validateWord(
   word: string,

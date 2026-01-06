@@ -4,7 +4,6 @@ import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
-import ExoticModeToggle from './ExoticModeToggle';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -45,7 +44,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     newLevel: number;
     unlockedThemeName?: string;
   } | null>(null);
-  const [exoticLetter, setExoticLetter] = useState<string | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
@@ -53,7 +51,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   // Determinar ID de progreso: usar dailyProgressId si está en modo diario, sino puzzleId
   const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
 
-  // Calcular soluciones cuando cambia el puzzle o la letra exótica
+  // Calcular soluciones cuando cambia el puzzle
   useEffect(() => {
     const minLen = currentPuzzle.minLen || 3;
     const allowEnye = currentPuzzle.allowEnye || false;
@@ -62,8 +60,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       currentPuzzle.outer, 
       dictionary,
       minLen,
-      allowEnye,
-      exoticLetter || undefined
+      allowEnye
     );
     setPuzzleSolutions(solutions);
     
@@ -72,11 +69,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       console.log(
         `[Game] Soluciones cargadas para ${currentPuzzle.id}:`,
         solutions.length,
-        'palabras',
-        exoticLetter ? `(Exótico con "${exoticLetter}")` : ''
+        'palabras'
       );
     }
-  }, [currentPuzzle, dictionary, exoticLetter]);
+  }, [currentPuzzle, dictionary]);
 
   // Cargar progreso al iniciar o cambiar puzzle
   useEffect(() => {
@@ -90,12 +86,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setFoundWords(progress.foundWords);
       setScore(progress.score);
       setAchievements({ superHeptaWords: progress.superHeptaWords });
-      setExoticLetter(progress.exoticLetter || null);
     } else {
       setFoundWords([]);
       setScore(0);
       setAchievements({ superHeptaWords: [] });
-      setExoticLetter(null);
     }
     setClickedWord('');
   };
@@ -109,17 +103,16 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       superHeptaWords: achievements.superHeptaWords,
       startedAt: loadPuzzleProgress(progressId)?.startedAt || now,
       lastPlayedAt: now,
-      exoticLetter: exoticLetter || undefined,
     };
     savePuzzleProgress(progressId, progress);
   };
 
   // Guardar progreso automáticamente cuando cambia
   useEffect(() => {
-    if (foundWords.length > 0 || score > 0 || exoticLetter) {
+    if (foundWords.length > 0 || score > 0) {
       savePuzzleProgressState();
     }
-  }, [foundWords, score, achievements, exoticLetter]);
+  }, [foundWords, score, achievements]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
@@ -191,7 +184,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   };
 
   const handleSubmit = (word: string) => {
-    const result = validateWord(word, currentPuzzle, foundWords, puzzleSolutions, exoticLetter);
+    const result = validateWord(word, currentPuzzle, foundWords, puzzleSolutions);
 
     if (!result.ok) {
       setMessage(result.reason || 'Error desconocido');
@@ -266,13 +259,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
             </button>
           )}
         </div>
-
-        <ExoticModeToggle
-          isActive={exoticLetter !== null}
-          currentLetter={exoticLetter}
-          usedLetters={[currentPuzzle.center, ...currentPuzzle.outer]}
-          onToggle={(letter) => setExoticLetter(letter)}
-        />
       </header>
 
       {/* Notificación de XP */}

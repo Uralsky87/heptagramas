@@ -36,6 +36,37 @@ export interface ValidationResult {
   reason?: string;
 }
 
+// ========================================
+// MODO EXÓTICOS
+// ========================================
+
+export interface ExoticPuzzle {
+  center: string;
+  outer: string[]; // 6 letras
+  allowExtraLetters: true; // Siempre true para exóticos
+}
+
+export interface ExoticsRunState {
+  runId: string; // UUID único para esta run
+  startedAt: string; // ISO timestamp
+  puzzle: ExoticPuzzle;
+  extraLetters: string[]; // Letras extra añadidas por el jugador (empieza vacío)
+  solutionsTotal: number; // Total de soluciones posibles con las letras actuales
+  foundWords: string[]; // Palabras encontradas
+  scorePoints: number; // Puntos acumulados (P)
+  xpEarned: number; // XP acumulado durante esta run (no se suma a global hasta terminar)
+  streak10Count: number; // Cuántos hitos de 10 palabras se han cobrado
+  milestones: {
+    reached50Percent: boolean; // Si ya alcanzó el 50% en este puzzle
+    reached100Found: boolean; // Si ya encontró 100 palabras
+    claimed50PercentBonus: boolean; // Si ya cobró el bonus de +250 P por 50%
+  };
+  doublePointsRemaining: number; // 0 o 10 - palabras restantes con doble puntuación
+  statsUnlocked: {
+    byStartLetter: boolean; // Si se desbloqueó ver palabras por letra inicial
+  };
+}
+
 // Legacy - mantener para migración
 export interface GameState {
   puzzleId: string;

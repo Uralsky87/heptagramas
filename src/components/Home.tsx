@@ -80,13 +80,14 @@ export default function Home({ onNavigate }: HomeProps) {
           <span className="menu-btn-desc">Elige tu puzzle favorito</span>
         </button>
 
-        <div className="exotic-info-card">
-          <div className="exotic-info-icon">✨</div>
-          <div className="exotic-info-text">
-            <strong>Modo Exótico disponible</strong>
-            <p>Activa el modo exótico dentro de cualquier puzzle para añadir una 8ª letra y descubrir más palabras.</p>
-          </div>
-        </div>
+        <button 
+          className="menu-btn menu-btn-exotic"
+          onClick={() => onNavigate('exotic')}
+        >
+          <span className="menu-btn-icon">✨</span>
+          <span className="menu-btn-title">Exóticos</span>
+          <span className="menu-btn-desc">Puzzles con 8 letras</span>
+        </button>
       </div>
 
       {showThemeSelector && (

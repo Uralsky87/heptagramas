@@ -4,7 +4,8 @@ import Home from './components/Home';
 import Game from './components/Game';
 import DailyScreen from './components/DailyScreen';
 import ClassicList from './components/ClassicList';
-import ExoticPlaceholder from './components/ExoticPlaceholder';
+import ExoticsHome from './components/ExoticsHome';
+import ExoticsPlay from './components/ExoticsPlay';
 import type { Puzzle } from './types';
 import { loadDictionary, type DictionaryData } from './lib/dictionary';
 import { getDailySession, getDailyPuzzleForDate } from './lib/dailySession';
@@ -14,10 +15,14 @@ import puzzlesData from './data/puzzles.json';
 
 // Importar función de test (disponible en consola como testPuzzle())
 import './lib/testPuzzle';
+// Importar test de Exotics Storage (disponible en consola como testExoticsStorage())
+import './lib/testExoticsStorage';
+// Importar test de Exotics Scoring (disponible en consola como testExoticsScoring())
+import './lib/testExoticsScoring';
 
 const PUZZLES: Puzzle[] = puzzlesData as Puzzle[];
 
-type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic';
+type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
@@ -53,6 +58,10 @@ export default function App() {
   const handleBackToHome = () => {
     setCurrentScreen('home');
     setSelectedDailyDateKey(null);
+  };
+
+  const handleBackToExoticHome = () => {
+    setCurrentScreen('exotic');
   };
 
   const handleSelectClassicPuzzle = (puzzle: Puzzle) => {
@@ -147,9 +156,28 @@ export default function App() {
     );
   }
 
-  // Pantalla Exotic (placeholder)
+  // Pantalla Exotic (nueva home de exóticos)
   if (currentScreen === 'exotic') {
-    return <ExoticPlaceholder onBack={handleBackToHome} />;
+    return (
+      <ExoticsHome 
+        onBack={handleBackToHome}
+        onStart={(runId: string) => {
+          console.log('[App] Iniciando run exótica:', runId);
+          setCurrentScreen('exotic-play');
+        }}
+        dictionary={dictionary}
+      />
+    );
+  }
+
+  // Pantalla Exotic Play (gameplay)
+  if (currentScreen === 'exotic-play') {
+    return (
+      <ExoticsPlay 
+        onBack={handleBackToExoticHome}
+        dictionary={dictionary}
+      />
+    );
   }
 
   return <Home onNavigate={handleNavigate} />;
