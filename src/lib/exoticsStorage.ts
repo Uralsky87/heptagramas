@@ -19,6 +19,29 @@ export function loadExoticsRun(): ExoticsRunState | null {
       return null;
     }
     
+    // Migración: Agregar campos nuevos si no existen
+    if (!parsed.statsUnlocked) {
+      parsed.statsUnlocked = { byStartLetter: false, lengthHint: false };
+    } else {
+      if (parsed.statsUnlocked.lengthHint === undefined) {
+        parsed.statsUnlocked.lengthHint = false;
+      }
+    }
+    
+    if (!parsed.uiState) {
+      parsed.uiState = { lengthHintExpanded: false, byStartLetterExpanded: true };
+    }
+    
+    // Migración: foundWords -> foundWordsAll
+    if (!parsed.foundWordsAll) {
+      parsed.foundWordsAll = parsed.foundWords || [];
+    }
+    
+    // Mantener foundWords por compatibilidad (será deprecated)
+    if (!parsed.foundWords) {
+      parsed.foundWords = parsed.foundWordsAll;
+    }
+    
     return parsed;
   } catch (error) {
     console.error('[ExoticsStorage] Error al cargar run:', error);
@@ -79,7 +102,8 @@ export function createNewRun(puzzle: ExoticsRunState['puzzle']): ExoticsRunState
     puzzle,
     extraLetters: [],
     solutionsTotal: 0, // Se calculará cuando se añada la primera letra extra
-    foundWords: [],
+    foundWords: [], // Deprecated - mantener por compatibilidad
+    foundWordsAll: [],
     scorePoints: 0,
     xpEarned: 0,
     streak10Count: 0,
@@ -91,6 +115,11 @@ export function createNewRun(puzzle: ExoticsRunState['puzzle']): ExoticsRunState
     doublePointsRemaining: 0,
     statsUnlocked: {
       byStartLetter: false,
+      lengthHint: false,
+    },
+    uiState: {
+      lengthHintExpanded: false,
+      byStartLetterExpanded: true,
     },
   };
   

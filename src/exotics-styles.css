@@ -138,26 +138,80 @@
   color: #e17055;
 }
 
-.btn-close-hint {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.2);
+/* Panel de letra inicial */
+.start-letter-panel {
+  background: linear-gradient(135deg, #a8e6cf 0%, #56d9cd 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  position: relative;
+  color: #2d3436;
+  box-shadow: 0 4px 12px rgba(86, 217, 205, 0.3);
+}
+
+.start-letter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.start-letter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.letter-label {
+  font-weight: 700;
+  min-width: 30px;
+  color: #2d3436;
+}
+
+.letter-stats {
+  font-weight: 600;
+  color: #00b894;
+}
+
+.pending-count {
+  font-size: 12px;
+  color: #e17055;
+  margin-left: 8px;
+}
+
+/* Header compartido para paneles de hints */
+.hint-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.hint-panel-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.btn-toggle-hint {
+  background: rgba(0, 0, 0, 0.15);
   color: #2d3436;
   border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
 }
 
-.btn-close-hint:hover {
-  background: rgba(0, 0, 0, 0.3);
+.btn-toggle-hint:hover {
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* Modal Overlay */
@@ -178,6 +232,139 @@
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Modal de cambio de letra */
+.letter-change-panel {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  color: white;
+  position: relative;
+}
+
+.letter-change-panel h2 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+.selector-instruction {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+  opacity: 0.95;
+}
+
+/* Mini tablero para selección */
+.mini-board-container {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.mini-board {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.mini-center-letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3436;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.mini-outer-letters {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mini-outer-letter {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mini-outer-letter:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.mini-outer-letter.selected {
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  border-color: #fff;
+  transform: scale(1.2);
+  box-shadow: 0 0 20px rgba(85, 239, 196, 0.6);
+}
+
+/* Posiciones de las 6 letras exteriores (hexágono) */
+.mini-outer-letter:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+.mini-outer-letter:nth-child(2) { top: 25%; right: 5%; }
+.mini-outer-letter:nth-child(3) { bottom: 25%; right: 5%; }
+.mini-outer-letter:nth-child(4) { bottom: 0; left: 50%; transform: translateX(-50%); }
+.mini-outer-letter:nth-child(5) { bottom: 25%; left: 5%; }
+.mini-outer-letter:nth-child(6) { top: 25%; left: 5%; }
+
+.letter-change-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-confirm-change {
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  color: #2d3436;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+}
+
+.btn-confirm-change:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 184, 148, 0.5);
+}
+
+.btn-confirm-change:active {
+  transform: translateY(0);
 }
 
 /* Panel de Habilidades */

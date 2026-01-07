@@ -6,8 +6,35 @@ const MIN_SOLUTIONS = 50;
 const MAX_SOLUTIONS = 500;
 const MAX_ATTEMPTS = 1000; // Número máximo de intentos antes de rendirse
 
+// Letras problemáticas en español (generan pocas palabras)
+const PROBLEMATIC_LETTERS = ['k', 'w', 'x', 'y'];
+
 // Caché del último puzzle generado para evitar repeticiones inmediatas
 let lastGeneratedPuzzle: { center: string; outer: string[] } | null = null;
+
+/**
+ * Valida si un set de letras cumple las reglas de calidad
+ */
+function isValidLetterSet(center: string, outer: string[]): boolean {
+  // Regla 1: La letra central NO puede ser problemática
+  if (PROBLEMATIC_LETTERS.includes(center)) {
+    return false;
+  }
+  
+  // Regla 2: Máximo 1 letra problemática en todo el set
+  const allLetters = [center, ...outer];
+  const problematicCount = allLetters.filter(l => PROBLEMATIC_LETTERS.includes(l)).length;
+  if (problematicCount > 1) {
+    return false;
+  }
+  
+  // Regla 3 (opcional): Si el centro es 'q', debe haber 'u' en el set
+  if (center === 'q' && !outer.includes('u')) {
+    return false;
+  }
+  
+  return true;
+}
 
 /**
  * Genera un set aleatorio de 7 letras (1 centro + 6 exteriores)
@@ -77,6 +104,17 @@ export async function generateExoticPuzzle(
     // Generar set aleatorio
     const { center, outer } = generateRandomLetters();
     
+    // Validar reglas de calidad ANTES de calcular soluciones (optimización)
+    if (!isValidLetterSet(center, outer)) {
+      if (import.meta.env.DEV && attempts % 100 === 0) {
+        console.log(
+          `[ExoticGenerator] Intento ${attempts}: Descartado por letras problemáticas ` +
+          `(${center} + [${outer.join(', ')}])`
+        );
+      }
+      continue; // Saltar a siguiente intento
+    }
+    
     // Evitar repetir el puzzle anterior
     if (lastGeneratedPuzzle) {
       const sameCenter = center === lastGeneratedPuzzle.center;
@@ -105,12 +143,20 @@ export async function generateExoticPuzzle(
     
     // Verificar si cumple el rango
     if (solutionCount >= MIN_SOLUTIONS && solutionCount <= MAX_SOLUTIONS) {
+      const allLetters = [center, ...outer];
+      const hasProblematic = allLetters.some(l => PROBLEMATIC_LETTERS.includes(l));
+      const problematicList = allLetters.filter(l => PROBLEMATIC_LETTERS.includes(l));
+      
       console.log(
         `[ExoticGenerator] ✓ Puzzle válido encontrado en intento ${attempts}!`,
         `\n  Centro: "${center}"`,
         `\n  Exteriores: [${outer.join(', ')}]`,
-        `\n  Soluciones: ${solutionCount}`
+        `\n  Soluciones: ${solutionCount}`,
+        hasProblematic ? `\n  ⚠️ Letras problemáticas: [${problematicList.join(', ')}]` : ''
       );
+      
+      // Guardar para evitar repeticiones
+      lastGeneratedPuzzle = { center, outer };
       
       return {
         center,

@@ -2,10 +2,11 @@ import { useState, forwardRef, useImperativeHandle } from 'react';
 
 interface HeptagramBoardSvgProps {
   center: string;
-  outer: string[]; // 6 letras
+  outer: string[]; // 6 o 7 letras (dinámico)
   onLetterClick?: (letter: string) => void;
   successAnimation?: boolean;
   onShuffleOuter?: (shuffled: string[]) => void;
+  extraLetterIndices?: Set<number>; // Índices de letras extra para marcar visualmente
 }
 
 // ============================================
@@ -14,19 +15,16 @@ interface HeptagramBoardSvgProps {
 const SVG_SIZE = 300;
 const CENTER_X = 150;
 const CENTER_Y = 150;
-const HEX_RADIUS = 66; // Radio del hexágono central (centro -> vértice) - aumentado 10%
+const POLYGON_RADIUS = 66; // Radio del polígono central (centro -> vértice)
 
 // Variables de espaciado y forma
 // g: Gap único para separación radial y lateral (en unidades viewBox)
 const g = 6;
 
 // depth: Profundidad del trapecio (distancia entre línea interior y exterior)
-// Aumentado ~96% para trapecios más grandes: 28 → 55
 const depth = 55;
 
 // t: Recorte lateral de los segmentos (derivado de g)
-// - Si quieres MENOS separación lateral (trapecios más juntos): reduce t (ej. g * 0.5)
-// - Si quieres MÁS separación lateral (trapecios más separados): aumenta t (ej. g * 0.7)
 const t = g * 0.6;
 // ============================================
 
@@ -39,15 +37,11 @@ function polarToCartesian(cx: number, cy: number, radius: number, angleInDegrees
   };
 }
 
-// Calcular los 6 vértices del hexágono regular
-function getHexagonPoints() {
-  const angles = [-90, -30, 30, 90, 150, 210]; // Empezando arriba
-  return angles.map(angle => polarToCartesian(CENTER_X, CENTER_Y, HEX_RADIUS, angle));
-}
-
-// Calcular hexágono con radio específico (para hexInterior y hexExterior)
-function getHexagonWithRadius(radius: number) {
-  const angles = [-90, -30, 30, 90, 150, 210];
+// Calcular los vértices de un polígono regular con n lados
+function getPolygonPoints(n: number, radius: number) {
+  const angleStep = 360 / n;
+  const startAngle = -90; // Empezar arriba
+  const angles = Array.from({ length: n }, (_, i) => startAngle + i * angleStep);
   return angles.map(angle => polarToCartesian(CENTER_X, CENTER_Y, radius, angle));
 }
 
@@ -66,16 +60,21 @@ function distance(p1: { x: number; y: number }, p2: { x: number; y: number }) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-// Calcular trapecio usando método de hexágonos concéntricos
-function getTrapezoidWithGaps(i: number, hexInterior: { x: number; y: number }[], hexExterior: { x: number; y: number }[]) {
-  // Lado interior del trapecio (del hexInterior)
-  const intA = hexInterior[i];
-  const intB = hexInterior[(i + 1) % 6];
+// Calcular trapecio usando método de polígonos concéntricos
+function getTrapezoidWithGaps(
+  i: number, 
+  n: number,
+  polyInterior: { x: number; y: number }[], 
+  polyExterior: { x: number; y: number }[]
+) {
+  // Lado interior del trapecio (del polyInterior)
+  const intA = polyInterior[i];
+  const intB = polyInterior[(i + 1) % n];
   const Li = distance(intA, intB);
   
-  // Lado exterior del trapecio (del hexExterior)
-  const extA = hexExterior[i];
-  const extB = hexExterior[(i + 1) % 6];
+  // Lado exterior del trapecio (del polyExterior)
+  const extA = polyExterior[i];
+  const extB = polyExterior[(i + 1) % n];
   const Lo = distance(extA, extB);
   
   // Recortar ambos segmentos por t (gap lateral)
@@ -105,7 +104,7 @@ export interface HeptagramBoardHandle {
   shuffle: () => void;
 }
 
-const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProps>(({ center, outer, onLetterClick, successAnimation, onShuffleOuter }, ref) => {
+const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProps>(({ center, outer, onLetterClick, successAnimation, onShuffleOuter, extraLetterIndices }, ref) => {
   const [outerLetters, setOuterLetters] = useState(outer);
 
   const shuffleOuter = () => {
@@ -117,37 +116,44 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
     setOuterLetters(shuffled);
     onShuffleOuter?.(shuffled);
   };
+  
   // Exponer la función shuffle al componente padre
   useImperativeHandle(ref, () => ({
     shuffle: shuffleOuter
   }));
+  
   // Obtener colores del tema actual desde CSS variables
   const centerStart = getComputedStyle(document.documentElement).getPropertyValue('--theme-center-start').trim();
   const centerEnd = getComputedStyle(document.documentElement).getPropertyValue('--theme-center-end').trim();
   const outerStart = getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-start').trim();
   const outerEnd = getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-end').trim();
 
-  // Calcular geometría con hexágonos concéntricos
-  // 1. Hexágono central
-  const hexPoints = getHexagonPoints();
+  // ============================================
+  // GEOMETRÍA DINÁMICA según número de lados
+  // ============================================
+  const n = outerLetters.length; // 6 o 7 lados
   
-  // 2. Calcular apotema del hexágono central
-  const apotema = HEX_RADIUS * Math.cos(Math.PI / 6);
+  // 1. Polígono central (hexágono o heptágono)
+  const centerPolygonPoints = getPolygonPoints(n, POLYGON_RADIUS);
   
-  // 3. Hexágono interior (para base interior de trapecios)
+  // 2. Calcular apotema del polígono central (distancia centro -> medio de lado)
+  const apotema = POLYGON_RADIUS * Math.cos(Math.PI / n);
+  
+  // 3. Polígono interior (para base interior de trapecios)
   const apotemaInterior = apotema + g;
-  const radioInterior = apotemaInterior / Math.cos(Math.PI / 6);
-  const hexInterior = getHexagonWithRadius(radioInterior);
+  const radioInterior = apotemaInterior / Math.cos(Math.PI / n);
+  const polyInterior = getPolygonPoints(n, radioInterior);
   
-  // 4. Hexágono exterior (para base exterior de trapecios)
+  // 4. Polígono exterior (para base exterior de trapecios)
   const apotemaExterior = apotemaInterior + depth;
-  const radioExterior = apotemaExterior / Math.cos(Math.PI / 6);
-  const hexExterior = getHexagonWithRadius(radioExterior);
+  const radioExterior = apotemaExterior / Math.cos(Math.PI / n);
+  const polyExterior = getPolygonPoints(n, radioExterior);
   
-  // 5. Construir los 6 trapecios
-  const trapezoids = Array.from({ length: 6 }, (_, i) => 
-    getTrapezoidWithGaps(i, hexInterior, hexExterior)
+  // 5. Construir los trapecios (n trapecios)
+  const trapezoids = Array.from({ length: n }, (_, i) => 
+    getTrapezoidWithGaps(i, n, polyInterior, polyExterior)
   );
+  // ============================================
 
   return (
     <div className="heptagram-section">
@@ -155,7 +161,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
         <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} className="heptagram-svg">
           {/* Definir gradientes */}
           <defs>
-            <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="centerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" style={{ stopColor: centerStart, stopOpacity: 1 }} />
               <stop offset="100%" style={{ stopColor: centerEnd, stopOpacity: 1 }} />
             </linearGradient>
@@ -163,17 +169,28 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
               <stop offset="0%" style={{ stopColor: outerStart, stopOpacity: 1 }} />
               <stop offset="100%" style={{ stopColor: outerEnd, stopOpacity: 1 }} />
             </linearGradient>
+            {/* Gradiente para letra extra (10% más claro) */}
+            <linearGradient id="trapExtraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: lightenColor(outerStart, 0.1), stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: lightenColor(outerEnd, 0.1), stopOpacity: 1 }} />
+            </linearGradient>
           </defs>
 
           {/* Trapecios exteriores (dibujar primero para que queden detrás) */}
           {trapezoids.map((points, i) => {
             const centerPoint = getTrapezoidCenter(points);
+            const isExtra = extraLetterIndices?.has(i) || false;
+            const fillGradient = isExtra ? "url(#trapExtraGradient)" : "url(#trapGradient)";
+            const strokeWidth = isExtra ? 2.5 : 0;
+            const strokeColor = isExtra ? outerEnd : "none";
+            
             return (
               <g key={`trap-${i}`} style={{ cursor: 'pointer' }} onClick={() => onLetterClick?.(outerLetters[i])}>
                 <polygon
                   points={pointsToString(points)}
-                  fill="url(#trapGradient)"
-                  stroke="none"
+                  fill={fillGradient}
+                  stroke={strokeColor}
+                  strokeWidth={strokeWidth}
                   className="trap-shape"
                   style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))' }}
                 />
@@ -191,13 +208,13 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
             );
           })}
 
-          {/* Hexágono central (encima de los trapecios) */}
+          {/* Polígono central (encima de los trapecios) */}
           <g style={{ cursor: 'pointer' }} onClick={() => onLetterClick?.(center)}>
             <polygon
-              points={pointsToString(hexPoints)}
-              fill="url(#hexGradient)"
+              points={pointsToString(centerPolygonPoints)}
+              fill="url(#centerGradient)"
               stroke="none"
-              className="hex-shape"
+              className="center-polygon"
               style={{ filter: 'drop-shadow(0 4px 12px rgba(237,75,130,0.4))' }}
             />
             <text
@@ -205,7 +222,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
               y={CENTER_Y}
               textAnchor="middle"
               dominantBaseline="central"
-              className="hex-letter"
+              className="center-letter"
               style={{ pointerEvents: 'none' }}
             >
               {center.toUpperCase()}
@@ -216,5 +233,19 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
     </div>
   );
 });
+
+// Función helper para aclarar color (simplificada)
+function lightenColor(color: string, amount: number): string {
+  // Si el color es en formato #RRGGBB
+  if (color.startsWith('#')) {
+    const num = parseInt(color.slice(1), 16);
+    const r = Math.min(255, ((num >> 16) & 255) + Math.floor(255 * amount));
+    const g = Math.min(255, ((num >> 8) & 255) + Math.floor(255 * amount));
+    const b = Math.min(255, (num & 255) + Math.floor(255 * amount));
+    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+  }
+  // Fallback: devolver color original
+  return color;
+}
 
 export default HeptagramBoardSvg;

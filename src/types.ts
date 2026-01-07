@@ -52,7 +52,8 @@ export interface ExoticsRunState {
   puzzle: ExoticPuzzle;
   extraLetters: string[]; // Letras extra añadidas por el jugador (empieza vacío)
   solutionsTotal: number; // Total de soluciones posibles con las letras actuales
-  foundWords: string[]; // Palabras encontradas
+  foundWords: string[]; // DEPRECATED - mantener por compatibilidad, usar foundWordsAll
+  foundWordsAll: string[]; // Todas las palabras encontradas históricamente en este puzzle
   scorePoints: number; // Puntos acumulados (P)
   xpEarned: number; // XP acumulado durante esta run (no se suma a global hasta terminar)
   streak10Count: number; // Cuántos hitos de 10 palabras se han cobrado
@@ -64,6 +65,11 @@ export interface ExoticsRunState {
   doublePointsRemaining: number; // 0 o 10 - palabras restantes con doble puntuación
   statsUnlocked: {
     byStartLetter: boolean; // Si se desbloqueó ver palabras por letra inicial
+    lengthHint: boolean; // Si se compró pista de longitud
+  };
+  uiState: {
+    lengthHintExpanded: boolean; // Si el panel de pista de longitud está visible
+    byStartLetterExpanded: boolean; // Si el panel de letra inicial está visible
   };
 }
 

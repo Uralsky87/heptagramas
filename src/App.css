@@ -138,17 +138,20 @@
 }
 
 .hex-shape,
+.center-polygon,
 .trap-shape {
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.hex-shape:hover {
+.hex-shape:hover,
+.center-polygon:hover {
   opacity: 0.95;
   filter: drop-shadow(0 6px 16px rgba(237,75,130,0.5)) brightness(1.05);
 }
 
-.hex-shape:active {
+.hex-shape:active,
+.center-polygon:active {
   transform: scale(0.95);
   filter: drop-shadow(0 4px 12px rgba(237,75,130,0.4)) brightness(1.1);
 }
@@ -164,6 +167,7 @@
 }
 
 .hex-letter,
+.center-letter,
 .trap-letter {
   font-size: 32px;
   font-weight: 700;
@@ -173,7 +177,8 @@
   pointer-events: none;
 }
 
-.hex-letter {
+.hex-letter,
+.center-letter {
   font-size: 48px;
   font-weight: 800;
 }
@@ -184,7 +189,8 @@
     max-width: 375px; /* Aumentado 25% para mÃ³vil: 300 * 1.25 = 375 */
   }
   
-  .hex-letter {
+  .hex-letter,
+  .center-letter {
     font-size: 44px;
   }
   
@@ -378,6 +384,20 @@
   background: linear-gradient(135deg, #fff5e1 0%, #ffe4b5 100%);
   border: 2px solid #ffd700;
   font-weight: 700;
+}
+
+.found-list li.invalid-word {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  color: #999;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.invalid-tag {
+  font-size: 10px;
+  color: #e74c3c;
+  font-weight: 600;
+  margin-left: 4px;
 }
 
 .star-icon {
@@ -2496,7 +2516,7 @@
     max-width: 100%;
   }
 }
-/* Botón cambiar puzzle gratis */
+/* Botï¿½n cambiar puzzle gratis */
 .btn-change-puzzle-free {
   background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
   color: #1a1a1a;
@@ -2521,7 +2541,7 @@
   transform: translateY(0);
 }
 
-/* Panel de generación en el sidebar */
+/* Panel de generaciï¿½n en el sidebar */
 .generation-info-panel {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 8px;

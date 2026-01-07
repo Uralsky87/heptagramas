@@ -19,22 +19,67 @@ interface ExoticsPlayProps {
   dictionary: DictionaryData;
 }
 
+// Función determinista de shuffle usando seed
+function shuffleArray(array: string[], seed: number): string[] {
+  const result = [...array];
+  let currentSeed = seed;
+  
+  // Simple LCG (Linear Congruential Generator) para pseudo-random determinista
+  const random = () => {
+    currentSeed = (currentSeed * 9301 + 49297) % 233280;
+    return currentSeed / 233280;
+  };
+  
+  // Fisher-Yates shuffle con seed
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  
+  return result;
+}
+
 export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [runState, setRunState] = useState<ExoticsRunState | null>(null);
   const [message, setMessage] = useState<string>('');
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
-  const [shuffledOuter, setShuffledOuter] = useState<string[]>([]);
+  const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
   const [showAbilitiesPanel, setShowAbilitiesPanel] = useState(false);
   const [showLetterSelector, setShowLetterSelector] = useState(false);
   const [letterSelectorMode, setLetterSelectorMode] = useState<'swap' | 'buy' | null>(null);
-  const [lengthHints, setLengthHints] = useState<{ [key: number]: number } | null>(null);
   const [isCalculatingSolutions, setIsCalculatingSolutions] = useState(false);
+  const [abilityFlow, setAbilityFlow] = useState<{
+    type: 'swap-random' | 'swap-concrete' | null;
+    selectedOuterIndex: number | null;
+  }>({ type: null, selectedOuterIndex: null });
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const solutionsCacheRef = useRef<Map<string, string[]>>(new Map());
+
+  // ============================================
+  // TABLERO DINÁMICO: combinar outer + extraLetters
+  // ============================================
+  
+  // Combinar outer base + extra letters para el tablero
+  const outerCombined = runState ? [...runState.puzzle.outer, ...runState.extraLetters] : [];
+  
+  // Derivar shuffledOuter del outerCombined usando shuffleSeed
+  const shuffledOuter = runState ? shuffleArray(outerCombined, shuffleSeed) : [];
+  
+  // Calcular índices de letras extra en shuffledOuter (para marcarlas visualmente)
+  const extraLetterIndices = new Set<number>();
+  if (runState && runState.extraLetters.length > 0) {
+    runState.extraLetters.forEach(extraLetter => {
+      const index = shuffledOuter.indexOf(extraLetter);
+      if (index !== -1) {
+        extraLetterIndices.add(index);
+      }
+    });
+  }
+  // ============================================
 
   // Cargar run state al montar
   useEffect(() => {
@@ -46,19 +91,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setRunState(run);
-    setShuffledOuter(run.puzzle.outer);
     
     if (import.meta.env.DEV) {
       console.log('[ExoticsPlay] Run cargada:', run.runId);
     }
   }, [onBack]);
-
-  // Sincronizar shuffledOuter cuando cambia puzzle.outer
-  useEffect(() => {
-    if (runState) {
-      setShuffledOuter(runState.puzzle.outer);
-    }
-  }, [runState?.puzzle.outer]);
 
   // Calcular soluciones cuando cambia el run state o las letras extra (con caché)
   useEffect(() => {
@@ -142,17 +179,48 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
   const handleShuffle = () => {
     if (!runState) return;
+    setShuffleSeed(prev => prev + 1); // Incrementar seed para nuevo shuffle
+  };
+
+  // ============= HELPERS PARA FOUNDWORDS VÁLIDOS =============
+
+  /**
+   * Verifica si una palabra (normalizada) es válida con el set ACTUAL de letras
+   */
+  const isWordValidWithCurrentLetters = (normalizedWord: string): boolean => {
+    if (!runState) return false;
     
-    const current = shuffledOuter;
-    let shuffled = [...current];
+    const normalizedCenter = normalizeChar(runState.puzzle.center, false);
+    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, false));
+    const normalizedExtra = runState.extraLetters.map(l => normalizeChar(l, false));
+    const allowedSet = new Set([normalizedCenter, ...normalizedOuter, ...normalizedExtra]);
     
-    // Algoritmo Fisher-Yates para shuffle
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    // Debe contener centro
+    if (!normalizedWord.includes(normalizedCenter)) return false;
+    
+    // Solo puede usar letras permitidas
+    for (let i = 0; i < normalizedWord.length; i++) {
+      if (!allowedSet.has(normalizedWord[i])) return false;
     }
     
-    setShuffledOuter(shuffled);
+    return true;
+  };
+
+  /**
+   * Calcular palabras válidas con el set ACTUAL de letras
+   * (de todas las palabras históricamente encontradas)
+   */
+  const getFoundWordsValid = (): string[] => {
+    if (!runState) return [];
+    return runState.foundWordsAll.filter(w => isWordValidWithCurrentLetters(w));
+  };
+
+  /**
+   * Obtener Set de palabras normalizadas encontradas (para prevenir duplicados)
+   */
+  const getFoundWordsNormalizedSet = (): Set<string> => {
+    if (!runState) return new Set();
+    return new Set(runState.foundWordsAll.map(w => normalizeWord(w)));
   };
 
   const validateWordExotic = (word: string): ValidationResult => {
@@ -185,11 +253,15 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       const ch = normalized[i];
       if (!allowedSet.has(ch)) {
         if (import.meta.env.DEV) {
-          console.warn(
-            `[ExoticsPlay] Letra NO permitida:`,
-            `\nCarácter: "${ch}"`,
-            `\nPalabra: "${normalized}"`,
-            `\nLetras permitidas:`, Array.from(allowedSet)
+          console.error(
+            `[ExoticsPlay] ❌ LETRA RECHAZADA:`,
+            `\n  Carácter rechazado: "${ch}" (código: ${ch.charCodeAt(0)})`,
+            `\n  Palabra completa: "${normalized}"`,
+            `\n  Palabra original: "${word}"`,
+            `\n  Letras permitidas (allowedSet):`, Array.from(allowedSet).sort(),
+            `\n  Centro: "${runState.puzzle.center}" → "${normalizedCenter}"`,
+            `\n  Outer: [${runState.puzzle.outer.join(', ')}] → [${normalizedOuter.join(', ')}]`,
+            `\n  Extra: [${runState.extraLetters.join(', ')}] → [${normalizedExtra.join(', ')}]`
           );
         }
         return { ok: false, reason: 'Solo puedes usar las letras disponibles.' };
@@ -201,8 +273,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       return { ok: false, reason: 'Palabra no válida.' };
     }
     
-    // 5. No debe estar ya encontrada
-    if (runState.foundWords.includes(normalized)) {
+    // 5. No debe estar ya encontrada (verificar contra foundWordsAll normalizado)
+    const foundSet = getFoundWordsNormalizedSet();
+    if (foundSet.has(normalized)) {
       return { ok: false, reason: 'Ya encontraste esta palabra.' };
     }
     
@@ -284,13 +357,14 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const canChangePuzzleFree = (): boolean => {
     if (!runState || puzzleSolutions.length === 0) return false;
     
-    const foundCount = runState.foundWords.length;
+    const foundWordsValid = getFoundWordsValid();
+    const foundCount = foundWordsValid.length;
     const progressPercent = foundCount / puzzleSolutions.length;
     
     // Condición 1: >= 50% de progreso
     if (progressPercent >= 0.5) return true;
     
-    // Condición 2: >= 100 palabras encontradas (sin importar el %)
+    // Condición 2: >= 100 palabras válidas encontradas (sin importar el %)
     if (foundCount >= 100) return true;
     
     return false;
@@ -300,11 +374,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const handleChangePuzzleFree = async () => {
     if (!runState) return;
     
+    const foundWordsValid = getFoundWordsValid();
     const progressPercent = puzzleSolutions.length > 0
-      ? ((runState.foundWords.length / puzzleSolutions.length) * 100).toFixed(1)
+      ? ((foundWordsValid.length / puzzleSolutions.length) * 100).toFixed(1)
       : '0.0';
     
-    const confirmMsg = `¿Cambiar a un nuevo heptagrama? (GRATIS)\n\nProgreso actual: ${runState.foundWords.length}/${puzzleSolutions.length} palabras (${progressPercent}%)\n\n✓ Se MANTENDRÁN tus ${runState.scorePoints} P y ${runState.xpEarned} XP\n✓ Se REINICIARÁ el contador de palabras\n✓ Bonus de hitos se podrán obtener de nuevo`;
+    const confirmMsg = `¿Cambiar a un nuevo heptagrama? (GRATIS)\n\nProgreso actual: ${foundWordsValid.length}/${puzzleSolutions.length} palabras (${progressPercent}%)\n\n✓ Se MANTENDRÁN tus ${runState.scorePoints} P y ${runState.xpEarned} XP\n✓ Se REINICIARÁ el contador de palabras\n✓ Bonus de hitos se podrán obtener de nuevo`;
     
     if (!confirm(confirmMsg)) return;
     
@@ -325,11 +400,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         return;
       }
       
-      // Actualizar run con nuevo puzzle, mantener P y XP
+      // NEW_PUZZLE: Actualizar run con nuevo puzzle, RESETEAR foundWordsAll
       const updatedRun: ExoticsRunState = {
         ...runState,
         puzzle: newPuzzle,
-        foundWords: [], // Reiniciar palabras encontradas
+        foundWords: [], // Mantener por compatibilidad
+        foundWordsAll: [], // Resetear histórico
         solutionsTotal: 0, // Se recalculará en el useEffect
         streak10Count: 0, // Reiniciar contador de hitos de 10
         milestones: {
@@ -348,9 +424,10 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       setTimeout(() => setMessage(''), 4000);
       
       if (import.meta.env.DEV) {
-        console.log('[ExoticsPlay] Puzzle cambiado gratis. P y XP mantenidos:', {
+        console.log('[ExoticsPlay] NEW_PUZZLE: Puzzle cambiado gratis. foundWordsAll reseteado:', {
           scorePoints: updatedRun.scorePoints,
           xpEarned: updatedRun.xpEarned,
+          newOuter: newPuzzle.outer,
         });
       }
     } catch (error) {
@@ -381,7 +458,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
   // 1. Pista de longitud (40 P)
   const handleLengthHint = () => {
-    if (!runState || runState.scorePoints < 40) return;
+    if (!runState || runState.scorePoints < 40 || runState.statsUnlocked.lengthHint) return;
     
     // Calcular palabras restantes por longitud
     const remaining = puzzleSolutions.filter(w => !runState.foundWords.includes(w));
@@ -392,14 +469,18 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       byLength[len] = (byLength[len] || 0) + 1;
     });
     
-    setLengthHints(byLength);
-    
-    // Cobrar
-    const updated = { ...runState, scorePoints: runState.scorePoints - 40 };
+    // Cobrar y marcar como desbloqueado
+    const updated: ExoticsRunState = {
+      ...runState,
+      scorePoints: runState.scorePoints - 40,
+      statsUnlocked: { ...runState.statsUnlocked, lengthHint: true },
+      uiState: { ...runState.uiState, lengthHintExpanded: true },
+    };
     setRunState(updated);
     saveExoticsRun(updated);
+    setShowAbilitiesPanel(false);
     
-    setMessage('💡 Pista de longitud activada!');
+    setMessage('💡 Pista de longitud desbloqueada!');
     setTimeout(() => setMessage(''), 3000);
     
     if (import.meta.env.DEV) {
@@ -415,10 +496,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       ...runState,
       scorePoints: runState.scorePoints - 120,
       statsUnlocked: { ...runState.statsUnlocked, byStartLetter: true },
+      uiState: { ...runState.uiState, byStartLetterExpanded: true },
     };
     
     setRunState(updated);
     saveExoticsRun(updated);
+    setShowAbilitiesPanel(false);
     
     setMessage('🔓 Estadísticas por letra inicial desbloqueadas!');
     setTimeout(() => setMessage(''), 3000);
@@ -427,32 +510,41 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   // 3. Cambiar letra aleatoria (160 P)
   const handleSwapLetterRandom = () => {
     if (!runState || runState.scorePoints < 160) return;
-    
-    if (!confirm('¿Cambiar una letra aleatoria del tablero por 160 P?\n\nEsto regenerará el puzzle y puede cambiar las soluciones disponibles.')) {
-      return;
-    }
+    setAbilityFlow({ type: 'swap-random', selectedOuterIndex: null });
+    setShowAbilitiesPanel(false);
+  };
+
+  // Confirmar cambio aleatorio tras selección
+  const confirmSwapRandom = () => {
+    if (!runState || abilityFlow.selectedOuterIndex === null) return;
     
     const available = getAvailableLetters();
-    if (available.length === 0) {
-      alert('No hay letras disponibles para intercambiar.');
+    const oldLetter = runState.puzzle.outer[abilityFlow.selectedOuterIndex];
+    
+    // Elegir letra nueva aleatoria DIFERENTE
+    const availableForSwap = available.filter(l => l !== oldLetter.toLowerCase());
+    if (availableForSwap.length === 0) {
+      alert('No hay letras disponibles diferentes para intercambiar.');
+      setAbilityFlow({ type: null, selectedOuterIndex: null });
       return;
     }
     
-    // Elegir letra aleatoria del outer
-    const randomIdx = Math.floor(Math.random() * shuffledOuter.length);
-    const oldLetter = shuffledOuter[randomIdx];
+    const newLetter = availableForSwap[Math.floor(Math.random() * availableForSwap.length)];
     
-    // Elegir letra nueva aleatoria
-    const newLetter = available[Math.floor(Math.random() * available.length)];
+    // Crear nuevo outer con inmutabilidad completa
+    const newOuter = [...runState.puzzle.outer];
+    newOuter[abilityFlow.selectedOuterIndex] = newLetter;
     
-    // Actualizar
-    const newOuter = [...shuffledOuter];
-    newOuter[randomIdx] = newLetter;
+    // Crear nuevo puzzle con nueva referencia
+    const newPuzzle = { ...runState.puzzle, outer: newOuter };
     
+    // MODIFY_PUZZLE: Mantener foundWordsAll, recalcular progreso
     const updated: ExoticsRunState = {
       ...runState,
-      puzzle: { ...runState.puzzle, outer: newOuter },
+      puzzle: newPuzzle,
       scorePoints: runState.scorePoints - 160,
+      foundWords: runState.foundWordsAll, // Mantener compatibilidad
+      // foundWordsAll se mantiene automáticamente
     };
     
     // Limpiar caché porque las letras cambiaron
@@ -460,39 +552,52 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     setRunState(updated);
     saveExoticsRun(updated);
+    setAbilityFlow({ type: null, selectedOuterIndex: null });
+    
+    if (import.meta.env.DEV) {
+      console.log(`[ExoticsPlay] 🔄 MODIFY_PUZZLE: Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
+      console.log('[ExoticsPlay] foundWordsAll mantenido:', runState.foundWordsAll.length);
+      console.log('[ExoticsPlay] Nuevo outer:', newOuter);
+    }
     
     setMessage(`🔄 Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
     setTimeout(() => setMessage(''), 3000);
   };
 
-  // 4. Cambiar letra concreta (320 P) - abre selector
+  // 4. Cambiar letra concreta (320 P) - abre selector de letra a cambiar
   const handleSwapLetterConcrete = () => {
     if (!runState || runState.scorePoints < 320) return;
-    
-    if (!confirm('¿Elegir qué letra cambiar por 320 P?\n\nPodrás seleccionar la letra que reemplazará una letra aleatoria del tablero.')) {
-      return;
-    }
-    
+    setAbilityFlow({ type: 'swap-concrete', selectedOuterIndex: null });
+    setShowAbilitiesPanel(false);
+  };
+
+  // Abrir selector de letras disponibles tras seleccionar letra a cambiar
+  const openLetterSelectorForSwap = () => {
+    if (abilityFlow.selectedOuterIndex === null) return;
     setLetterSelectorMode('swap');
     setShowLetterSelector(true);
-    setShowAbilitiesPanel(false);
   };
 
   // Confirmar cambio de letra concreta
   const confirmSwapLetter = (newLetter: string) => {
-    if (!runState) return;
+    if (!runState || abilityFlow.selectedOuterIndex === null) return;
     
-    // Elegir letra aleatoria del outer para reemplazar
-    const randomIdx = Math.floor(Math.random() * shuffledOuter.length);
-    const oldLetter = shuffledOuter[randomIdx];
+    const oldLetter = runState.puzzle.outer[abilityFlow.selectedOuterIndex];
     
-    const newOuter = [...shuffledOuter];
-    newOuter[randomIdx] = newLetter.toLowerCase();
+    // Crear nuevo outer con inmutabilidad completa
+    const newOuter = [...runState.puzzle.outer];
+    newOuter[abilityFlow.selectedOuterIndex] = newLetter.toLowerCase();
     
+    // Crear nuevo puzzle con nueva referencia
+    const newPuzzle = { ...runState.puzzle, outer: newOuter };
+    
+    // MODIFY_PUZZLE: Mantener foundWordsAll
     const updated: ExoticsRunState = {
       ...runState,
-      puzzle: { ...runState.puzzle, outer: newOuter },
+      puzzle: newPuzzle,
       scorePoints: runState.scorePoints - 320,
+      foundWords: runState.foundWordsAll, // Mantener compatibilidad
+      // foundWordsAll se mantiene automáticamente
     };
     
     // Limpiar caché porque las letras cambiaron
@@ -501,6 +606,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setRunState(updated);
     saveExoticsRun(updated);
     setShowLetterSelector(false);
+    setAbilityFlow({ type: null, selectedOuterIndex: null });
+    
+    if (import.meta.env.DEV) {
+      console.log(`[ExoticsPlay] 🔄 MODIFY_PUZZLE: Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
+      console.log('[ExoticsPlay] foundWordsAll mantenido:', runState.foundWordsAll.length);
+      console.log('[ExoticsPlay] Nuevo outer:', newOuter);
+    }
     
     setMessage(`🔄 Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
     setTimeout(() => setMessage(''), 3000);
@@ -518,14 +630,23 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     const newLetter = available[Math.floor(Math.random() * available.length)];
     
+    // MODIFY_PUZZLE: Añadir letra extra, mantener foundWordsAll
     const updated: ExoticsRunState = {
       ...runState,
       extraLetters: [...runState.extraLetters, newLetter],
       scorePoints: runState.scorePoints - 450,
+      foundWords: runState.foundWordsAll, // Mantener compatibilidad
+      // foundWordsAll se mantiene automáticamente
     };
     
     setRunState(updated);
     saveExoticsRun(updated);
+    setShowAbilitiesPanel(false);
+    
+    if (import.meta.env.DEV) {
+      console.log(`[ExoticsPlay] ✨ MODIFY_PUZZLE: Letra extra añadida: ${newLetter.toUpperCase()}`);
+      console.log('[ExoticsPlay] foundWordsAll mantenido:', runState.foundWordsAll.length);
+    }
     
     setMessage(`✨ Letra extra añadida: ${newLetter.toUpperCase()}`);
     setTimeout(() => setMessage(''), 3000);
@@ -544,15 +665,23 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const confirmBuyLetter = (letter: string) => {
     if (!runState) return;
     
+    // MODIFY_PUZZLE: Añadir letra extra, mantener foundWordsAll
     const updated: ExoticsRunState = {
       ...runState,
       extraLetters: [...runState.extraLetters, letter.toLowerCase()],
       scorePoints: runState.scorePoints - 900,
+      foundWords: runState.foundWordsAll, // Mantener compatibilidad
+      // foundWordsAll se mantiene automáticamente
     };
     
     setRunState(updated);
     saveExoticsRun(updated);
     setShowLetterSelector(false);
+    
+    if (import.meta.env.DEV) {
+      console.log(`[ExoticsPlay] ✨ MODIFY_PUZZLE: Letra extra añadida: ${letter.toUpperCase()}`);
+      console.log('[ExoticsPlay] foundWordsAll mantenido:', runState.foundWordsAll.length);
+    }
     
     setMessage(`✨ Letra extra añadida: ${letter.toUpperCase()}`);
     setTimeout(() => setMessage(''), 3000);
@@ -570,6 +699,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     setRunState(updated);
     saveExoticsRun(updated);
+    setShowAbilitiesPanel(false);
     
     setMessage('⚡ ¡Próximas 10 palabras con DOBLE PUNTOS!');
     setTimeout(() => setMessage(''), 4000);
@@ -579,8 +709,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const handleBuyNewPuzzle = async () => {
     if (!runState || runState.scorePoints < 350) return;
     
+    const foundWordsValid = getFoundWordsValid();
     const progressPercent = puzzleSolutions.length > 0
-      ? runState.foundWords.length / puzzleSolutions.length
+      ? foundWordsValid.length / puzzleSolutions.length
       : 0;
     
     if (progressPercent >= 0.5) {
@@ -616,10 +747,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         return;
       }
       
+      // NEW_PUZZLE: Resetear foundWordsAll
       const updated: ExoticsRunState = {
         ...updatedWithCost,
         puzzle: newPuzzle,
-        foundWords: [],
+        foundWords: [], // Mantener compatibilidad
+        foundWordsAll: [], // Resetear histórico
         solutionsTotal: 0,
         streak10Count: 0,
         milestones: {
@@ -636,6 +769,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       saveExoticsRun(updated);
       setIsGeneratingNewPuzzle(false);
       setShowAbilitiesPanel(false);
+      
+      if (import.meta.env.DEV) {
+        console.log('[ExoticsPlay] NEW_PUZZLE: Nuevo puzzle comprado, foundWordsAll reseteado:', {
+          newOuter: newPuzzle.outer,
+          pointsRemaining: updated.scorePoints,
+        });
+      }
       
       setMessage('✨ ¡Nuevo heptagrama comprado! -350 P');
       setTimeout(() => setMessage(''), 4000);
@@ -669,8 +809,14 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     const normalized = normalizeWord(word);
-    const newFoundWords = [...runState.foundWords, normalized].sort();
-    const newWordCount = newFoundWords.length;
+    
+    // Añadir a foundWordsAll (todas las palabras históricas encontradas)
+    const newFoundWordsAll = [...runState.foundWordsAll, normalized].sort();
+    
+    // Calcular foundWordsValid DESPUÉS de añadir la nueva palabra
+    // (para usar en progreso y hitos)
+    const newFoundWordsValid = newFoundWordsAll.filter(w => isWordValidWithCurrentLetters(w));
+    const validWordCount = newFoundWordsValid.length;
     
     // Verificar si es SuperHepta
     const isSH = isSuperHepta(normalized);
@@ -684,9 +830,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       wordPoints *= 2;
     }
     
-    // Verificar hito cada 10 palabras (NO se multiplica)
+    // Verificar hito cada 10 palabras VÁLIDAS (NO se multiplica)
     const { bonus: milestoneBonus, newStreak10Count } = calculateMilestoneBonus(
-      newWordCount,
+      validWordCount,
       runState.streak10Count
     );
     
@@ -701,9 +847,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     const xpFromPoints = Math.round(totalPointsThisWord * 0.4);
     let newXP = runState.xpEarned + xpFromPoints;
     
-    // Verificar si alcanzó el 50% y dar bonus único de +250 P
+    // Verificar si alcanzó el 50% y dar bonus único de +250 P (usar foundWordsValid)
     const progressPercent = puzzleSolutions.length > 0 
-      ? newWordCount / puzzleSolutions.length 
+      ? validWordCount / puzzleSolutions.length 
       : 0;
     const reached50 = progressPercent >= 0.5;
     let bonus50Percent = 0;
@@ -721,8 +867,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       }
     }
     
-    // Verificar si alcanzó 100 palabras encontradas
-    if (newWordCount >= 100 && !runState.milestones.reached100Found) {
+    // Verificar si alcanzó 100 palabras VÁLIDAS encontradas
+    if (validWordCount >= 100 && !runState.milestones.reached100Found) {
       newMilestones.reached100Found = true;
     }
     
@@ -733,12 +879,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         `\n  Longitud: ${normalized.length}`,
         `\n  SuperHepta: ${isSH}`,
         `\n  Puntos base: ${wordPoints}${isSH ? ' (incluye +60 SuperHepta)' : ''}`,
-        milestoneBonus > 0 ? `\n  🎉 HITO! ${newWordCount} palabras → +${milestoneBonus} P` : '',
+        milestoneBonus > 0 ? `\n  🎉 HITO! ${validWordCount} palabras → +${milestoneBonus} P` : '',
         bonus50Percent > 0 ? `\n  🎯 BONUS 50%! → +${bonus50Percent} P` : '',
         `\n  Total P: +${totalPointsThisWord + bonus50Percent}`,
         `\n  XP ganada: +${Math.round((totalPointsThisWord + bonus50Percent) * 0.4)}`,
         `\n  Nuevos totales: ${newScore} P, ${newXP} XP`,
-        `\n  Palabras: ${newWordCount}/${runState.solutionsTotal}`,
+        `\n  Palabras válidas: ${validWordCount}/${runState.solutionsTotal}`,
+        `\n  Palabras totales (históricas): ${newFoundWordsAll.length}`,
         `\n  Progreso: ${Math.round(progressPercent * 100)}%`
       );
     }
@@ -746,7 +893,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     // Actualizar estado
     const updatedRun: ExoticsRunState = {
       ...runState,
-      foundWords: newFoundWords,
+      foundWords: newFoundWordsAll, // Mantener compatibilidad - ahora es igual a foundWordsAll
+      foundWordsAll: newFoundWordsAll,
       scorePoints: newScore,
       xpEarned: newXP,
       streak10Count: newStreak10Count,
@@ -780,7 +928,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (bonus50Percent > 0) {
       feedbackMessage = `🎯 ¡50% COMPLETADO! +${bonus50Percent} P (GRATIS disponible)`;
     } else if (milestoneBonus > 0) {
-      feedbackMessage = `🎉 ¡${newWordCount} PALABRAS! +${milestoneBonus} P`;
+      feedbackMessage = `🎉 ¡${validWordCount} PALABRAS! +${milestoneBonus} P`;
     } else if (isSH) {
       feedbackMessage = `¡SuperHepta! 🌟 +${wordPoints} P${doubleIndicator}`;
     } else {
@@ -799,11 +947,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const handleEndRun = () => {
     if (!runState) return;
     
+    const foundWordsValid = getFoundWordsValid();
     const progressPercent = puzzleSolutions.length > 0 
-      ? (runState.foundWords.length / puzzleSolutions.length) * 100 
+      ? (foundWordsValid.length / puzzleSolutions.length) * 100 
       : 0;
     
-    const confirmMsg = `¿Terminar esta run?\n\nPuntos: ${runState.scorePoints} P\nXP acumulada: ${runState.xpEarned}\nPalabras: ${runState.foundWords.length}/${puzzleSolutions.length} (${progressPercent.toFixed(1)}%)\n\nEl XP se sumará a tu nivel global.`;
+    const confirmMsg = `¿Terminar esta run?\n\nPuntos: ${runState.scorePoints} P\nXP acumulada: ${runState.xpEarned}\nPalabras válidas: ${foundWordsValid.length}/${puzzleSolutions.length} (${progressPercent.toFixed(1)}%)\n\nEl XP se sumará a tu nivel global.`;
     
     if (confirm(confirmMsg)) {
       // Sumar XP al playerState global
@@ -841,6 +990,19 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         </header>
       </div>
     );
+  }
+
+  // Logging de render para debugging (solo dev)
+  if (import.meta.env.DEV && runState) {
+    console.log('[ExoticsPlay] 🔄 RENDER:', {
+      center: runState.puzzle.center,
+      outer: runState.puzzle.outer.join(''),
+      outerRef: runState.puzzle.outer,
+      shuffledOuter: shuffledOuter.join(''),
+      shuffleSeed,
+      extraLetters: runState.extraLetters.join(''),
+      foundWords: runState.foundWords.length,
+    });
   }
 
   return (
@@ -923,21 +1085,31 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
         {/* Panel central: Tablero y controles */}
         <div className="game-main">
-          <div className="puzzle-header">
-            <h2 className="puzzle-title">
-              Encontradas: {runState.foundWords.length}
-              {runState.solutionsTotal > 0 && ` / ${runState.solutionsTotal}`}
-            </h2>
-          </div>
+          {(() => {
+            const foundWordsValid = getFoundWordsValid();
+            return (
+              <div className="puzzle-header">
+                <h2 className="puzzle-title">
+                  Encontradas: {foundWordsValid.length}
+                  {runState.solutionsTotal > 0 && ` / ${runState.solutionsTotal}`}
+                  {runState.foundWordsAll.length > foundWordsValid.length && 
+                    <span className="invalid-count"> ({runState.foundWordsAll.length - foundWordsValid.length} inválidas)</span>
+                  }
+                </h2>
+              </div>
+            );
+          })()}
 
           <div className="board-container">
             <HeptagramBoardSvg
+              key={`${runState.puzzle.center}-${outerCombined.join('')}`}
               ref={heptagramRef}
               center={runState.puzzle.center}
               outer={shuffledOuter}
               onLetterClick={handleLetterClick}
-              onShuffleOuter={(shuffled) => setShuffledOuter(shuffled)}
+              onShuffleOuter={() => setShuffleSeed(prev => prev + 1)}
               successAnimation={showSuccessAnim}
+              extraLetterIndices={extraLetterIndices}
             />
           </div>
 
@@ -954,31 +1126,126 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
         {/* Panel derecho: Lista de palabras */}
         <div className="game-sidebar">
-          <FoundWordsList 
-            words={runState.foundWords}
-            total={puzzleSolutions.length}
-            superHeptaWords={[]}
-          />
+          {(() => {
+            const foundWordsValid = getFoundWordsValid();
+            const invalidWords = runState.foundWordsAll.filter(w => !foundWordsValid.includes(w));
+            
+            return (
+              <FoundWordsList 
+                words={runState.foundWordsAll}
+                total={puzzleSolutions.length}
+                superHeptaWords={[]}
+                invalidWords={invalidWords}
+              />
+            );
+          })()}
           
-          {lengthHints && (
+          {/* Panel: Pista de Longitud */}
+          {runState.statsUnlocked.lengthHint && (
             <div className="length-hints-panel">
-              <h4>💡 Pistas de Longitud</h4>
-              <div className="length-hints-list">
-                {Object.entries(lengthHints)
-                  .sort(([a], [b]) => Number(a) - Number(b))
-                  .map(([len, count]) => (
-                    <div key={len} className="length-hint-item">
-                      <span>{len} letras:</span>
-                      <span className="hint-count">{count}</span>
-                    </div>
-                  ))}
+              <div className="hint-panel-header">
+                <h4>💡 Pistas de Longitud</h4>
+                <button 
+                  className="btn-toggle-hint" 
+                  onClick={() => {
+                    const updated = {
+                      ...runState,
+                      uiState: { ...runState.uiState, lengthHintExpanded: !runState.uiState.lengthHintExpanded }
+                    };
+                    setRunState(updated);
+                    saveExoticsRun(updated);
+                  }}
+                >
+                  {runState.uiState.lengthHintExpanded ? '▼' : '▶'}
+                </button>
               </div>
-              <button 
-                className="btn-close-hint" 
-                onClick={() => setLengthHints(null)}
-              >
-                ✕
-              </button>
+              {runState.uiState.lengthHintExpanded && (() => {
+                const foundWordsValid = getFoundWordsValid();
+                const remaining = puzzleSolutions.filter(w => !foundWordsValid.includes(w));
+                const byLength: { [key: number]: number } = {};
+                remaining.forEach(word => {
+                  const len = word.length;
+                  byLength[len] = (byLength[len] || 0) + 1;
+                });
+                return (
+                  <div className="length-hints-list">
+                    {Object.entries(byLength)
+                      .sort(([a], [b]) => Number(a) - Number(b))
+                      .map(([len, count]) => (
+                        <div key={len} className="length-hint-item">
+                          <span>{len} letras:</span>
+                          <span className="hint-count">{count} pendientes</span>
+                        </div>
+                      ))}
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          {/* Panel: Por Letra Inicial */}
+          {runState.statsUnlocked.byStartLetter && (
+            <div className="start-letter-panel">
+              <div className="hint-panel-header">
+                <h4>🔤 Por Letra Inicial</h4>
+                <button 
+                  className="btn-toggle-hint" 
+                  onClick={() => {
+                    const updated = {
+                      ...runState,
+                      uiState: { ...runState.uiState, byStartLetterExpanded: !runState.uiState.byStartLetterExpanded }
+                    };
+                    setRunState(updated);
+                    saveExoticsRun(updated);
+                  }}
+                >
+                  {runState.uiState.byStartLetterExpanded ? '▼' : '▶'}
+                </button>
+              </div>
+              {runState.uiState.byStartLetterExpanded && (() => {
+                // Obtener las letras del puzzle base (center + outer, sin extras)
+                const baseLetters = [runState.puzzle.center, ...runState.puzzle.outer]
+                  .map(l => normalizeChar(l, false))
+                  .sort();
+                
+                const foundWordsValid = getFoundWordsValid();
+                const foundSet = new Set(foundWordsValid);
+                const statsByLetter: { [letter: string]: { total: number; pending: number } } = {};
+                
+                // Calcular totales y pendientes por letra (usando foundWordsValid)
+                puzzleSolutions.forEach(word => {
+                  const firstLetter = word[0];
+                  if (baseLetters.includes(firstLetter)) {
+                    if (!statsByLetter[firstLetter]) {
+                      statsByLetter[firstLetter] = { total: 0, pending: 0 };
+                    }
+                    statsByLetter[firstLetter].total++;
+                    if (!foundSet.has(word)) {
+                      statsByLetter[firstLetter].pending++;
+                    }
+                  }
+                });
+                
+                return (
+                  <div className="start-letter-list">
+                    {baseLetters
+                      .filter((letter, index, self) => self.indexOf(letter) === index) // unique
+                      .sort()
+                      .map(letter => {
+                        const stats = statsByLetter[letter] || { total: 0, pending: 0 };
+                        const found = stats.total - stats.pending;
+                        return (
+                          <div key={letter} className="start-letter-item">
+                            <span className="letter-label">{letter.toUpperCase()}:</span>
+                            <span className="letter-stats">
+                              {found}/{stats.total} <span className="pending-count">(pendientes: {stats.pending})</span>
+                            </span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                );
+              })()}
             </div>
           )}
         </div>
@@ -996,10 +1263,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               <button 
                 className="ability-btn"
                 onClick={handleLengthHint}
-                disabled={runState.scorePoints < 40}
+                disabled={runState.scorePoints < 40 || runState.statsUnlocked.lengthHint}
               >
                 <span className="ability-icon">💡</span>
-                <span className="ability-name">Pista de longitud</span>
+                <span className="ability-name">
+                  {runState.statsUnlocked.lengthHint ? '✓ Pista de longitud' : 'Pista de longitud'}
+                </span>
                 <span className="ability-cost">40 P</span>
               </button>
 
@@ -1090,6 +1359,70 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             <button className="btn-close-panel" onClick={() => setShowAbilitiesPanel(false)}>
               Cerrar
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Seleccionar letra a cambiar */}
+      {abilityFlow.type && (
+        <div className="modal-overlay" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
+          <div className="letter-change-panel" onClick={(e) => e.stopPropagation()}>
+            <h2>🔄 Cambiar Letra</h2>
+            <p className="selector-instruction">
+              {abilityFlow.selectedOuterIndex === null 
+                ? 'Selecciona la letra exterior que quieres cambiar:' 
+                : `Letra seleccionada: ${runState.puzzle.outer[abilityFlow.selectedOuterIndex].toUpperCase()}`}
+            </p>
+            
+            {/* Mini tablero para selección */}
+            <div className="mini-board-container">
+              <div className="mini-board">
+                <div 
+                  className="mini-center-letter"
+                  onClick={() => setMessage('❌ La letra central no se puede cambiar')}
+                  style={{ cursor: 'not-allowed', opacity: 0.5 }}
+                >
+                  {runState.puzzle.center.toUpperCase()}
+                </div>
+                <div className="mini-outer-letters">
+                  {runState.puzzle.outer.map((letter, idx) => (
+                    <button
+                      key={idx}
+                      className={`mini-outer-letter ${abilityFlow.selectedOuterIndex === idx ? 'selected' : ''}`}
+                      onClick={() => setAbilityFlow({ ...abilityFlow, selectedOuterIndex: idx })}
+                    >
+                      {letter.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="letter-change-actions">
+              {abilityFlow.selectedOuterIndex === null ? (
+                <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
+                  Cancelar
+                </button>
+              ) : abilityFlow.type === 'swap-random' ? (
+                <>
+                  <button className="btn-confirm-change" onClick={confirmSwapRandom}>
+                    ✓ Cambiar por aleatoria (160 P)
+                  </button>
+                  <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn-confirm-change" onClick={openLetterSelectorForSwap}>
+                    → Elegir letra nueva (320 P)
+                  </button>
+                  <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
+                    Cancelar
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}

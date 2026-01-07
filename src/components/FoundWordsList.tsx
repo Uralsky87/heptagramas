@@ -2,6 +2,7 @@ interface FoundWordsListProps {
   words: string[];
   total: number;
   superHeptaWords: string[];
+  invalidWords?: string[]; // Palabras que ya no son válidas con el set actual de letras
 }
 
 function getProgressLevel(percentage: number): string {
@@ -11,10 +12,11 @@ function getProgressLevel(percentage: number): string {
   return 'Experto';
 }
 
-export default function FoundWordsList({ words, total, superHeptaWords }: FoundWordsListProps) {
+export default function FoundWordsList({ words, total, superHeptaWords, invalidWords = [] }: FoundWordsListProps) {
   const percentage = total > 0 ? Math.round((words.length / total) * 100) : 0;
   const level = getProgressLevel(percentage);
   const superHeptaSet = new Set(superHeptaWords);
+  const invalidSet = new Set(invalidWords);
 
   return (
     <section className="found-section">
@@ -37,12 +39,21 @@ export default function FoundWordsList({ words, total, superHeptaWords }: FoundW
         <p className="empty-message">Aún no has encontrado ninguna palabra.</p>
       ) : (
         <ul className="found-list">
-          {words.map((word) => (
-            <li key={word} className={superHeptaSet.has(word) ? 'superhepta' : ''}>
-              {word}
-              {superHeptaSet.has(word) && <span className="star-icon"> ⭐</span>}
-            </li>
-          ))}
+          {words.map((word) => {
+            const isInvalid = invalidSet.has(word);
+            const isSuper = superHeptaSet.has(word);
+            let className = '';
+            if (isSuper) className = 'superhepta';
+            if (isInvalid) className += ' invalid-word';
+            
+            return (
+              <li key={word} className={className.trim()}>
+                {word}
+                {isSuper && <span className="star-icon"> ⭐</span>}
+                {isInvalid && <span className="invalid-tag"> (ya no válida)</span>}
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>
