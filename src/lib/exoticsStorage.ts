@@ -29,7 +29,11 @@ export function loadExoticsRun(): ExoticsRunState | null {
     }
     
     if (!parsed.uiState) {
-      parsed.uiState = { lengthHintExpanded: false, byStartLetterExpanded: true };
+      parsed.uiState = { lengthHintExpanded: false, byStartLetterExpanded: true, runPanelMinimized: false };
+    } else {
+      if (parsed.uiState.runPanelMinimized === undefined) {
+        parsed.uiState.runPanelMinimized = false;
+      }
     }
     
     // Migración: foundWords -> foundWordsAll
@@ -120,6 +124,7 @@ export function createNewRun(puzzle: ExoticsRunState['puzzle']): ExoticsRunState
     uiState: {
       lengthHintExpanded: false,
       byStartLetterExpanded: true,
+      runPanelMinimized: false,
     },
   };
   

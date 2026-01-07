@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#6366f1"/>
+  <g transform="translate(256, 256)">
+    <!-- Heptagrama (7 puntas) más grande -->
+    <path d="M 0,-160 L 32,-48 L 144,-96 L 48,0 L 144,96 L 32,48 L 0,160 L -32,48 L -144,96 L -48,0 L -144,-96 L -32,-48 Z" 
+          fill="none" stroke="#fbbf24" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Círculo central -->
+    <circle cx="0" cy="0" r="32" fill="#fbbf24"/>
+  </g>
+  <text x="256" y="380" font-family="Arial, sans-serif" font-size="56" font-weight="bold" 
+        fill="#fbbf24" text-anchor="middle">HEPTAGRAMAS</text>
+</svg>

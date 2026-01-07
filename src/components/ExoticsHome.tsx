@@ -128,10 +128,6 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         <div className="exotics-hero">
           <div className="exotics-icon">✨</div>
           <h2>Modo Exótico</h2>
-          <p className="exotics-description">
-            Añade una octava letra al heptagrama para descubrir aún más palabras.
-            Un desafío mayor con más posibilidades.
-          </p>
         </div>
 
         <div className="exotics-features">

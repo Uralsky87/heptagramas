@@ -3968,6 +3968,7 @@ alforroche
 alforzar
 alforzo
 alfoz
+alga
 algadara
 algaido
 algaliar
@@ -33823,6 +33824,7 @@ lejitos
 lejos
 lela
 lelo
+lema
 lemanita
 lembario
 lembo
@@ -35591,10 +35593,10 @@ magarza
 magarzuela
 magdalena
 magenta
+magia
 magiar
 mágicamente
 mágico
-magie
 maginar
 magisterial
 magisterio

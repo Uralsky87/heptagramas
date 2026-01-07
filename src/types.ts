@@ -70,6 +70,7 @@ export interface ExoticsRunState {
   uiState: {
     lengthHintExpanded: boolean; // Si el panel de pista de longitud está visible
     byStartLetterExpanded: boolean; // Si el panel de letra inicial está visible
+    runPanelMinimized: boolean; // Si el panel Run Activa está minimizado
   };
 }
 

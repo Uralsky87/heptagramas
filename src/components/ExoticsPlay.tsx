@@ -1018,56 +1018,96 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       <div className="game-layout">
         {/* Panel izquierdo: Run Info */}
         <div className="exotic-run-panel">
-          <h3>🎮 Run Activa</h3>
-          
-          {isCalculatingSolutions && (
-            <div className="calculating-indicator">
-              <span className="spinner">⏳</span>
-              <p>Calculando soluciones...</p>
-            </div>
-          )}
-          
-          <div className="run-info-stats">
-            <div className="run-info-item">
-              <span className="run-info-label">Puntos (P)</span>
-              <span className="run-info-value">{runState.scorePoints}</span>
-            </div>
-            
-            <div className="run-info-item">
-              <span className="run-info-label">XP Ganada</span>
-              <span className="run-info-value">{runState.xpEarned}</span>
-            </div>
-            
-            <div className="run-info-item">
-              <span className="run-info-label">Letras extra</span>
-              <span className="run-info-value">{runState.extraLetters.length}</span>
-            </div>
+          <div className="run-panel-header">
+            {runState.uiState.runPanelMinimized ? (
+              <div className="run-panel-minimized">
+                <span className="run-title">🎮 Run Activa</span>
+                <span className="run-compact-stat">P: {runState.scorePoints}</span>
+                <span className="run-compact-stat">XP: {runState.xpEarned}</span>
+                <button className="btn-abilities-compact" onClick={() => setShowAbilitiesPanel(true)}>
+                  ⚡ Habilidades
+                </button>
+                <button 
+                  className="btn-toggle-panel" 
+                  onClick={() => {
+                    const updated = {
+                      ...runState,
+                      uiState: { ...runState.uiState, runPanelMinimized: false }
+                    };
+                    setRunState(updated);
+                    saveExoticsRun(updated);
+                  }}
+                  title="Expandir panel"
+                >
+                  ▼
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="run-panel-title-row">
+                  <h3>🎮 Run Activa</h3>
+                  <button 
+                    className="btn-toggle-panel" 
+                    onClick={() => {
+                      const updated = {
+                        ...runState,
+                        uiState: { ...runState.uiState, runPanelMinimized: true }
+                      };
+                      setRunState(updated);
+                      saveExoticsRun(updated);
+                    }}
+                    title="Minimizar panel"
+                  >
+                    ▲
+                  </button>
+                </div>
+                
+                {isCalculatingSolutions && (
+                  <div className="calculating-indicator">
+                    <span className="spinner">⏳</span>
+                    <p>Calculando soluciones...</p>
+                  </div>
+                )}
+                
+                <div className="run-info-stats">
+                  <div className="run-info-item">
+                    <span className="run-info-label">Puntos (P)</span>
+                    <span className="run-info-value">{runState.scorePoints}</span>
+                  </div>
+                  
+                  <div className="run-info-item">
+                    <span className="run-info-label">XP Ganada</span>
+                    <span className="run-info-value">{runState.xpEarned}</span>
+                  </div>
+                </div>
+
+                {canChangePuzzleFree() && !isGeneratingNewPuzzle && (
+                  <button className="btn-change-puzzle-free" onClick={handleChangePuzzleFree}>
+                    ✨ Cambiar heptagrama (GRATIS)
+                  </button>
+                )}
+
+                {isGeneratingNewPuzzle && (
+                  <div className="generation-info-panel">
+                    <div className="spinner">⏳</div>
+                    <p>Generando nuevo puzzle...</p>
+                    <p className="generation-stats">
+                      Intentos: {generationProgress.attempts}<br />
+                      Última: {generationProgress.lastCount} palabras
+                    </p>
+                  </div>
+                )}
+
+                <button className="btn-abilities" onClick={() => setShowAbilitiesPanel(true)}>
+                  ⚡ Habilidades
+                </button>
+
+                <button className="btn-end-run" onClick={handleEndRun}>
+                  🛑 Terminar Run
+                </button>
+              </>
+            )}
           </div>
-
-          {canChangePuzzleFree() && !isGeneratingNewPuzzle && (
-            <button className="btn-change-puzzle-free" onClick={handleChangePuzzleFree}>
-              ✨ Cambiar heptagrama (GRATIS)
-            </button>
-          )}
-
-          {isGeneratingNewPuzzle && (
-            <div className="generation-info-panel">
-              <div className="spinner">⏳</div>
-              <p>Generando nuevo puzzle...</p>
-              <p className="generation-stats">
-                Intentos: {generationProgress.attempts}<br />
-                Última: {generationProgress.lastCount} palabras
-              </p>
-            </div>
-          )}
-
-          <button className="btn-abilities" onClick={() => setShowAbilitiesPanel(true)}>
-            ⚡ Habilidades
-          </button>
-
-          <button className="btn-end-run" onClick={handleEndRun}>
-            🛑 Terminar Run
-          </button>
 
           {runState.extraLetters.length > 0 && (
             <div className="extra-letters-display">

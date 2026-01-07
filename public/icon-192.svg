@@ -1,0 +1,12 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" fill="#6366f1"/>
+  <g transform="translate(96, 96)">
+    <!-- Heptagrama (7 puntas) -->
+    <path d="M 0,-60 L 12,-18 L 54,-36 L 18,0 L 54,36 L 12,18 L 0,60 L -12,18 L -54,36 L -18,0 L -54,-36 L -12,-18 Z" 
+          fill="none" stroke="#fbbf24" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Círculo central -->
+    <circle cx="0" cy="0" r="12" fill="#fbbf24"/>
+  </g>
+  <text x="96" y="140" font-family="Arial, sans-serif" font-size="20" font-weight="bold" 
+        fill="#fbbf24" text-anchor="middle">HEPTA</text>
+</svg>
