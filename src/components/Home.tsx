@@ -96,7 +96,7 @@ export default function Home({ onNavigate }: HomeProps) {
       )}
       
       <div className="app-version">
-        Heptagramas v0.42
+        Heptagramas v0.43
       </div>
     </PageContainer>
   );

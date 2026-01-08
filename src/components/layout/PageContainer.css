@@ -1,22 +1,24 @@
 /* PageContainer - Centrado universal para todas las pantallas */
 
 .page-container-outer {
-  width: 100%;
+  width: 100vw;              /* 100vw NO 100% - fuerza ancho viewport */
   min-height: 100dvh;
   display: flex;
-  justify-content: center;
+  justify-content: center;   /* centra horizontal */
   align-items: flex-start;
+  /* TEMPORAL: background para ver viewport completo */
+  background: rgba(255, 0, 0, 0.03);
 }
 
 .page-container-inner {
-  width: 100%;
+  width: 100%;               /* CRÍTICO: 100% para no shrink-wrap */
   max-width: 480px;
   padding: 16px;
-  margin: 0 auto;
+  margin: 0;                 /* NO usar margin:auto, el outer centra con flex */
   display: flex;
   flex-direction: column;
-  /* TEMPORAL: verificar centrado - descomentar para debug */
-  border: 1px solid red;
+  /* TEMPORAL: borde rojo para verificar centrado en móvil */
+  border: 2px solid red;
 }
 
 /* Para ExoticsPlay que necesita más ancho en desktop */
