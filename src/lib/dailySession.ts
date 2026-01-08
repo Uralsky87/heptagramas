@@ -4,6 +4,7 @@
  */
 
 import type { Puzzle } from '../types';
+import { getDailySessions, setDailySessions } from '../storage';
 
 export interface DailySession {
   dateKey: string; // "YYYY-MM-DD"
@@ -11,7 +12,21 @@ export interface DailySession {
   progressId: string; // ID único para el progreso: "daily-YYYY-MM-DD"
 }
 
-const STORAGE_KEY = 'heptagramas_dailySessions';
+// Cache en memoria para acceso síncrono
+let sessionsCache: Record<string, DailySession> | null = null;
+
+/**
+ * Precarga las sesiones diarias desde IndexedDB
+ */
+export async function preloadDailySessions(): Promise<void> {
+  try {
+    const sessions = await getDailySessions();
+    sessionsCache = sessions || {};
+  } catch (error) {
+    console.error('[DailySession] Error al precargar sesiones:', error);
+    sessionsCache = {};
+  }
+}
 
 /**
  * Obtiene la fecha actual en formato YYYY-MM-DD (hora local)
@@ -113,27 +128,27 @@ export function getDailySession(dateKey: string, puzzles: Puzzle[]): DailySessio
 }
 
 /**
- * Carga todas las sesiones diarias del localStorage
+ * Carga todas las sesiones diarias (sync - usa cache)
  */
 export function loadAllDailySessions(): Record<string, DailySession> {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (!data) return {};
-    return JSON.parse(data);
-  } catch {
+  if (sessionsCache === null) {
+    console.warn('[DailySession] Sesiones no precargadas, retornando objeto vacío');
     return {};
   }
+  return sessionsCache;
 }
 
 /**
- * Guarda las sesiones diarias en localStorage
+ * Guarda las sesiones diarias (async)
  */
 function saveDailySessions(sessions: Record<string, DailySession>): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-  } catch (err) {
+  // Actualizar cache
+  sessionsCache = sessions;
+  
+  // Guardar async (fire and forget)
+  setDailySessions(sessions).catch((err) => {
     console.error('Error guardando sesiones diarias:', err);
-  }
+  });
 }
 
 /**

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadExoticsRun, clearExoticsRun, hasActiveRun, createNewRun } from '../lib/exoticsStorage';
-import { loadPlayerState, savePlayerState } from '../lib/storage';
+import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { calculateLevel } from '../lib/xpSystem';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import type { DictionaryData } from '../lib/dictionary';

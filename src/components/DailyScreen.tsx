@@ -7,7 +7,7 @@ import {
   formatDateKey,
   getDailyPuzzleForDate 
 } from '../lib/dailySession';
-import { loadPuzzleProgress } from '../lib/storage';
+import { loadPuzzleProgress } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';

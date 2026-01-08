@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { loadPlayerState } from '../lib/storage';
+import { loadPlayerState } from '../lib/storageAdapter';
 import { getLevelProgress } from '../lib/xpSystem';
 import ThemeSelector from './ThemeSelector';
 import PageContainer from './layout/PageContainer';
 
 interface HomeProps {
   onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
+  onNavigateToSettings?: () => void;
 }
 
-export default function Home({ onNavigate }: HomeProps) {
+export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
   const [levelInfo, setLevelInfo] = useState<{
     level: number;
     progressPercentage: number;
@@ -34,13 +35,24 @@ export default function Home({ onNavigate }: HomeProps) {
       <header className="home-header">
         <div className="home-header-top">
           <h1>🌟 Heptagramas</h1>
-          <button 
-            className="btn-settings"
-            onClick={() => setShowThemeSelector(true)}
-            title="Temas"
-          >
-            🎨
-          </button>
+          <div className="home-header-buttons">
+            <button 
+              className="btn-settings"
+              onClick={() => setShowThemeSelector(true)}
+              title="Temas"
+            >
+              🎨
+            </button>
+            {onNavigateToSettings && (
+              <button 
+                className="btn-settings"
+                onClick={onNavigateToSettings}
+                title="Ajustes"
+              >
+                ⚙️
+              </button>
+            )}
+          </div>
         </div>
         <p className="home-subtitle">Encuentra palabras con 7 letras mágicas</p>
         

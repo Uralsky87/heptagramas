@@ -7,7 +7,7 @@ import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
 import { playSuccessSound, playSuperHeptaSound } from '../lib/soundEffects';
-import { loadPlayerState, savePlayerState } from '../lib/storage';
+import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { loadExoticsRun, saveExoticsRun, clearExoticsRun } from '../lib/exoticsStorage';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';

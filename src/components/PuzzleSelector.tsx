@@ -1,6 +1,6 @@
 import type { Puzzle } from '../types';
 import { isToday } from '../lib/dailyPuzzle';
-import { loadPuzzleProgress } from '../lib/storage';
+import { loadPuzzleProgress } from '../lib/storageAdapter';
 
 interface PuzzleSelectorProps {
   puzzles: Puzzle[];

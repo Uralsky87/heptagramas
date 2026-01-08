@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { loadPlayerState, savePlayerState } from '../lib/storage';
+import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { THEMES, getThemeById, isThemeUnlocked, applyTheme, getNextThemeToUnlock } from '../lib/themes';
 import { getLevelProgress } from '../lib/xpSystem';
 

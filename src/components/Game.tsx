@@ -12,9 +12,10 @@ import { playSuccessSound, playSuperHeptaSound } from '../lib/soundEffects';
 import {
   loadPuzzleProgress,
   savePuzzleProgress,
+  preloadPuzzleProgress,
   loadPlayerState,
   savePlayerState,
-} from '../lib/storage';
+} from '../lib/storageAdapter';
 import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import { calculateSessionXP, checkLevelUp, calculateLevel } from '../lib/xpSystem';
@@ -81,7 +82,11 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   }, [progressId]);
 
   // Cargar progreso de un puzzle
-  const loadPuzzleProgressState = (progressIdToLoad: string) => {
+  const loadPuzzleProgressState = async (progressIdToLoad: string) => {
+    // Precargar del IndexedDB al cache
+    await preloadPuzzleProgress(progressIdToLoad);
+    
+    // Ahora leer del cache (sync)
     const progress = loadPuzzleProgress(progressIdToLoad);
     if (progress) {
       setFoundWords(progress.foundWords);

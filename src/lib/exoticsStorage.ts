@@ -1,56 +1,70 @@
 import type { ExoticsRunState } from '../types';
-
-const EXOTICS_RUN_KEY = 'exoticsRunState';
+import { getExoticsRunState, setExoticsRunState } from '../storage';
 
 /**
  * Cargar el estado de la run activa de exóticos (si existe)
  */
 export function loadExoticsRun(): ExoticsRunState | null {
+  // Usar cache sincrónico
+  const cached = (window as any).__exoticsRunCache;
+  if (cached !== undefined) {
+    return cached;
+  }
+  return null;
+}
+
+/**
+ * Precarga el estado de exóticos desde IndexedDB - ASYNC
+ */
+export async function preloadExoticsRun(): Promise<void> {
   try {
-    const stored = localStorage.getItem(EXOTICS_RUN_KEY);
-    if (!stored) return null;
+    const state = await getExoticsRunState();
     
-    const parsed = JSON.parse(stored) as ExoticsRunState;
+    if (!state) {
+      (window as any).__exoticsRunCache = null;
+      return;
+    }
     
     // Validación básica
-    if (!parsed.runId || !parsed.puzzle || !Array.isArray(parsed.foundWords)) {
+    if (!state.runId || !state.puzzle || !Array.isArray(state.foundWords)) {
       console.warn('[ExoticsStorage] Estado corrupto, eliminando...');
-      clearExoticsRun();
-      return null;
+      await clearExoticsRun();
+      (window as any).__exoticsRunCache = null;
+      return;
     }
     
     // Migración: Agregar campos nuevos si no existen
-    if (!parsed.statsUnlocked) {
-      parsed.statsUnlocked = { byStartLetter: false, lengthHint: false };
+    if (!state.statsUnlocked) {
+      state.statsUnlocked = { byStartLetter: false, lengthHint: false };
     } else {
-      if (parsed.statsUnlocked.lengthHint === undefined) {
-        parsed.statsUnlocked.lengthHint = false;
+      if (state.statsUnlocked.lengthHint === undefined) {
+        state.statsUnlocked.lengthHint = false;
       }
     }
     
-    if (!parsed.uiState) {
-      parsed.uiState = { lengthHintExpanded: false, byStartLetterExpanded: true, runPanelMinimized: false };
+    if (!state.uiState) {
+      state.uiState = { lengthHintExpanded: false, byStartLetterExpanded: true, runPanelMinimized: false };
     } else {
-      if (parsed.uiState.runPanelMinimized === undefined) {
-        parsed.uiState.runPanelMinimized = false;
+      if (state.uiState.runPanelMinimized === undefined) {
+        state.uiState.runPanelMinimized = false;
       }
     }
     
     // Migración: foundWords -> foundWordsAll
-    if (!parsed.foundWordsAll) {
-      parsed.foundWordsAll = parsed.foundWords || [];
+    if (!state.foundWordsAll) {
+      state.foundWordsAll = state.foundWords || [];
     }
     
     // Mantener foundWords por compatibilidad (será deprecated)
-    if (!parsed.foundWords) {
-      parsed.foundWords = parsed.foundWordsAll;
+    if (!state.foundWords) {
+      state.foundWords = state.foundWordsAll;
     }
     
-    return parsed;
+    (window as any).__exoticsRunCache = state;
   } catch (error) {
     console.error('[ExoticsStorage] Error al cargar run:', error);
-    clearExoticsRun();
-    return null;
+    await clearExoticsRun();
+    (window as any).__exoticsRunCache = null;
   }
 }
 
@@ -58,28 +72,32 @@ export function loadExoticsRun(): ExoticsRunState | null {
  * Guardar el estado de la run activa
  */
 export function saveExoticsRun(state: ExoticsRunState): void {
-  try {
-    localStorage.setItem(EXOTICS_RUN_KEY, JSON.stringify(state));
-    
-    if (import.meta.env.DEV) {
-      console.log('[ExoticsStorage] Run guardada:', {
-        runId: state.runId,
-        extraLetters: state.extraLetters.length,
-        foundWords: state.foundWords.length,
-        scorePoints: state.scorePoints,
-      });
-    }
-  } catch (error) {
+  // Actualizar cache
+  (window as any).__exoticsRunCache = state;
+  
+  // Guardar async (fire and forget)
+  setExoticsRunState(state).catch((error) => {
     console.error('[ExoticsStorage] Error al guardar run:', error);
+  });
+  
+  if (import.meta.env.DEV) {
+    console.log('[ExoticsStorage] Run guardada:', {
+      runId: state.runId,
+      extraLetters: state.extraLetters.length,
+      foundWords: state.foundWords.length,
+      scorePoints: state.scorePoints,
+    });
   }
 }
 
 /**
  * Eliminar la run activa (terminar run)
  */
-export function clearExoticsRun(): void {
+export async function clearExoticsRun(): Promise<void> {
+  (window as any).__exoticsRunCache = null;
+  
   try {
-    localStorage.removeItem(EXOTICS_RUN_KEY);
+    await setExoticsRunState(null);
     
     if (import.meta.env.DEV) {
       console.log('[ExoticsStorage] Run eliminada');

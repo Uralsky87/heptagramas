@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
-import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storage';
+import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
