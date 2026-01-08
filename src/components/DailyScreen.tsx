@@ -10,7 +10,7 @@ import {
 import { loadPuzzleProgress } from '../lib/storage';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
-import PageContainer from './PageContainer';
+import PageContainer from './layout/PageContainer';
 
 interface DailyScreenProps {
   puzzles: Puzzle[];
@@ -88,7 +88,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
   };
 
   return (
-    <PageContainer className="daily-screen-container">
+    <PageContainer>
       <header className="daily-header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio

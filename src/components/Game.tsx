@@ -4,6 +4,7 @@ import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
+import PageContainer from './layout/PageContainer';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -239,7 +240,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   };
 
   return (
-    <div className="app">
+    <PageContainer>
       <header className="header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button className="btn-back" onClick={handleBackButton}>
@@ -331,6 +332,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
           </div>
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

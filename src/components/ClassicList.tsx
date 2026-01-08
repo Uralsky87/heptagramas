@@ -3,7 +3,7 @@ import type { Puzzle, PuzzleProgress } from '../types';
 import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storage';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
-import PageContainer from './PageContainer';
+import PageContainer from './layout/PageContainer';
 
 interface ClassicListProps {
   puzzles: Puzzle[];
@@ -64,7 +64,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
   };
 
   return (
-    <PageContainer className="classic-list-container">
+    <PageContainer>
       <header className="classic-header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio

@@ -35,6 +35,8 @@
   }
 }
 
+/* DEPRECATED: PageContainer ahora maneja todo el layout */
+/*
 .app {
   max-width: 480px;
   margin: 0 auto;
@@ -43,9 +45,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* TEMPORAL: para verificar centrado en dev */
-  /* border: 2px solid red; */
 }
+*/
 
 /* Header */
 .header {
@@ -2404,6 +2405,7 @@
   width: 100%;
   margin: 0 auto;
   align-items: stretch;
+  /* max-width manejado por PageContainer */
 }
 
 /* Panel izquierdo: Run Info */
@@ -2595,7 +2597,7 @@
 /* Responsive: en pantallas pequeñas, apilar verticalmente */
 @media (min-width: 901px) {
   .game-layout {
-    max-width: 1200px;
+    /* max-width manejado por PageContainer con wide=true */
   }
 }
 

@@ -4,6 +4,7 @@ import { loadPlayerState, savePlayerState } from '../lib/storage';
 import { calculateLevel } from '../lib/xpSystem';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import type { DictionaryData } from '../lib/dictionary';
+import PageContainer from './layout/PageContainer';
 
 interface ExoticsHomeProps {
   onBack: () => void;
@@ -115,7 +116,7 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
   };
 
   return (
-    <div className="app">
+    <PageContainer>
       <header className="header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio
@@ -199,6 +200,6 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
           <strong>Nota:</strong> En construcción. Próximamente podrás seleccionar puzzles exóticos.
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSvg';
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
+import PageContainer from './layout/PageContainer';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
@@ -1003,11 +1004,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
   if (!runState) {
     return (
-      <div className="app">
+      <PageContainer>
         <header className="header">
           <h1>✨ Cargando...</h1>
         </header>
-      </div>
+      </PageContainer>
     );
   }
 
@@ -1025,7 +1026,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   }
 
   return (
-    <div className="app">
+    <PageContainer wide>
       <header className="header">
         <button className="btn-back" onClick={onBack}>
           ← Exóticos
@@ -1529,6 +1530,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           </div>
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }
