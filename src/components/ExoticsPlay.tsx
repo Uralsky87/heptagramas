@@ -177,11 +177,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setClickedWord(prev => prev.slice(0, -1));
   };
 
-  const handleShuffle = () => {
-    if (!runState) return;
-    setShuffleSeed(prev => prev + 1); // Incrementar seed para nuevo shuffle
-  };
-
   // ============= HELPERS PARA FOUNDWORDS VÁLIDOS =============
 
   /**
