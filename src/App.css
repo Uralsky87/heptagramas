@@ -43,6 +43,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* TEMPORAL: para verificar centrado en dev */
+  /* border: 2px solid red; */
 }
 
 /* Header */
@@ -2399,8 +2401,9 @@
 .game-layout {
   display: flex;
   gap: 16px;
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 /* Panel izquierdo: Run Info */
@@ -2569,10 +2572,18 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  align-items: center;
+}
+
+.board-container {
+  width: 100%;
+  max-width: 612px;
+  margin: 0 auto;
 }
 
 .puzzle-header {
   text-align: center;
+  width: 100%;
 }
 
 /* Panel derecho: Lista de palabras */
@@ -2582,14 +2593,26 @@
 }
 
 /* Responsive: en pantallas pequeñas, apilar verticalmente */
+@media (min-width: 901px) {
+  .game-layout {
+    max-width: 1200px;
+  }
+}
+
 @media (max-width: 900px) {
   .game-layout {
     flex-direction: column;
+    align-items: center;
   }
 
   .exotic-run-panel,
   .game-sidebar {
     max-width: 100%;
+    width: 100%;
+  }
+  
+  .game-main {
+    width: 100%;
   }
 }
 /* Bot�n cambiar puzzle gratis */
