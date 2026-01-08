@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   /* TEMPORAL: borde rojo para verificar centrado en móvil */
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 /* Para ExoticsPlay que necesita más ancho en desktop */
