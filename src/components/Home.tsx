@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { loadPlayerState } from '../lib/storage';
 import { getLevelProgress } from '../lib/xpSystem';
 import ThemeSelector from './ThemeSelector';
+import PageContainer from './PageContainer';
 
 interface HomeProps {
   onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
@@ -29,7 +30,7 @@ export default function Home({ onNavigate }: HomeProps) {
   }, []);
 
   return (
-    <div className="home-container">
+    <PageContainer className="home-container">
       <header className="home-header">
         <div className="home-header-top">
           <h1>🌟 Heptagramas</h1>
@@ -97,6 +98,6 @@ export default function Home({ onNavigate }: HomeProps) {
       <div className="app-version">
         Heptagramas v0.34
       </div>
-    </div>
+    </PageContainer>
   );
 }

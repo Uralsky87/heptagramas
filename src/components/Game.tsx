@@ -303,6 +303,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       <PuzzleStats 
         letters={[...currentPuzzle.outer, currentPuzzle.center]}
         solutions={puzzleSolutions}
+        foundWords={foundWords}
       />
 
       {showPuzzleSelector && mode === 'classic' && (

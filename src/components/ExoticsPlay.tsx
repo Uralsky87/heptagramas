@@ -687,7 +687,31 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setTimeout(() => setMessage(''), 3000);
   };
 
-  // 7. Doble puntos x10 palabras (240 P)
+  // 7. Mezclar letras (10 P)
+  const handleShuffleLetters = () => {
+    if (!runState || runState.scorePoints < 10) return;
+    
+    // Cobrar y aplicar shuffle
+    setShuffleSeed(prev => prev + 1);
+    
+    const updated: ExoticsRunState = {
+      ...runState,
+      scorePoints: runState.scorePoints - 10,
+    };
+    
+    setRunState(updated);
+    saveExoticsRun(updated);
+    setShowAbilitiesPanel(false);
+    
+    setMessage('🔄 Letras mezcladas!');
+    setTimeout(() => setMessage(''), 2000);
+    
+    if (import.meta.env.DEV) {
+      console.log('[ExoticsPlay] Mezcla aplicada, nuevo seed:', shuffleSeed + 1);
+    }
+  };
+
+  // 8. Doble puntos x10 palabras (240 P)
   const handleDoublePointsBoost = () => {
     if (!runState || runState.scorePoints < 240) return;
     
@@ -705,7 +729,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setTimeout(() => setMessage(''), 4000);
   };
 
-  // 8. Nuevo puzzle antes del 50% (350 P)
+  // 9. Nuevo puzzle antes del 50% (350 P)
   const handleBuyNewPuzzle = async () => {
     if (!runState || runState.scorePoints < 350) return;
     
@@ -1159,7 +1183,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             onSubmit={handleSubmit}
             onClearClicked={handleClearClicked}
             onBackspace={handleBackspace}
-            onShuffle={handleShuffle}
             successAnimation={showSuccessAnim}
           />
         </div>
@@ -1367,6 +1390,17 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
                 <span className="ability-icon">🌟</span>
                 <span className="ability-name">Letra extra (elegir)</span>
                 <span className="ability-cost">900 P</span>
+              </button>
+
+              {/* Mezclar letras */}
+              <button 
+                className="ability-btn"
+                onClick={handleShuffleLetters}
+                disabled={runState.scorePoints < 10}
+              >
+                <span className="ability-icon">🔄</span>
+                <span className="ability-name">Mezclar letras (aleatorio)</span>
+                <span className="ability-cost">10 P</span>
               </button>
 
               {/* Doble puntos */}
