@@ -126,16 +126,11 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       </header>
 
       <div className="exotics-home-container">
-        <div className="exotics-hero">
-          <div className="exotics-icon">✨</div>
-          <h2>Modo Exótico</h2>
-        </div>
-
         <div className="exotics-features">
           <div className="exotics-feature">
             <span className="feature-icon">🎯</span>
-            <h3>8 Letras</h3>
-            <p>Centro + 6 exteriores + 1 extra</p>
+            <h3>Habilidades</h3>
+            <p>Utiliza habilidades para hacer tuyo el puzzle</p>
           </div>
           <div className="exotics-feature">
             <span className="feature-icon">📚</span>
@@ -145,7 +140,7 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
           <div className="exotics-feature">
             <span className="feature-icon">⭐</span>
             <h3>Mayor Desafío</h3>
-            <p>Encuentra todas las soluciones</p>
+            <p>Contra más progreses, más experiencia acumularás</p>
           </div>
         </div>
 
@@ -195,10 +190,6 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
             <p className="generation-hint">Buscando puzzle con 50-500 soluciones...</p>
           </div>
         )}
-
-        <div className="exotics-note">
-          <strong>Nota:</strong> En construcción. Próximamente podrás seleccionar puzzles exóticos.
-        </div>
       </div>
     </PageContainer>
   );

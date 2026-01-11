@@ -1036,7 +1036,47 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       </header>
 
       <div className="game-layout">
-        {/* Panel izquierdo: Run Info */}
+        {/* Panel central: Tablero y controles */}
+        <div className="game-main">
+          {(() => {
+            const foundWordsValid = getFoundWordsValid();
+            return (
+              <div className="puzzle-header">
+                <h2 className="puzzle-title">
+                  Encontradas: {foundWordsValid.length}
+                  {runState.solutionsTotal > 0 && ` / ${runState.solutionsTotal}`}
+                  {runState.foundWordsAll.length > foundWordsValid.length && 
+                    <span className="invalid-count"> ({runState.foundWordsAll.length - foundWordsValid.length} inválidas)</span>
+                  }
+                </h2>
+              </div>
+            );
+          })()}
+
+          <div className="board-container">
+            <HeptagramBoardSvg
+              key={`${runState.puzzle.center}-${outerCombined.join('')}`}
+              ref={heptagramRef}
+              center={runState.puzzle.center}
+              outer={shuffledOuter}
+              onLetterClick={handleLetterClick}
+              onShuffleOuter={() => setShuffleSeed(prev => prev + 1)}
+              successAnimation={showSuccessAnim}
+              extraLetterIndices={extraLetterIndices}
+            />
+          </div>
+
+          <WordInput
+            clickedWord={clickedWord}
+            message={message}
+            onSubmit={handleSubmit}
+            onClearClicked={handleClearClicked}
+            onBackspace={handleBackspace}
+            successAnimation={showSuccessAnim}
+          />
+        </div>
+
+        {/* Panel de Run Info (ahora después del tablero) */}
         <div className="exotic-run-panel">
           <div className="run-panel-header">
             {runState.uiState.runPanelMinimized ? (
@@ -1141,46 +1181,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               </div>
             </div>
           )}
-        </div>
-
-        {/* Panel central: Tablero y controles */}
-        <div className="game-main">
-          {(() => {
-            const foundWordsValid = getFoundWordsValid();
-            return (
-              <div className="puzzle-header">
-                <h2 className="puzzle-title">
-                  Encontradas: {foundWordsValid.length}
-                  {runState.solutionsTotal > 0 && ` / ${runState.solutionsTotal}`}
-                  {runState.foundWordsAll.length > foundWordsValid.length && 
-                    <span className="invalid-count"> ({runState.foundWordsAll.length - foundWordsValid.length} inválidas)</span>
-                  }
-                </h2>
-              </div>
-            );
-          })()}
-
-          <div className="board-container">
-            <HeptagramBoardSvg
-              key={`${runState.puzzle.center}-${outerCombined.join('')}`}
-              ref={heptagramRef}
-              center={runState.puzzle.center}
-              outer={shuffledOuter}
-              onLetterClick={handleLetterClick}
-              onShuffleOuter={() => setShuffleSeed(prev => prev + 1)}
-              successAnimation={showSuccessAnim}
-              extraLetterIndices={extraLetterIndices}
-            />
-          </div>
-
-          <WordInput
-            clickedWord={clickedWord}
-            message={message}
-            onSubmit={handleSubmit}
-            onClearClicked={handleClearClicked}
-            onBackspace={handleBackspace}
-            successAnimation={showSuccessAnim}
-          />
         </div>
 
         {/* Panel derecho: Lista de palabras */}
