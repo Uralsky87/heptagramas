@@ -46,7 +46,6 @@ function isValidLetterSet(center: string, outer: string[]): boolean {
 function generateRandomLetters(): { center: string; outer: string[] } {
   const alphabet = 'abcdefghijklmnopqrstuvwxyzñ'.split(''); // Con ñ
   const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); // Sin ñ para centro
-  const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); // Sin ñ para centro
   const selected: string[] = [];
   
   // Seleccionar letra central (nunca ñ)

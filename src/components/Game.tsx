@@ -194,7 +194,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
 
     if (!result.ok) {
       setMessage(result.reason || 'Error desconocido');
-      const timer = setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
       // Log en desarrollo para debugging
@@ -227,7 +227,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     
     // Mostrar animación de éxito
     setShowSuccessAnim(true);
-    const animTimer = setTimeout(() => setShowSuccessAnim(false), 600);
+    setTimeout(() => setShowSuccessAnim(false), 600);
     
     if (isSH) {
       setAchievements((prev) => {
@@ -237,10 +237,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         return prev;
       });
       setMessage('¡SuperHepta! 🌟 ¡Usaste todas las letras!');
-      const msgTimer = setTimeout(() => setMessage(''), 4000);
+      setTimeout(() => setMessage(''), 4000);
     } else {
       setMessage('¡Bien! ✓');
-      const msgTimer = setTimeout(() => setMessage(''), 2000);
+      setTimeout(() => setMessage(''), 2000);
     }
   };
 
