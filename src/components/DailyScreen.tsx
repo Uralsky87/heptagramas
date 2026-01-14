@@ -55,8 +55,9 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
     setDaysInfo(initialInfo);
 
     // Calcular soluciones de forma asíncrona
+    const timers: number[] = [];
     last7Days.forEach((dateKey, index) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         getDailySession(dateKey, puzzles); // Crear sesión si no existe
         const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
         const minLen = puzzle.minLen || 3;
@@ -80,7 +81,12 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
           return updated;
         });
       }, index * 10);
+      timers.push(timer);
     });
+
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
   }, [puzzles, dictionary]);
 
   const handlePlayDaily = (dateKey: string) => {

@@ -102,8 +102,10 @@ export async function generateExoticPuzzle(
   dictionary: DictionaryData,
   onProgress?: (attempt: number, lastSolutionCount: number) => void
 ): Promise<ExoticPuzzle | null> {
-  console.log('[ExoticGenerator] Iniciando generación de puzzle...');
-  console.log(`[ExoticGenerator] Rango objetivo: ${MIN_SOLUTIONS}-${MAX_SOLUTIONS} soluciones`);
+  if (import.meta.env.DEV) {
+    console.log('[ExoticGenerator] Iniciando generación de puzzle...');
+    console.log(`[ExoticGenerator] Rango objetivo: ${MIN_SOLUTIONS}-${MAX_SOLUTIONS} soluciones`);
+  }
   
   let attempts = 0;
   let lastSolutionCount = 0;
@@ -157,13 +159,15 @@ export async function generateExoticPuzzle(
       const hasProblematic = allLetters.some(l => PROBLEMATIC_LETTERS.includes(l));
       const problematicList = allLetters.filter(l => PROBLEMATIC_LETTERS.includes(l));
       
-      console.log(
-        `[ExoticGenerator] ✓ Puzzle válido encontrado en intento ${attempts}!`,
-        `\n  Centro: "${center}"`,
-        `\n  Exteriores: [${outer.join(', ')}]`,
-        `\n  Soluciones: ${solutionCount}`,
-        hasProblematic ? `\n  ⚠️ Letras problemáticas: [${problematicList.join(', ')}]` : ''
-      );
+      if (import.meta.env.DEV) {
+        console.log(
+          `[ExoticGenerator] ✓ Puzzle válido encontrado en intento ${attempts}!`,
+          `\n  Centro: "${center}"`,
+          `\n  Exteriores: [${outer.join(', ')}]`,
+          `\n  Soluciones: ${solutionCount}`,
+          hasProblematic ? `\n  ⚠️ Letras problemáticas: [${problematicList.join(', ')}]` : ''
+        );
+      }
       
       // Guardar para evitar repeticiones
       lastGeneratedPuzzle = { center, outer };
@@ -182,10 +186,12 @@ export async function generateExoticPuzzle(
   }
   
   // No se pudo generar un puzzle válido
-  console.error(
-    `[ExoticGenerator] ✗ No se pudo generar puzzle válido después de ${MAX_ATTEMPTS} intentos.`,
-    `\nÚltimo intento tenía ${lastSolutionCount} soluciones.`
-  );
+  if (import.meta.env.DEV) {
+    console.error(
+      `[ExoticGenerator] ✗ No se pudo generar puzzle válido después de ${MAX_ATTEMPTS} intentos.`,
+      `\nÚltimo intento tenía ${lastSolutionCount} soluciones.`
+    );
+  }
   
   return null;
 }

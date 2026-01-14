@@ -33,8 +33,9 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
     setPuzzlesWithMeta(initial);
 
     // Calcular soluciones de forma asíncrona
+    const timers: number[] = [];
     classicPuzzles.forEach((puzzle, index) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         const minLen = puzzle.minLen || 3;
         const allowEnye = puzzle.allowEnye ?? true;
         const solutions = solvePuzzle(
@@ -55,7 +56,12 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
           return updated;
         });
       }, index * 10); // Escalonar cálculos para no bloquear UI
+      timers.push(timer);
     });
+
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
   }, [dictionary]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {

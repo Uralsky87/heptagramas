@@ -186,9 +186,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const isWordValidWithCurrentLetters = (normalizedWord: string): boolean => {
     if (!runState) return false;
     
-    const normalizedCenter = normalizeChar(runState.puzzle.center, false);
-    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, false));
-    const normalizedExtra = runState.extraLetters.map(l => normalizeChar(l, false));
+    const normalizedCenter = normalizeChar(runState.puzzle.center, true);
+    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, true));
+    const normalizedExtra = runState.extraLetters.map(l => normalizeChar(l, true));
     const allowedSet = new Set([normalizedCenter, ...normalizedOuter, ...normalizedExtra]);
     
     // Debe contener centro
@@ -232,7 +232,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     // 2. Debe contener la letra central
-    const normalizedCenter = normalizeChar(runState.puzzle.center, false);
+    const normalizedCenter = normalizeChar(runState.puzzle.center, true);
     if (!normalized.includes(normalizedCenter)) {
       return {
         ok: false,
@@ -241,8 +241,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     // 3. Solo puede usar letras permitidas (centro + outer + extra letters)
-    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, false));
-    const normalizedExtra = runState.extraLetters.map(l => normalizeChar(l, false));
+    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, true));
+    const normalizedExtra = runState.extraLetters.map(l => normalizeChar(l, true));
     const allowedSet = new Set([normalizedCenter, ...normalizedOuter, ...normalizedExtra]);
     
     for (let i = 0; i < normalized.length; i++) {
@@ -282,8 +282,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (!runState) return false;
     
     const normalized = normalizeWord(word);
-    const normalizedCenter = normalizeChar(runState.puzzle.center, false);
-    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, false));
+    const normalizedCenter = normalizeChar(runState.puzzle.center, true);
+    const normalizedOuter = runState.puzzle.outer.map(l => normalizeChar(l, true));
     const allLetters = [normalizedCenter, ...normalizedOuter];
     
     for (const letter of allLetters) {
@@ -1264,7 +1264,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               {runState.uiState.byStartLetterExpanded && (() => {
                 // Obtener las letras del puzzle base (center + outer, sin extras)
                 const baseLetters = [runState.puzzle.center, ...runState.puzzle.outer]
-                  .map(l => normalizeChar(l, false))
+                  .map(l => normalizeChar(l, true))
                   .sort();
                 
                 const foundWordsValid = getFoundWordsValid();
