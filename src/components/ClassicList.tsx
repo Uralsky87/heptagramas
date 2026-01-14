@@ -36,7 +36,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
     classicPuzzles.forEach((puzzle, index) => {
       setTimeout(() => {
         const minLen = puzzle.minLen || 3;
-        const allowEnye = puzzle.allowEnye || false;
+        const allowEnye = puzzle.allowEnye ?? true;
         const solutions = solvePuzzle(
           puzzle.center, 
           puzzle.outer, 

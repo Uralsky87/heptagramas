@@ -7,6 +7,6 @@ import { normalizeString } from './normalizeChar';
  * @deprecated Usa normalizeString directamente
  */
 export function normalizeWord(word: string): string {
-  // Por defecto, modo clásico NO permite ñ
-  return normalizeString(word, false);
+  // Por defecto, permitir ñ en palabras
+  return normalizeString(word, true);
 }

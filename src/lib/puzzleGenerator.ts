@@ -63,7 +63,7 @@ function hasAtLeastOneSuperHepta(solutions: string[], center: string, outer: str
     outer,
     mode: 'classic',
     minLen: 3,
-    allowEnye: false,
+    allowEnye: true,
   };
 
   for (const word of solutions) {
@@ -150,9 +150,9 @@ export async function generateValidPuzzles(
     const shuffled = availableLetters.sort(() => Math.random() - 0.5);
     const outer = shuffled.slice(0, 6);
 
-    // Normalizar todas las letras
-    const normalizedCenter = normalizeChar(center, false);
-    const normalizedOuter = outer.map(l => normalizeChar(l, false));
+    // Normalizar todas las letras (permitir ñ en outer, pero center ya fue filtrado)
+    const normalizedCenter = normalizeChar(center, true);
+    const normalizedOuter = outer.map(l => normalizeChar(l, true));
 
     // Verificar que no se repita la combinación
     const combination = [normalizedCenter, ...normalizedOuter.sort()].join(',');
@@ -175,7 +175,7 @@ export async function generateValidPuzzles(
         outer: normalizedOuter,
         mode: 'classic',
         minLen: 3,
-        allowEnye: false,
+        allowEnye: true,
       });
 
       console.log(`✓ Puzzle ${puzzles.length}/${count} generado (${validation.solutions.length} soluciones, intento ${attempts})`);

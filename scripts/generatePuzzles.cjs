@@ -34,9 +34,9 @@ const DEFAULT_CONFIG = {
   classicMax: 300,
   candidates: 5000,
   minLen: 3,
-  allowEnye: false,
+  allowEnye: true,
   output: 'src/data/puzzles.json',
-  wordlistPath: 'src/data/wordlist.txt'
+  wordlistPath: 'public/wordlist.txt'
 };
 
 // Parsear argumentos
@@ -84,7 +84,7 @@ Opciones:
   --classic-max <num>    Máximo de soluciones para clásicos (default: ${DEFAULT_CONFIG.classicMax})
   --candidates <num>     Número de candidatos a generar (default: ${DEFAULT_CONFIG.candidates})
   --min-len <num>        Longitud mínima de palabra (default: ${DEFAULT_CONFIG.minLen})
-  --allow-enye           Permitir letra ñ (default: false)
+  --allow-enye           Permitir letra ñ (default: true, ñ nunca será letra central)
   --output <path>        Ruta del archivo de salida (default: ${DEFAULT_CONFIG.output})
   --help, -h             Mostrar esta ayuda
         `);
@@ -181,20 +181,27 @@ function loadDictionary(wordlistPath) {
 
 /**
  * Genera un candidato aleatorio de puzzle
+ * La ñ nunca puede ser letra central
  */
 function generateCandidate(allowEnye) {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz' + (allowEnye ? 'ñ' : '');
+  // ñ nunca puede ser letra central
+  const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz';
   const letters = new Set();
   
-  // Generar 7 letras únicas
+  // Elegir letra central (nunca ñ)
+  const center = centerAlphabet[Math.floor(Math.random() * centerAlphabet.length)];
+  letters.add(center);
+  
+  // Generar 6 letras exteriores únicas (pueden incluir ñ si allowEnye es true)
   while (letters.size < 7) {
     const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
     letters.add(randomLetter);
   }
   
   const lettersArray = Array.from(letters);
-  const center = lettersArray[0];
-  const outer = lettersArray.slice(1);
+  // Asegurar que center esté en la primera posición
+  const outer = lettersArray.filter(l => l !== center);
   
   return { center, outer };
 }

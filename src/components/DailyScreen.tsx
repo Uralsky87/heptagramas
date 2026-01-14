@@ -60,7 +60,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         getDailySession(dateKey, puzzles); // Crear sesión si no existe
         const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
         const minLen = puzzle.minLen || 3;
-        const allowEnye = puzzle.allowEnye || false;
+        const allowEnye = puzzle.allowEnye ?? true;
         const solutions = solvePuzzle(
           puzzle.center,
           puzzle.outer,

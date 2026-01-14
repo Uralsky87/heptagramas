@@ -56,7 +56,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   // Calcular soluciones cuando cambia el puzzle
   useEffect(() => {
     const minLen = currentPuzzle.minLen || 3;
-    const allowEnye = currentPuzzle.allowEnye || false;
+    const allowEnye = currentPuzzle.allowEnye ?? true;
     const solutions = solvePuzzle(
       currentPuzzle.center, 
       currentPuzzle.outer, 
@@ -251,7 +251,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
           <button className="btn-back" onClick={handleBackButton}>
             ← Inicio
           </button>
-          <h1>🌟 Heptagramas</h1>
+          <h1>Heptagramas</h1>
           <div style={{ width: '70px' }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>

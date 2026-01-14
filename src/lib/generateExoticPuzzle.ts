@@ -9,6 +9,9 @@ const MAX_ATTEMPTS = 1000; // Número máximo de intentos antes de rendirse
 // Letras problemáticas en español (generan pocas palabras)
 const PROBLEMATIC_LETTERS = ['k', 'w', 'x', 'y'];
 
+// La ñ nunca puede ser letra central (puede estar en outer)
+const INVALID_CENTER_LETTERS = [...PROBLEMATIC_LETTERS, 'ñ'];
+
 // Caché del último puzzle generado para evitar repeticiones inmediatas
 let lastGeneratedPuzzle: { center: string; outer: string[] } | null = null;
 
@@ -16,8 +19,8 @@ let lastGeneratedPuzzle: { center: string; outer: string[] } | null = null;
  * Valida si un set de letras cumple las reglas de calidad
  */
 function isValidLetterSet(center: string, outer: string[]): boolean {
-  // Regla 1: La letra central NO puede ser problemática
-  if (PROBLEMATIC_LETTERS.includes(center)) {
+  // Regla 1: La letra central NO puede ser problemática ni ñ
+  if (INVALID_CENTER_LETTERS.includes(center)) {
     return false;
   }
   
@@ -38,13 +41,20 @@ function isValidLetterSet(center: string, outer: string[]): boolean {
 
 /**
  * Genera un set aleatorio de 7 letras (1 centro + 6 exteriores)
- * sin duplicados y sin ñ
+ * sin duplicados. La ñ puede estar en outer pero nunca en center.
  */
 function generateRandomLetters(): { center: string; outer: string[] } {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); // Sin ñ
+  const alphabet = 'abcdefghijklmnopqrstuvwxyzñ'.split(''); // Con ñ
+  const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); // Sin ñ para centro
+  const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); // Sin ñ para centro
   const selected: string[] = [];
   
-  // Seleccionar 7 letras únicas al azar
+  // Seleccionar letra central (nunca ñ)
+  const centerIndex = Math.floor(Math.random() * centerAlphabet.length);
+  const center = centerAlphabet[centerIndex];
+  selected.push(center);
+  
+  // Seleccionar 6 letras exteriores únicas (pueden incluir ñ)
   while (selected.length < 7) {
     const randomIndex = Math.floor(Math.random() * alphabet.length);
     const letter = alphabet[randomIndex];
@@ -54,12 +64,12 @@ function generateRandomLetters(): { center: string; outer: string[] } {
     }
   }
   
-  // Mezclar para asignar aleatoriamente centro y exteriores
-  const shuffled = selected.sort(() => Math.random() - 0.5);
+  // Extraer outer (todas menos center)
+  const outer = selected.filter(l => l !== center);
   
   return {
-    center: shuffled[0],
-    outer: shuffled.slice(1),
+    center,
+    outer,
   };
 }
 
@@ -76,7 +86,7 @@ function calculateSolutions(
     outer,
     dictionary,
     3, // minLen
-    false // allowEnye
+    true // allowEnye
   );
   
   return solutions.length;

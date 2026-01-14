@@ -34,7 +34,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
     <PageContainer>
       <header className="home-header">
         <div className="home-header-top">
-          <h1>🌟 Heptagramas</h1>
+          <h1>Heptagramas</h1>
           <div className="home-header-buttons">
             <button 
               className="btn-settings"

@@ -830,23 +830,24 @@
 
 .home-header-top {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
   margin-bottom: 12px;
+  gap: 16px;
 }
 
 .home-header-top h1 {
   margin: 0;
   font-size: 36px;
   color: #2c3e50;
+  flex: 1;
+  text-align: center;
 }
 
 .home-header-buttons {
-  position: absolute;
-  right: 0;
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .btn-settings {

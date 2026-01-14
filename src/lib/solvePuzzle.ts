@@ -40,7 +40,7 @@ function getCacheKey(center: string, outer: string[], minLen: number, exoticLett
  * @param outer - Letras exteriores (6 letras)
  * @param dictionary - Diccionario preprocesado
  * @param minLen - Longitud mínima (default: 3)
- * @param allowEnye - Si permite ñ (default: false para modo clásico)
+ * @param allowEnye - Si permite ñ (default: true, ñ nunca puede ser letra central)
  * @param exoticLetter - Letra extra opcional para modo exótico (8 letras total). NO USAR en Diario/Clásicos.
  * @returns Array de palabras válidas (normalizadas)
  */
@@ -49,7 +49,7 @@ export function solvePuzzle(
   outer: string[],
   dictionary: DictionaryData,
   minLen: number = 3,
-  allowEnye: boolean = false,
+  allowEnye: boolean = true,
   exoticLetter?: string
 ): string[] {
   // Normalizar letras del puzzle

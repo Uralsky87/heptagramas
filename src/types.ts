@@ -5,7 +5,7 @@ export interface Puzzle {
   outer: string[]; // 6 letras exteriores
   mode: 'daily' | 'classic'; // tipo de puzzle
   minLen?: number; // longitud mínima (default: 3)
-  allowEnye?: boolean; // si permite ñ (default: false)
+  allowEnye?: boolean; // si permite ñ (default: true, ñ nunca será letra central)
   targetRange?: { min: number; max: number }; // rango de palabras objetivo
   solutionCount?: number; // número de soluciones válidas (precalculado)
 }

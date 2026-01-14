@@ -6,7 +6,7 @@ import { normalizeString, normalizeChar } from './normalizeChar';
  * (center + outer) al menos una vez cada una.
  */
 export function isSuperHepta(word: string, puzzle: Puzzle): boolean {
-  const allowEnye = puzzle.allowEnye || false;
+  const allowEnye = puzzle.allowEnye ?? true;
   const normalized = normalizeString(word, allowEnye);
   
   // Normalizar letras del puzzle
@@ -36,7 +36,7 @@ export function validateWord(
   solutions?: string[],
   exoticLetter?: string | null
 ): ValidationResult {
-  const allowEnye = puzzle.allowEnye || false;
+  const allowEnye = puzzle.allowEnye ?? true;
   const normalized = normalizeString(word, allowEnye);
 
   // Log en desarrollo
