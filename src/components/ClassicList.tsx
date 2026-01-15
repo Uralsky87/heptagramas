@@ -4,6 +4,7 @@ import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 
 interface ClassicListProps {
   puzzles: Puzzle[];
@@ -71,11 +72,15 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
   return (
     <PageContainer>
+      <TopBar 
+        onThemeClick={() => {}} 
+        onSettingsClick={() => {}}
+      />
+
       <header className="classic-header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio
         </button>
-        <h1>🎯 Puzzles Clásicos</h1>
       </header>
 
       <div className="puzzles-grid-classic">

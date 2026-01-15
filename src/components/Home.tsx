@@ -3,6 +3,7 @@ import { loadPlayerState } from '../lib/storageAdapter';
 import { getLevelProgress } from '../lib/xpSystem';
 import ThemeSelector from './ThemeSelector';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 
 interface HomeProps {
   onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
@@ -32,28 +33,12 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
 
   return (
     <PageContainer>
+      <TopBar 
+        onThemeClick={() => setShowThemeSelector(true)}
+        onSettingsClick={onNavigateToSettings || (() => {})}
+      />
+
       <header className="home-header">
-        <div className="home-header-top">
-          <h1>Heptagramas</h1>
-          <div className="home-header-buttons">
-            <button 
-              className="btn-settings"
-              onClick={() => setShowThemeSelector(true)}
-              title="Temas"
-            >
-              🎨
-            </button>
-            {onNavigateToSettings && (
-              <button 
-                className="btn-settings"
-                onClick={onNavigateToSettings}
-                title="Ajustes"
-              >
-                ⚙️
-              </button>
-            )}
-          </div>
-        </div>
         <p className="home-subtitle">Encuentra palabras con 7 letras mágicas</p>
         
         {levelInfo && (

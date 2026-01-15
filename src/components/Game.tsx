@@ -5,6 +5,7 @@ import FoundWordsList from './FoundWordsList';
 import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -246,12 +247,16 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
 
   return (
     <PageContainer>
+      <TopBar 
+        onThemeClick={() => {}} 
+        onSettingsClick={() => {}}
+      />
+
       <header className="header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button className="btn-back" onClick={handleBackButton}>
             ← Inicio
           </button>
-          <h1>Heptagramas</h1>
           <div style={{ width: '70px' }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>

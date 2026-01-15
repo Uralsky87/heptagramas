@@ -5,6 +5,7 @@ import { calculateLevel } from '../lib/xpSystem';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 
 interface ExoticsHomeProps {
   onBack: () => void;
@@ -117,12 +118,15 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
 
   return (
     <PageContainer>
+      <TopBar 
+        onThemeClick={() => {}} 
+        onSettingsClick={() => {}}
+      />
+
       <header className="header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio
         </button>
-        <h1>✨ Modo Exótico</h1>
-        <div style={{ width: '70px' }} />
       </header>
 
       <div className="exotics-home-container">

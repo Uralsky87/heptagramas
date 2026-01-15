@@ -3,6 +3,7 @@ import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSv
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
@@ -1005,6 +1006,10 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   if (!runState) {
     return (
       <PageContainer>
+        <TopBar 
+          onThemeClick={() => {}} 
+          onSettingsClick={() => {}}
+        />
         <header className="header">
           <h1>✨ Cargando...</h1>
         </header>
@@ -1027,12 +1032,15 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
   return (
     <PageContainer wide>
+      <TopBar 
+        onThemeClick={() => {}} 
+        onSettingsClick={() => {}}
+      />
+      
       <header className="header">
         <button className="btn-back" onClick={onBack}>
           ← Exóticos
         </button>
-        <h1>✨ Exóticos</h1>
-        <div style={{ width: '70px' }} />
       </header>
 
       <div className="game-layout">

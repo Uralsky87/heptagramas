@@ -11,6 +11,7 @@ import { loadPuzzleProgress } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
+import TopBar from './TopBar';
 
 interface DailyScreenProps {
   puzzles: Puzzle[];
@@ -95,11 +96,15 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
 
   return (
     <PageContainer>
+      <TopBar 
+        onThemeClick={() => {}} 
+        onSettingsClick={() => {}}
+      />
+      
       <header className="daily-header">
         <button className="btn-back" onClick={onBack}>
           ← Inicio
         </button>
-        <h1>📅 Heptagramas Diarios</h1>
       </header>
 
       <div className="daily-content">

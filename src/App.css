@@ -2601,12 +2601,6 @@
 }
 
 /* Responsive: en pantallas pequeñas, apilar verticalmente */
-@media (min-width: 901px) {
-  .game-layout {
-    /* max-width manejado por PageContainer con wide=true */
-  }
-}
-
 @media (max-width: 900px) {
   .game-layout {
     flex-direction: column;
