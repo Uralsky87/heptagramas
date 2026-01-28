@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSvg';
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
@@ -119,7 +119,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     if (foundWords.length > 0 || score > 0) {
       savePuzzleProgressState();
     }
-  }, [foundWords, score, achievements]);
+  }, [foundWords, score, achievements, progressId]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
@@ -161,16 +161,22 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     });
     setShowXPReward(true);
     
-    // Ocultar después de 4 segundos
-    setTimeout(() => {
-      setShowXPReward(false);
-    }, 4000);
-    
     if (import.meta.env.DEV) {
       console.log('[Game] XP otorgada:', xpReward);
       console.log('[Game] Nivel:', levelUpInfo);
     }
   };
+
+  // Manejar timeout de XP reward (evitar memory leak)
+  useEffect(() => {
+    if (!showXPReward) return;
+    
+    const timer = setTimeout(() => {
+      setShowXPReward(false);
+    }, 4000);
+    
+    return () => clearTimeout(timer);
+  }, [showXPReward]);
 
   const handleBackButton = () => {
     savePuzzleProgressState();
@@ -190,12 +196,19 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setClickedWord(prev => prev.slice(0, -1));
   };
 
+  // Limpiar mensaje después de 3 segundos (evitar memory leak)
+  useEffect(() => {
+    if (!message) return;
+    
+    const timer = setTimeout(() => setMessage(''), 3000);
+    return () => clearTimeout(timer);
+  }, [message]);
+
   const handleSubmit = (word: string) => {
     const result = validateWord(word, currentPuzzle, foundWords, puzzleSolutions);
 
     if (!result.ok) {
       setMessage(result.reason || 'Error desconocido');
-      setTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
       // Log en desarrollo para debugging
@@ -228,7 +241,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     
     // Mostrar animación de éxito
     setShowSuccessAnim(true);
-    setTimeout(() => setShowSuccessAnim(false), 600);
     
     if (isSH) {
       setAchievements((prev) => {
@@ -238,12 +250,18 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         return prev;
       });
       setMessage('¡SuperHepta! 🌟 ¡Usaste todas las letras!');
-      setTimeout(() => setMessage(''), 4000);
     } else {
       setMessage('¡Bien! ✓');
-      setTimeout(() => setMessage(''), 2000);
     }
   };
+
+  // Limpiar animación de éxito
+  useEffect(() => {
+    if (!showSuccessAnim) return;
+    
+    const timer = setTimeout(() => setShowSuccessAnim(false), 600);
+    return () => clearTimeout(timer);
+  }, [showSuccessAnim]);
 
   return (
     <PageContainer>
