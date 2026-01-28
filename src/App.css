@@ -162,6 +162,20 @@
 .trap-shape {
   transition: all 0.2s ease;
   cursor: pointer;
+  outline: none;
+}
+
+/* Eliminar highlight al hacer clic en elementos SVG */
+svg * {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+svg g {
+  outline: none;
 }
 
 .hex-shape:hover,

@@ -1,12 +1,40 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#6366f1"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ed4b82;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c9356a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Fondo con gradiente -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
+  
   <g transform="translate(256, 256)">
-    <!-- Heptagrama (7 puntas) más grande -->
+    <!-- Resplandor de fondo -->
+    <circle cx="0" cy="0" r="200" fill="url(#glowGrad)"/>
+    
+    <!-- Heptagrama exterior (7 puntas) -->
+    <path d="M 0,-186 L 37,-56 L 168,-112 L 56,0 L 168,112 L 37,56 L 0,186 L -37,56 L -168,112 L -56,0 L -168,-112 L -37,-56 Z" 
+          fill="none" stroke="#fbbf24" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"
+          opacity="0.6"/>
+    
+    <!-- Heptagrama medio -->
     <path d="M 0,-160 L 32,-48 L 144,-96 L 48,0 L 144,96 L 32,48 L 0,160 L -32,48 L -144,96 L -48,0 L -144,-96 L -32,-48 Z" 
-          fill="none" stroke="#fbbf24" stroke-width="8" stroke-linejoin="round"/>
-    <!-- Círculo central -->
-    <circle cx="0" cy="0" r="32" fill="#fbbf24"/>
+          fill="none" stroke="#fbbf24" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+    
+    <!-- Heptagrama interior relleno -->
+    <path d="M 0,-120 L 24,-36 L 108,-72 L 36,0 L 108,72 L 24,36 L 0,120 L -24,36 L -108,72 L -36,0 L -108,-72 L -24,-36 Z" 
+          fill="#fbbf24" opacity="0.3" stroke="none"/>
+    
+    <!-- Círculo central con gradiente -->
+    <circle cx="0" cy="0" r="48" fill="url(#centerGrad)" stroke="#fbbf24" stroke-width="5"/>
   </g>
-  <text x="256" y="380" font-family="Arial, sans-serif" font-size="56" font-weight="bold" 
-        fill="#fbbf24" text-anchor="middle">HEPTAGRAMAS</text>
 </svg>

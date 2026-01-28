@@ -32,6 +32,7 @@ export default function App() {
   const [selectedDailyDateKey, setSelectedDailyDateKey] = useState<string | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryData | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
 
   // Inicializar IndexedDB y migrar datos
   useEffect(() => {
@@ -73,6 +74,55 @@ export default function App() {
     initialize();
   }, []);
 
+  // Manejar el botón "atrás" del navegador/móvil
+  useEffect(() => {
+    // Agregar una entrada inicial al historial del navegador
+    if (window.history.state === null) {
+      window.history.replaceState({ screen: 'home' }, '');
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      event.preventDefault();
+      
+      // Si estamos en home, permitir salir de la app
+      if (currentScreen === 'home') {
+        return;
+      }
+      
+      // En cualquier otra pantalla, navegar hacia atrás dentro de la app
+      if (navigationStack.length > 1) {
+        const newStack = [...navigationStack];
+        newStack.pop(); // Eliminar pantalla actual
+        const previousScreen = newStack[newStack.length - 1];
+        
+        setNavigationStack(newStack);
+        setCurrentScreen(previousScreen);
+        
+        // Agregar nueva entrada al historial del navegador
+        window.history.pushState({ screen: previousScreen }, '');
+        
+        // Limpiar estados según la pantalla a la que volvemos
+        if (previousScreen === 'home') {
+          setSelectedDailyDateKey(null);
+          setSelectedClassicPuzzle(null);
+        } else if (previousScreen === 'classic') {
+          setSelectedClassicPuzzle(null);
+        } else if (previousScreen === 'daily') {
+          setSelectedDailyDateKey(null);
+        }
+      } else {
+        // Si solo queda home en el stack, ir a home
+        setCurrentScreen('home');
+        setSelectedDailyDateKey(null);
+        setSelectedClassicPuzzle(null);
+        setNavigationStack(['home']);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentScreen, navigationStack]);
+
   // Cargar diccionario al iniciar
   useEffect(() => {
     console.log('Componente montado, cargando diccionario...');
@@ -89,40 +139,74 @@ export default function App() {
 
   const handleNavigate = (screen: Screen) => {
     setCurrentScreen(screen);
+    setNavigationStack([...navigationStack, screen]);
+    window.history.pushState({ screen }, '');
   };
 
   const handleBackToHome = () => {
     setCurrentScreen('home');
     setSelectedDailyDateKey(null);
+    setNavigationStack(['home']);
+    window.history.pushState({ screen: 'home' }, '');
   };
 
   const handleBackToExoticHome = () => {
     setCurrentScreen('exotic');
+    // Mantener el stack hasta exotic
+    const exoticIndex = navigationStack.indexOf('exotic');
+    if (exoticIndex !== -1) {
+      setNavigationStack(navigationStack.slice(0, exoticIndex + 1));
+    } else {
+      setNavigationStack(['home', 'exotic']);
+    }
+    window.history.pushState({ screen: 'exotic' }, '');
   };
 
   const handleNavigateToSettings = () => {
     setCurrentScreen('settings');
+    setNavigationStack([...navigationStack, 'settings']);
+    window.history.pushState({ screen: 'settings' }, '');
   };
 
   const handleSelectClassicPuzzle = (puzzle: Puzzle) => {
     setSelectedClassicPuzzle(puzzle);
     setCurrentScreen('classic-game');
+    setNavigationStack([...navigationStack, 'classic-game']);
+    window.history.pushState({ screen: 'classic-game' }, '');
   };
 
   const handleBackToClassicList = () => {
     setCurrentScreen('classic');
     setSelectedClassicPuzzle(null);
+    // Mantener el stack hasta classic
+    const classicIndex = navigationStack.indexOf('classic');
+    if (classicIndex !== -1) {
+      setNavigationStack(navigationStack.slice(0, classicIndex + 1));
+    } else {
+      setNavigationStack(['home', 'classic']);
+    }
+    window.history.pushState({ screen: 'classic' }, '');
   };
 
   const handlePlayDaily = (dateKey: string) => {
     setSelectedDailyDateKey(dateKey);
     setCurrentScreen('daily-game');
+    setNavigationStack([...navigationStack, 'daily-game']);
+    window.history.pushState({ screen: 'daily-game' }, '');
   };
 
   const handleBackToDailyList = () => {
     setCurrentScreen('daily');
     setSelectedDailyDateKey(null);
     setSelectedClassicPuzzle(null);
+    // Mantener el stack hasta daily
+    const dailyIndex = navigationStack.indexOf('daily');
+    if (dailyIndex !== -1) {
+      setNavigationStack(navigationStack.slice(0, dailyIndex + 1));
+    } else {
+      setNavigationStack(['home', 'daily']);
+    }
+    window.history.pushState({ screen: 'daily' }, '');
   };
 
   // Mostrar carga mientras se inicializa
@@ -211,6 +295,8 @@ export default function App() {
         onStart={(runId: string) => {
           console.log('[App] Iniciando run exótica:', runId);
           setCurrentScreen('exotic-play');
+          setNavigationStack([...navigationStack, 'exotic-play']);
+          window.history.pushState({ screen: 'exotic-play' }, '');
         }}
         dictionary={dictionary}
       />

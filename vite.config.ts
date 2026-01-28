@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon-192.svg', 'icon-512.svg'],
       manifest: {
-        name: 'Heptagramas - Juego de Palabras',
-        short_name: 'Heptagramas',
+        name: 'Palabrarium',
+        short_name: 'Palabrarium',
         description: 'Juego de palabras con heptagramas de 7 letras. Encuentra todas las palabras posibles en modo clásico o desafíate en el modo exótico con letras extra.',
         start_url: '/heptagramas/',
         display: 'standalone',
