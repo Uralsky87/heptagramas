@@ -95,7 +95,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
       )}
       
       <div className="app-version">
-        {t('home.version')} v0.5
+        {t('home.version')} v0.6
       </div>
     </PageContainer>
   );

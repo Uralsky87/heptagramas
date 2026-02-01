@@ -1022,6 +1022,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         <TopBar 
           onThemeClick={() => {}} 
           onSettingsClick={() => {}}
+          rightButton={
+            <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+              ← {t('common.home')}
+            </button>
+          }
         />
         <header className="header">
           <h1>✨ Cargando...</h1>
@@ -1048,6 +1053,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
+        rightButton={
+          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+            ← Exóticos
+          </button>
+        }
       />
       
       <header className="header">

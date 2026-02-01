@@ -77,6 +77,11 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
+        rightButton={
+          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+            ← {t('common.home')}
+          </button>
+        }
       />
 
       <header className="classic-header">

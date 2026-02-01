@@ -24,6 +24,7 @@ import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import { calculateSessionXP, checkLevelUp, calculateLevel } from '../lib/xpSystem';
 import { checkThemeUnlock } from '../lib/themes';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface GameProps {
   initialPuzzle: Puzzle;
@@ -35,6 +36,7 @@ interface GameProps {
 }
 
 export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mode, dailyProgressId }: GameProps) {
+  const { t } = useLanguage();
   const [currentPuzzle, setCurrentPuzzle] = useState<Puzzle>(initialPuzzle);
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [score, setScore] = useState<number>(0);
@@ -280,6 +282,11 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
+        rightButton={
+          <button className="top-bar-btn top-bar-btn-right" onClick={handleBackButton}>
+            ← {t('common.home')}
+          </button>
+        }
       />
 
       <header className="header">

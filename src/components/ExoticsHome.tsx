@@ -6,6 +6,7 @@ import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ExoticsHomeProps {
   onBack: () => void;
@@ -14,6 +15,7 @@ interface ExoticsHomeProps {
 }
 
 export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHomeProps) {
+  const { t } = useLanguage();
   const [hasRun, setHasRun] = useState(false);
   const [runInfo, setRunInfo] = useState<{
     foundWords: number;
@@ -121,6 +123,11 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
+        rightButton={
+          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+            ← {t('common.home')}
+          </button>
+        }
       />
 
       <header className="header">
