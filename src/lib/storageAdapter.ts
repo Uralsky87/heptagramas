@@ -25,6 +25,15 @@ let writeQueue: Array<() => Promise<void>> = [];
 let isProcessingQueue = false;
 
 /**
+ * Limpia el cache de progreso
+ * Útil al cambiar de idioma para forzar recarga desde IndexedDB
+ */
+export function clearProgressCache(): void {
+  console.log('[StorageAdapter] Limpiando caché de progreso');
+  progressCache.clear();
+}
+
+/**
  * Procesa la cola de escrituras
  */
 async function processWriteQueue() {
@@ -79,10 +88,22 @@ export function savePuzzleProgress(puzzleId: string, progress: PuzzleProgress): 
     try {
       // Detectar si es diario
       if (puzzleId.startsWith('daily-')) {
-        const dateMatch = puzzleId.match(/^daily-(\d{4}-\d{2}-\d{2})$/);
-        if (dateMatch) {
+        const langDateMatch = puzzleId.match(/^daily-(es|en)-(\d{4}-\d{2}-\d{2})$/);
+        const legacyMatch = puzzleId.match(/^daily-(\d{4}-\d{2}-\d{2})$/);
+        if (langDateMatch) {
           const daily: DailyProgress = {
-            date: dateMatch[1],
+            date: `${langDateMatch[1]}-${langDateMatch[2]}`,
+            foundWords: progress.foundWords,
+            completed: false,
+            lastPlayedAt: new Date(progress.lastPlayedAt).getTime(),
+            progressId: puzzleId,
+          };
+          await setDailyProgress(daily);
+          return;
+        }
+        if (legacyMatch) {
+          const daily: DailyProgress = {
+            date: legacyMatch[1],
             foundWords: progress.foundWords,
             completed: false,
             lastPlayedAt: new Date(progress.lastPlayedAt).getTime(),
@@ -117,9 +138,30 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
   try {
     // Detectar si es diario
     if (puzzleId.startsWith('daily-')) {
-      const dateMatch = puzzleId.match(/^daily-(\d{4}-\d{2}-\d{2})$/);
-      if (dateMatch) {
-        const daily = await getDailyProgress(dateMatch[1]);
+      const langDateMatch = puzzleId.match(/^daily-(es|en)-(\d{4}-\d{2}-\d{2})$/);
+      const legacyMatch = puzzleId.match(/^daily-(\d{4}-\d{2}-\d{2})$/);
+      if (langDateMatch) {
+        const lang = langDateMatch[1];
+        const date = langDateMatch[2];
+        let daily = await getDailyProgress(`${lang}-${date}`);
+        if (!daily && lang === 'es') {
+          // Migración: usar progreso legado (sin idioma) para español
+          daily = await getDailyProgress(date);
+        }
+        if (daily) {
+          const progress: PuzzleProgress = {
+            foundWords: daily.foundWords,
+            score: 0,
+            superHeptaWords: [],
+            startedAt: new Date(daily.lastPlayedAt).toISOString(),
+            lastPlayedAt: new Date(daily.lastPlayedAt).toISOString(),
+          };
+          progressCache.set(puzzleId, progress);
+        }
+        return;
+      }
+      if (legacyMatch) {
+        const daily = await getDailyProgress(legacyMatch[1]);
         if (daily) {
           const progress: PuzzleProgress = {
             foundWords: daily.foundWords,

@@ -5,6 +5,7 @@ import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ClassicListProps {
   puzzles: Puzzle[];
@@ -19,6 +20,7 @@ interface PuzzleWithMeta extends Omit<Puzzle, 'solutionCount'> {
 }
 
 export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBack }: ClassicListProps) {
+  const { t } = useLanguage();
   const [puzzlesWithMeta, setPuzzlesWithMeta] = useState<PuzzleWithMeta[]>([]);
 
   // Filtrar solo puzzles clásicos
@@ -79,7 +81,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
       <header className="classic-header">
         <button className="btn-back" onClick={onBack}>
-          ← Inicio
+          {t('common.home')}
         </button>
       </header>
 
@@ -109,9 +111,9 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
               <div className="puzzle-card-meta">
                 <div className="solution-count">
                   {puzzle.solutionCount === null ? (
-                    <span className="calculating">Calculando...</span>
+                    <span className="calculating">{t('classic.calculating')}</span>
                   ) : (
-                    <span>📝 {puzzle.solutionCount} palabras</span>
+                    <span>📝 {puzzle.solutionCount} {t('classic.words')}</span>
                   )}
                 </div>
 
@@ -137,7 +139,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
                   handleSelectPuzzle(puzzle as Puzzle);
                 }}
               >
-                {hasProgress ? '▶ Continuar' : '▶ Jugar'}
+                {hasProgress ? t('classic.continue') : t('classic.play')}
               </button>
             </div>
           );

@@ -26,7 +26,7 @@ function letterMask(word: string): number {
 }
 
 /**
- * Carga y preprocesa el diccionario desde wordlist.txt:
+ * Carga y preprocesa el diccionario desde wordlist.txt (español) o wordlisten.txt (inglés):
  * - Normaliza con normalizeString (consistente con validateWord)
  * - Filtra palabras < 3 letras
  * - Elimina duplicados
@@ -34,8 +34,9 @@ function letterMask(word: string): number {
  * - Crea índice por letra para búsqueda rápida
  * 
  * @param wordlistContent - Opcional. Si se provee, usa este texto en lugar de hacer fetch
+ * @param language - Idioma ('es' o 'en') para seleccionar el archivo correcto
  */
-export async function loadDictionary(wordlistContent?: string): Promise<DictionaryData> {
+export async function loadDictionary(wordlistContent?: string, language: 'es' | 'en' = 'es'): Promise<DictionaryData> {
   try {
     let text: string;
 
@@ -44,8 +45,9 @@ export async function loadDictionary(wordlistContent?: string): Promise<Dictiona
       console.log('Usando contenido de diccionario proporcionado');
       text = wordlistContent;
     } else {
-      // Cargar desde public/wordlist.txt (para navegador)
-      const wordlistUrl = `${import.meta.env.BASE_URL}wordlist.txt`;
+      // Cargar desde public/wordlist.txt (español) o wordlisten.txt (inglés)
+      const filename = language === 'en' ? 'wordlisten.txt' : 'wordlist.txt';
+      const wordlistUrl = `${import.meta.env.BASE_URL}${filename}`;
       console.log('Iniciando carga de diccionario desde', wordlistUrl);
       const response = await fetch(wordlistUrl);
       console.log('Respuesta del fetch:', response.status, response.statusText);

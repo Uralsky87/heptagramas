@@ -1,0 +1,49 @@
+/* Animación de feedback incorrecto */
+.incorrect-feedback {
+  position: fixed;
+  top: 120px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.incorrect-text {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ef4444;
+  text-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  animation: slideAcross 1.5s ease-in-out forwards;
+  white-space: nowrap;
+}
+
+@keyframes slideAcross {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+@media (max-width: 768px) {
+  .incorrect-text {
+    font-size: 24px;
+  }
+  
+  .incorrect-feedback {
+    top: 100px;
+  }
+}

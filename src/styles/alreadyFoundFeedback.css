@@ -1,0 +1,49 @@
+/* Animación de feedback palabra ya encontrada */
+.already-found-feedback {
+  position: fixed;
+  top: 120px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.already-found-text {
+  font-size: 28px;
+  font-weight: bold;
+  color: #3b82f6;
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  animation: slideAcross 1.5s ease-in-out forwards;
+  white-space: nowrap;
+}
+
+@keyframes slideAcross {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+@media (max-width: 768px) {
+  .already-found-text {
+    font-size: 24px;
+  }
+  
+  .already-found-feedback {
+    top: 100px;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSvg';
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
@@ -6,6 +6,9 @@ import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import CorrectFeedback from './CorrectFeedback';
+import IncorrectFeedback from './IncorrectFeedback';
+import AlreadyFoundFeedback from './AlreadyFoundFeedback';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -48,6 +51,8 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     unlockedThemeName?: string;
   } | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
+  const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
+  const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
@@ -211,6 +216,13 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setMessage(result.reason || 'Error desconocido');
       setClickedWord('');
       
+      // Mostrar feedback específico para palabra ya encontrada
+      if (result.reason === 'Ya la encontraste.') {
+        setShowAlreadyFoundAnim(true);
+      } else {
+        setShowIncorrectAnim(true);
+      }
+      
       // Log en desarrollo para debugging
       if (import.meta.env.DEV) {
         console.log(
@@ -311,6 +323,21 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         onLetterClick={handleLetterClick}
         successAnimation={showSuccessAnim}
         onShuffleOuter={setShuffledOuter}
+      />
+
+      <CorrectFeedback 
+        isVisible={showSuccessAnim}
+        onAnimationEnd={() => setShowSuccessAnim(false)}
+      />
+
+      <IncorrectFeedback 
+        isVisible={showIncorrectAnim}
+        onAnimationEnd={() => setShowIncorrectAnim(false)}
+      />
+
+      <AlreadyFoundFeedback 
+        isVisible={showAlreadyFoundAnim}
+        onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
       />
 
       <WordInput 

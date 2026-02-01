@@ -4,6 +4,9 @@ import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import CorrectFeedback from './CorrectFeedback';
+import IncorrectFeedback from './IncorrectFeedback';
+import AlreadyFoundFeedback from './AlreadyFoundFeedback';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
@@ -47,6 +50,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
+  const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
+  const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
@@ -820,6 +825,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       setTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
+      // Mostrar feedback específico para palabra ya encontrada
+      if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
+        setShowAlreadyFoundAnim(true);
+      } else {
+        setShowIncorrectAnim(true);
+      }
+      
       if (import.meta.env.DEV) {
         console.log(
           `[ExoticsPlay] Palabra rechazada: "${word}"`,
@@ -831,7 +843,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     const normalized = normalizeWord(word);
     
-    // Añadir a foundWordsAll (todas las palabras históricas encontradas)
+    // Mostrar feedback de correcto
+    setShowSuccessAnim(true);
     const newFoundWordsAll = [...runState.foundWordsAll, normalized].sort();
     
     // Calcular foundWordsValid DESPUÉS de añadir la nueva palabra
@@ -1073,6 +1086,21 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               extraLetterIndices={extraLetterIndices}
             />
           </div>
+
+          <CorrectFeedback 
+            isVisible={showSuccessAnim}
+            onAnimationEnd={() => setShowSuccessAnim(false)}
+          />
+
+          <IncorrectFeedback 
+            isVisible={showIncorrectAnim}
+            onAnimationEnd={() => setShowIncorrectAnim(false)}
+          />
+
+          <AlreadyFoundFeedback 
+            isVisible={showAlreadyFoundAnim}
+            onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
+          />
 
           <WordInput
             clickedWord={clickedWord}

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsProps {
   onBack: () => void;
@@ -12,6 +13,7 @@ export default function Settings({ onBack }: SettingsProps) {
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { language, setLanguage, t } = useLanguage();
 
   const showMessage = (type: 'success' | 'error' | 'info', text: string) => {
     setMessage({ type, text });
@@ -107,9 +109,9 @@ export default function Settings({ onBack }: SettingsProps) {
           onClick={onBack}
           disabled={isProcessing}
         >
-          ← Volver
+          {t('common.back')}
         </button>
-        <h1>⚙️ Ajustes</h1>
+        <h1>⚙️ {t('settings.title')}</h1>
       </header>
 
       <div className="settings-container">
@@ -118,6 +120,29 @@ export default function Settings({ onBack }: SettingsProps) {
             {message.text}
           </div>
         )}
+
+        <section className="settings-section">
+          <h2>🌐 {t('settings.language')}</h2>
+          <p className="settings-description">
+            Selecciona tu idioma preferido. El cambio se aplicará inmediatamente.
+          </p>
+          <div className="settings-actions">
+            <button 
+              className={`settings-btn ${language === 'es' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
+              onClick={() => setLanguage('es')}
+              disabled={isProcessing}
+            >
+              🇪🇸 {t('settings.spanish')}
+            </button>
+            <button 
+              className={`settings-btn ${language === 'en' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
+              onClick={() => setLanguage('en')}
+              disabled={isProcessing}
+            >
+              🇬🇧 {t('settings.english')}
+            </button>
+          </div>
+        </section>
 
         <section className="settings-section">
           <h2>📦 Gestión de datos</h2>

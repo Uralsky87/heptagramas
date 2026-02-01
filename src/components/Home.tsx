@@ -4,6 +4,7 @@ import { getLevelProgress } from '../lib/xpSystem';
 import ThemeSelector from './ThemeSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HomeProps {
   onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
@@ -11,6 +12,7 @@ interface HomeProps {
 }
 
 export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
+  const { t } = useLanguage();
   const [levelInfo, setLevelInfo] = useState<{
     level: number;
     progressPercentage: number;
@@ -39,12 +41,12 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
       />
 
       <header className="home-header">
-        <p className="home-subtitle">Encuentra palabras con 7 letras mágicas</p>
+        <p className="home-subtitle">{t('home.subtitle')}</p>
         
         {levelInfo && (
           <div className="level-display">
             <div className="level-header">
-              <span className="level-text">Nivel {levelInfo.level}</span>
+              <span className="level-text">{t('home.level')} {levelInfo.level}</span>
               <span className="level-xp">
                 {levelInfo.xpInLevel} / {levelInfo.xpNeeded} XP
               </span>
@@ -65,8 +67,8 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
           onClick={() => onNavigate('daily')}
         >
           <span className="menu-btn-icon">📅</span>
-          <span className="menu-btn-title">Puzzle Diario</span>
-          <span className="menu-btn-desc">Uno nuevo cada día</span>
+          <span className="menu-btn-title">{t('home.daily_title')}</span>
+          <span className="menu-btn-desc">{t('home.daily_desc')}</span>
         </button>
 
         <button 
@@ -74,8 +76,8 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
           onClick={() => onNavigate('classic')}
         >
           <span className="menu-btn-icon">🎯</span>
-          <span className="menu-btn-title">Clásicos</span>
-          <span className="menu-btn-desc">Elige tu puzzle favorito</span>
+          <span className="menu-btn-title">{t('home.classic_title')}</span>
+          <span className="menu-btn-desc">{t('home.classic_desc')}</span>
         </button>
 
         <button 
@@ -83,8 +85,8 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
           onClick={() => onNavigate('exotic')}
         >
           <span className="menu-btn-icon">✨</span>
-          <span className="menu-btn-title">Exóticos</span>
-          <span className="menu-btn-desc">Puzzles con 8 letras</span>
+          <span className="menu-btn-title">{t('home.exotic_title')}</span>
+          <span className="menu-btn-desc">{t('home.exotic_desc')}</span>
         </button>
       </div>
 
@@ -93,7 +95,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
       )}
       
       <div className="app-version">
-        Heptagramas v0.5
+        {t('home.version')} v0.5
       </div>
     </PageContainer>
   );

@@ -9,7 +9,7 @@ import { getDailySessions, setDailySessions } from '../storage';
 export interface DailySession {
   dateKey: string; // "YYYY-MM-DD"
   puzzleId: string; // ID del puzzle usado ese día
-  progressId: string; // ID único para el progreso: "daily-YYYY-MM-DD"
+  progressId: string; // ID único para el progreso: "daily-<lang>-YYYY-MM-DD"
 }
 
 // Cache en memoria para acceso síncrono
@@ -26,6 +26,10 @@ export async function preloadDailySessions(): Promise<void> {
     console.error('[DailySession] Error al precargar sesiones:', error);
     sessionsCache = {};
   }
+}
+
+function getSessionKey(language: 'es' | 'en', dateKey: string): string {
+  return `${language}-${dateKey}`;
 }
 
 /**
@@ -104,12 +108,13 @@ export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzl
 /**
  * Obtiene o crea la sesión diaria para una fecha
  */
-export function getDailySession(dateKey: string, puzzles: Puzzle[]): DailySession {
+export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'es' | 'en' = 'es'): DailySession {
   const sessions = loadAllDailySessions();
+  const sessionKey = getSessionKey(language, dateKey);
   
   // Si ya existe sesión para este día, retornarla
-  if (sessions[dateKey]) {
-    return sessions[dateKey];
+  if (sessions[sessionKey]) {
+    return sessions[sessionKey];
   }
   
   // Crear nueva sesión
@@ -117,11 +122,11 @@ export function getDailySession(dateKey: string, puzzles: Puzzle[]): DailySessio
   const newSession: DailySession = {
     dateKey,
     puzzleId: puzzle.id,
-    progressId: `daily-${dateKey}`,
+    progressId: `daily-${language}-${dateKey}`,
   };
   
   // Guardar
-  sessions[dateKey] = newSession;
+  sessions[sessionKey] = newSession;
   saveDailySessions(sessions);
   
   return newSession;

@@ -12,6 +12,7 @@ import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DailyScreenProps {
   puzzles: Puzzle[];
@@ -30,6 +31,7 @@ interface DayInfo {
 }
 
 export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }: DailyScreenProps) {
+  const { t, language } = useLanguage();
   const [daysInfo, setDaysInfo] = useState<DayInfo[]>([]);
   const todayKey = getDailyKey();
 
@@ -39,7 +41,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
     
     // Crear info inicial
     const initialInfo: DayInfo[] = last7Days.map(dateKey => {
-      const session = getDailySession(dateKey, puzzles);
+      const session = getDailySession(dateKey, puzzles, language);
       const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
       const progress = loadPuzzleProgress(session.progressId);
       
@@ -59,7 +61,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
     const timers: number[] = [];
     last7Days.forEach((dateKey, index) => {
       const timer = setTimeout(() => {
-        getDailySession(dateKey, puzzles); // Crear sesión si no existe
+        getDailySession(dateKey, puzzles, language); // Crear sesión si no existe
         const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
         const minLen = puzzle.minLen || 3;
         const allowEnye = puzzle.allowEnye ?? true;
@@ -88,7 +90,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
     return () => {
       timers.forEach(timer => clearTimeout(timer));
     };
-  }, [puzzles, dictionary]);
+  }, [puzzles, dictionary, language]);
 
   const handlePlayDaily = (dateKey: string) => {
     onPlayDaily(dateKey);
@@ -103,7 +105,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
       
       <header className="daily-header">
         <button className="btn-back" onClick={onBack}>
-          ← Inicio
+          {t('common.home')}
         </button>
       </header>
 
@@ -112,7 +114,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         {daysInfo.length > 0 && (
           <div className="today-card">
             <div className="today-card-header">
-              <h2>🌟 Heptagrama de hoy</h2>
+              <h2>🌟 {t('daily.today_title')}</h2>
               <p className="today-date">{formatDateKey(todayKey)}</p>
             </div>
             
@@ -129,14 +131,14 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                 
                 {daysInfo[0].solutionCount !== null && (
                   <p className="solution-count-big">
-                    📝 {daysInfo[0].solutionCount} palabras
+                    📝 {daysInfo[0].solutionCount} {t('daily.words')}
                   </p>
                 )}
               </div>
 
               {daysInfo[0].progress && daysInfo[0].progress.foundWords.length > 0 && (
                 <div className="today-progress">
-                  <p className="progress-label">Tu progreso:</p>
+                  <p className="progress-label">{t('daily.your_progress')}</p>
                   <div className="progress-bar-big">
                     <div 
                       className="progress-fill" 
@@ -146,7 +148,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                     />
                   </div>
                   <p className="progress-text-big">
-                    {daysInfo[0].progress.foundWords.length} / {daysInfo[0].solutionCount || '?'} palabras
+                    {daysInfo[0].progress.foundWords.length} / {daysInfo[0].solutionCount || '?'} {t('daily.words')}
                   </p>
                 </div>
               )}
@@ -156,8 +158,8 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                 onClick={() => handlePlayDaily(todayKey)}
               >
                 {daysInfo[0].progress && daysInfo[0].progress.foundWords.length > 0 
-                  ? '▶ Continuar jugando' 
-                  : '▶ Jugar ahora'}
+                  ? t('daily.continue')
+                  : t('daily.play_now')}
               </button>
             </div>
           </div>
@@ -165,7 +167,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
 
         {/* Lista de días anteriores */}
         <div className="previous-days">
-          <h3 className="section-title">Días anteriores</h3>
+          <h3 className="section-title">{t('daily.previous_days')}</h3>
           <div className="days-list">
             {daysInfo.slice(1).map((dayInfo) => {
               const hasProgress = dayInfo.progress && dayInfo.progress.foundWords.length > 0;
@@ -193,7 +195,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
 
                   <div className="day-card-body">
                     {dayInfo.solutionCount === null ? (
-                      <span className="calculating">Calculando...</span>
+                      <span className="calculating">{t('daily.calculating')}</span>
                     ) : (
                       <>
                         {hasProgress ? (
@@ -209,7 +211,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                             </span>
                           </div>
                         ) : (
-                          <span className="no-progress">Sin jugar</span>
+                          <span className="no-progress">{t('daily.not_played')}</span>
                         )}
                       </>
                     )}

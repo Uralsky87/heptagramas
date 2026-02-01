@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import DefinitionModal from './DefinitionModal';
+import { useDefinitions } from '../lib/useDefinitions';
+
 interface FoundWordsListProps {
   words: string[];
   total: number;
@@ -13,10 +17,21 @@ function getProgressLevel(percentage: number): string {
 }
 
 export default function FoundWordsList({ words, total, superHeptaWords, invalidWords = [] }: FoundWordsListProps) {
+  const [selectedWord, setSelectedWord] = useState<string | null>(null);
+  const { getDefinition } = useDefinitions();
   const percentage = total > 0 ? Math.round((words.length / total) * 100) : 0;
   const level = getProgressLevel(percentage);
   const superHeptaSet = new Set(superHeptaWords);
   const invalidSet = new Set(invalidWords);
+
+  const handleWordClick = (word: string) => {
+    const definition = getDefinition(word);
+    if (definition) {
+      setSelectedWord(word);
+    }
+  };
+
+  const selectedDefinition = selectedWord ? getDefinition(selectedWord) : null;
 
   return (
     <section className="found-section">
@@ -42,12 +57,19 @@ export default function FoundWordsList({ words, total, superHeptaWords, invalidW
           {words.map((word) => {
             const isInvalid = invalidSet.has(word);
             const isSuper = superHeptaSet.has(word);
+            const hasDefinition = getDefinition(word);
             let className = '';
             if (isSuper) className = 'superhepta';
             if (isInvalid) className += ' invalid-word';
+            if (hasDefinition) className += ' has-definition';
             
             return (
-              <li key={word} className={className.trim()}>
+              <li 
+                key={word} 
+                className={className.trim()}
+                onClick={() => handleWordClick(word)}
+                title={hasDefinition ? 'Haz clic para ver la definición' : ''}
+              >
                 {word}
                 {isSuper && <span className="star-icon"> ⭐</span>}
                 {isInvalid && <span className="invalid-tag"> (ya no válida)</span>}
@@ -55,6 +77,15 @@ export default function FoundWordsList({ words, total, superHeptaWords, invalidW
             );
           })}
         </ul>
+      )}
+
+      {selectedWord && selectedDefinition && (
+        <DefinitionModal
+          word={selectedWord}
+          definition={selectedDefinition}
+          isOpen={true}
+          onClose={() => setSelectedWord(null)}
+        />
       )}
     </section>
   );

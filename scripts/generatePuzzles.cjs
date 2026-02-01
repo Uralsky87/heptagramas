@@ -67,8 +67,14 @@ function parseArgs() {
       case '--allow-enye':
         config.allowEnye = true;
         break;
+      case '--no-enye':
+        config.allowEnye = false;
+        break;
       case '--output':
         config.output = args[++i];
+        break;
+      case '--wordlist':
+        config.wordlistPath = args[++i];
         break;
       case '--help':
       case '-h':
@@ -85,7 +91,9 @@ Opciones:
   --candidates <num>     Número de candidatos a generar (default: ${DEFAULT_CONFIG.candidates})
   --min-len <num>        Longitud mínima de palabra (default: ${DEFAULT_CONFIG.minLen})
   --allow-enye           Permitir letra ñ (default: true, ñ nunca será letra central)
+  --no-enye              No permitir letra ñ
   --output <path>        Ruta del archivo de salida (default: ${DEFAULT_CONFIG.output})
+  --wordlist <path>      Ruta del wordlist (default: ${DEFAULT_CONFIG.wordlistPath})
   --help, -h             Mostrar esta ayuda
         `);
         process.exit(0);

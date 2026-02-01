@@ -411,6 +411,17 @@ svg g {
   align-items: center;
   justify-content: center;
   gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.found-list li.has-definition {
+  cursor: pointer;
+}
+
+.found-list li.has-definition:hover {
+  background: linear-gradient(135deg, #e8ecf1 0%, #b0bfd6 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
 }
 
 .found-list li.superhepta {

@@ -7,6 +7,9 @@ import ClassicList from './components/ClassicList';
 import ExoticsHome from './components/ExoticsHome';
 import ExoticsPlay from './components/ExoticsPlay';
 import Settings from './components/Settings';
+import UpdateBanner from './components/UpdateBanner';
+import { useUpdateChecker } from './lib/useUpdateChecker';
+import { useLanguage } from './contexts/LanguageContext';
 import type { Puzzle } from './types';
 import { loadDictionary, type DictionaryData } from './lib/dictionary';
 import { getDailySession, getDailyPuzzleForDate, preloadDailySessions } from './lib/dailySession';
@@ -14,6 +17,7 @@ import { applyTheme, getThemeById } from './lib/themes';
 import { migrateFromLocalStorage, getPlayerState, openDatabase } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
 import puzzlesData from './data/puzzles.json';
+import puzzlesEnData from './data/puzzles_en.json';
 
 // Importar función de test (disponible en consola como testPuzzle())
 import './lib/testPuzzle';
@@ -22,7 +26,8 @@ import './lib/testExoticsStorage';
 // Importar test de Exotics Scoring (disponible en consola como testExoticsScoring())
 import './lib/testExoticsScoring';
 
-const PUZZLES: Puzzle[] = puzzlesData as Puzzle[];
+const PUZZLES_ES: Puzzle[] = puzzlesData as Puzzle[];
+const PUZZLES_EN: Puzzle[] = puzzlesEnData as Puzzle[];
 
 type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'settings';
 
@@ -33,6 +38,9 @@ export default function App() {
   const [dictionary, setDictionary] = useState<DictionaryData | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
+  const { updateAvailable, isUpdating, handleUpdate } = useUpdateChecker();
+  const { language } = useLanguage();
+  const puzzles = language === 'en' ? PUZZLES_EN : PUZZLES_ES;
 
   // Inicializar IndexedDB y migrar datos
   useEffect(() => {
@@ -123,10 +131,10 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [currentScreen, navigationStack]);
 
-  // Cargar diccionario al iniciar
+  // Cargar diccionario al iniciar o cambiar idioma
   useEffect(() => {
-    console.log('Componente montado, cargando diccionario...');
-    loadDictionary()
+    console.log(`[App] Cargando diccionario en idioma: ${language}`);
+    loadDictionary(undefined, language)
       .then(dict => {
         console.log('Diccionario recibido:', dict.words.length, 'palabras');
         setDictionary(dict);
@@ -135,7 +143,7 @@ export default function App() {
         console.error('Error al cargar diccionario:', err);
         alert('Error al cargar el diccionario. Revisa la consola.');
       });
-  }, []);
+  }, [language]);
 
   const handleNavigate = (screen: Screen) => {
     setCurrentScreen(screen);
@@ -212,32 +220,42 @@ export default function App() {
   // Mostrar carga mientras se inicializa
   if (!isHydrated || !dictionary) {
     return (
-      <div className="app">
-        <header className="header">
-          <h1>🌟 Heptagramas</h1>
-          <p className="puzzle-title">
-            {!isHydrated ? 'Inicializando almacenamiento...' : 'Cargando diccionario...'}
-          </p>
-        </header>
-      </div>
+      <>
+        <UpdateBanner 
+          isVisible={updateAvailable}
+          isUpdating={isUpdating}
+          onUpdate={handleUpdate}
+        />
+        <div className="app">
+          <header className="header">
+            <h1>🌟 Heptagramas</h1>
+            <p className="puzzle-title">
+              {!isHydrated ? 'Inicializando almacenamiento...' : 'Cargando diccionario...'}
+            </p>
+          </header>
+        </div>
+      </>
     );
   }
 
+  // Preparar el contenido según la pantalla actual
+  let screenContent: React.ReactNode;
+
   // Pantalla Home
   if (currentScreen === 'home') {
-    return <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
+    screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
   }
 
   // Pantalla Settings
-  if (currentScreen === 'settings') {
-    return <Settings onBack={handleBackToHome} />;
+  else if (currentScreen === 'settings') {
+    screenContent = <Settings onBack={handleBackToHome} />;
   }
 
   // Pantalla DailyScreen (lista de diarios)
-  if (currentScreen === 'daily') {
-    return (
+  else if (currentScreen === 'daily') {
+    screenContent = (
       <DailyScreen 
-        puzzles={PUZZLES}
+        puzzles={puzzles}
         dictionary={dictionary}
         onPlayDaily={handlePlayDaily}
         onBack={handleBackToHome}
@@ -246,15 +264,15 @@ export default function App() {
   }
 
   // Juego Diario específico
-  if (currentScreen === 'daily-game' && selectedDailyDateKey) {
-    const session = getDailySession(selectedDailyDateKey, PUZZLES);
-    const puzzle = getDailyPuzzleForDate(selectedDailyDateKey, PUZZLES);
+  else if (currentScreen === 'daily-game' && selectedDailyDateKey) {
+    const session = getDailySession(selectedDailyDateKey, puzzles, language);
+    const puzzle = getDailyPuzzleForDate(selectedDailyDateKey, puzzles);
     
-    return (
+    screenContent = (
       <Game 
         initialPuzzle={puzzle}
         dictionary={dictionary}
-        allPuzzles={PUZZLES}
+        allPuzzles={puzzles}
         onBack={handleBackToDailyList}
         mode="daily"
         dailyProgressId={session.progressId}
@@ -263,10 +281,10 @@ export default function App() {
   }
 
   // Pantalla ClassicList
-  if (currentScreen === 'classic') {
-    return (
+  else if (currentScreen === 'classic') {
+    screenContent = (
       <ClassicList 
-        puzzles={PUZZLES}
+        puzzles={puzzles}
         dictionary={dictionary}
         onSelectPuzzle={handleSelectClassicPuzzle}
         onBack={handleBackToHome}
@@ -275,12 +293,12 @@ export default function App() {
   }
 
   // Juego Clásico específico
-  if (currentScreen === 'classic-game' && selectedClassicPuzzle) {
-    return (
+  else if (currentScreen === 'classic-game' && selectedClassicPuzzle) {
+    screenContent = (
       <Game 
         initialPuzzle={selectedClassicPuzzle}
         dictionary={dictionary}
-        allPuzzles={PUZZLES}
+        allPuzzles={puzzles}
         onBack={handleBackToClassicList}
         mode="classic"
       />
@@ -288,8 +306,8 @@ export default function App() {
   }
 
   // Pantalla Exotic (nueva home de exóticos)
-  if (currentScreen === 'exotic') {
-    return (
+  else if (currentScreen === 'exotic') {
+    screenContent = (
       <ExoticsHome 
         onBack={handleBackToHome}
         onStart={(runId: string) => {
@@ -304,8 +322,8 @@ export default function App() {
   }
 
   // Pantalla Exotic Play (gameplay)
-  if (currentScreen === 'exotic-play') {
-    return (
+  else if (currentScreen === 'exotic-play') {
+    screenContent = (
       <ExoticsPlay 
         onBack={handleBackToExoticHome}
         dictionary={dictionary}
@@ -313,5 +331,20 @@ export default function App() {
     );
   }
 
-  return <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
+  // Por defecto, mostrar Home
+  else {
+    screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
+  }
+
+  // Retornar con UpdateBanner envolviendo todo
+  return (
+    <>
+      <UpdateBanner 
+        isVisible={updateAvailable}
+        isUpdating={isUpdating}
+        onUpdate={handleUpdate}
+      />
+      {screenContent}
+    </>
+  );
 }
