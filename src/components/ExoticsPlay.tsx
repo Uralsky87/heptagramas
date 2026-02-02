@@ -17,6 +17,7 @@ import { solvePuzzle } from '../lib/solvePuzzle';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import { calculateLevel } from '../lib/xpSystem';
 import type { DictionaryData } from '../lib/dictionary';
+import { useLanguage } from '../contexts/LanguageContext';
 import '../exotics-styles.css';
 
 interface ExoticsPlayProps {
@@ -45,6 +46,7 @@ function shuffleArray(array: string[], seed: number): string[] {
 }
 
 export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
+  const { t } = useLanguage();
   const [runState, setRunState] = useState<ExoticsRunState | null>(null);
   const [message, setMessage] = useState<string>('');
   const [clickedWord, setClickedWord] = useState('');
