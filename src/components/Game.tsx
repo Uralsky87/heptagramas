@@ -317,15 +317,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         </div>
       )}
 
-      <HeptagramBoardSvg 
-        ref={heptagramRef}
-        center={currentPuzzle.center} 
-        outer={shuffledOuter}
-        onLetterClick={handleLetterClick}
-        successAnimation={showSuccessAnim}
-        onShuffleOuter={setShuffledOuter}
-      />
-
+      {/* Mensajes de feedback encima del heptagrama */}
       <CorrectFeedback 
         isVisible={showSuccessAnim}
         onAnimationEnd={() => setShowSuccessAnim(false)}
@@ -339,6 +331,15 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       <AlreadyFoundFeedback 
         isVisible={showAlreadyFoundAnim}
         onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
+      />
+
+      <HeptagramBoardSvg 
+        ref={heptagramRef}
+        center={currentPuzzle.center} 
+        outer={shuffledOuter}
+        onLetterClick={handleLetterClick}
+        successAnimation={showSuccessAnim}
+        onShuffleOuter={setShuffledOuter}
       />
 
       <WordInput 
