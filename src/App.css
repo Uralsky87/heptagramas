@@ -157,38 +157,6 @@
   display: block;
 }
 
-.btn-delete-letter {
-  position: absolute;
-  bottom: -60px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  background: white;
-  border: 2px solid #e0e0e0;
-  color: #ed4b82;
-  font-size: 24px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: manipulation;
-}
-
-.btn-delete-letter:hover {
-  background: #f5f7fa;
-  border-color: #ed4b82;
-  box-shadow: 0 2px 8px rgba(237, 75, 130, 0.2);
-}
-
-.btn-delete-letter:active {
-  background: #ede9fc;
-  border-color: #ed4b82;
-  transform: scale(0.95);
-}
-
 .hex-shape,
 .center-polygon,
 .trap-shape {
@@ -263,12 +231,15 @@ svg g {
     font-size: 28px;
   }
 
+  .word-input {
+    height: 40px;
+    font-size: 14px;
+  }
+
   .btn-delete-letter {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-    bottom: -50px;
-    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 }
 
@@ -280,23 +251,23 @@ svg g {
 .input-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
-.button-row {
+.input-with-delete {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  gap: 8px;
+  align-items: stretch;
 }
 
 .word-input {
-  width: 100%;
-  height: 52px;
+  flex: 1;
+  height: 44px;
   padding: 0 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 2px solid #e0e0e0;
-  font-size: 18px;
+  font-size: 16px;
   transition: border-color 0.2s;
 }
 
@@ -304,6 +275,42 @@ svg g {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-delete-letter {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  color: #ed4b82;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.btn-delete-letter:hover {
+  background: #f5f7fa;
+  border-color: #ed4b82;
+  box-shadow: 0 2px 8px rgba(237, 75, 130, 0.2);
+}
+
+.btn-delete-letter:active {
+  background: #ede9fc;
+  border-color: #ed4b82;
+  transform: scale(0.95);
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
 }
 
 .btn-action {

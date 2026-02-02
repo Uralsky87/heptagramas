@@ -49,21 +49,25 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
   return (
     <section className="input-section">
       <div className={`input-container ${successAnimation ? 'success-pulse' : ''}`}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Haz clic en las letras..."
-          className={`word-input ${successAnimation ? 'success-flash' : ''}`}
-          readOnly
-        />
+        <div className="input-with-delete">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Haz clic en las letras..."
+            className={`word-input ${successAnimation ? 'success-flash' : ''}`}
+            readOnly
+          />
+          <button 
+            onClick={handleClear}
+            className="btn-delete-letter"
+            title="Borrar última letra"
+          >
+            ⌫
+          </button>
+        </div>
         <div className="button-row">
-          {input && (
-            <button onClick={handleClear} className="btn-action btn-clear">
-              Borrar
-            </button>
-          )}
           {onShuffle && (
             <button onClick={onShuffle} className="btn-action btn-shuffle-inline" title="Reordenar">
               🔄
