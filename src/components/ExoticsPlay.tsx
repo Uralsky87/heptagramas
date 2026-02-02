@@ -7,6 +7,7 @@ import TopBar from './TopBar';
 import CorrectFeedback from './CorrectFeedback';
 import IncorrectFeedback from './IncorrectFeedback';
 import AlreadyFoundFeedback from './AlreadyFoundFeedback';
+import MissingCentralFeedback from './MissingCentralFeedback';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
@@ -54,6 +55,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
   const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
+  const [showMissingCentralAnim, setShowMissingCentralAnim] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
@@ -830,6 +832,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       // Mostrar feedback específico para palabra ya encontrada
       if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
         setShowAlreadyFoundAnim(true);
+      } else if (result.reason?.includes('Debe contener la letra central')) {
+        setShowMissingCentralAnim(true);
       } else {
         setShowIncorrectAnim(true);
       }
@@ -1112,6 +1116,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           <AlreadyFoundFeedback 
             isVisible={showAlreadyFoundAnim}
             onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
+          />
+
+          <MissingCentralFeedback 
+            isVisible={showMissingCentralAnim}
+            onAnimationEnd={() => setShowMissingCentralAnim(false)}
           />
 
           <WordInput

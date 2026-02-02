@@ -9,6 +9,7 @@ import TopBar from './TopBar';
 import CorrectFeedback from './CorrectFeedback';
 import IncorrectFeedback from './IncorrectFeedback';
 import AlreadyFoundFeedback from './AlreadyFoundFeedback';
+import MissingCentralFeedback from './MissingCentralFeedback';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -55,6 +56,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
   const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
+  const [showMissingCentralAnim, setShowMissingCentralAnim] = useState(false);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
@@ -221,6 +223,8 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       // Mostrar feedback específico para palabra ya encontrada
       if (result.reason === 'Ya la encontraste.') {
         setShowAlreadyFoundAnim(true);
+      } else if (result.reason?.includes('Debe contener la letra central')) {
+        setShowMissingCentralAnim(true);
       } else {
         setShowIncorrectAnim(true);
       }
@@ -331,6 +335,11 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       <AlreadyFoundFeedback 
         isVisible={showAlreadyFoundAnim}
         onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
+      />
+
+      <MissingCentralFeedback 
+        isVisible={showMissingCentralAnim}
+        onAnimationEnd={() => setShowMissingCentralAnim(false)}
       />
 
       <HeptagramBoardSvg 

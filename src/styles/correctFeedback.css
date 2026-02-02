@@ -5,16 +5,17 @@
   pointer-events: none;
   z-index: 1000;
   margin-bottom: 24px;
-  height: 20px;
+  min-height: 20px;
 }
 
 .correct-text {
-  font-size: 14px;
+  font-size: 28px;
   font-weight: 500;
   color: #22c55e;
   text-shadow: none;
-  animation: fadeInOut 1.5s ease-in-out forwards;
+  animation: fadeInOut 2.5s ease-in-out forwards;
   white-space: nowrap;
+  line-height: 1;
 }
 
 @keyframes fadeInOut {
@@ -24,7 +25,7 @@
   10% {
     opacity: 1;
   }
-  90% {
+  85% {
     opacity: 1;
   }
   100% {
@@ -34,7 +35,7 @@
 
 @media (max-width: 768px) {
   .correct-text {
-    font-size: 14px;
+    font-size: 24px;
   }
   
   .correct-feedback {
