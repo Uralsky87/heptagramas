@@ -199,6 +199,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setClickedWord(prev => prev.slice(0, -1));
   };
 
+  const handleDeleteLetter = () => {
+    setClickedWord(prev => prev.slice(0, -1));
+  };
+
   // Limpiar mensaje después de 3 segundos (evitar memory leak)
   useEffect(() => {
     if (!message) return;
@@ -343,6 +347,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         message={message}
         clickedWord={clickedWord}
         onBackspace={handleBackspace}
+        onDeleteLetter={handleDeleteLetter}
         onShuffle={() => heptagramRef.current?.shuffle()}
         successAnimation={showSuccessAnim}
       />

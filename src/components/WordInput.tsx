@@ -6,10 +6,11 @@ interface WordInputProps {
   clickedWord?: string;
   onBackspace?: () => void;
   onShuffle?: () => void;
+  onDeleteLetter?: () => void;
   successAnimation?: boolean;
 }
 
-export default function WordInput({ onSubmit, message, clickedWord = '', onBackspace, onShuffle, successAnimation }: WordInputProps) {
+export default function WordInput({ onSubmit, message, clickedWord = '', onBackspace, onShuffle, onDeleteLetter, successAnimation }: WordInputProps) {
   const [input, setInput] = useState('');
 
   // Sincronizar input con palabra clickeada
@@ -31,6 +32,8 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onBacks
     if (input.length > 0) {
       // Borrar la última letra del input
       setInput(input.slice(0, -1));
+      // También llamar al callback del padre para actualizar clickedWord
+      onDeleteLetter?.();
     } else if (clickedWord.length > 0) {
       // Si el input está vacío pero hay palabra clickeada, borrar de ahí
       onBackspace?.();

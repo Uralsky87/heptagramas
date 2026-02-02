@@ -182,6 +182,10 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setClickedWord(prev => prev.slice(0, -1));
   };
 
+  const handleDeleteLetter = () => {
+    setClickedWord(prev => prev.slice(0, -1));
+  };
+
   // ============= HELPERS PARA FOUNDWORDS VÁLIDOS =============
 
   /**
@@ -1115,6 +1119,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             message={message}
             onSubmit={handleSubmit}
             onBackspace={handleBackspace}
+            onDeleteLetter={handleDeleteLetter}
             successAnimation={showSuccessAnim}
           />
         </div>
