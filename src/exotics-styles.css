@@ -767,7 +767,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 8px;
-  margin: 20px 0 16px 0;
+  margin: 8px 0 8px 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -775,7 +775,7 @@
 .board-points {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   font-size: 18px;
   font-weight: 700;
   color: var(--text-color);

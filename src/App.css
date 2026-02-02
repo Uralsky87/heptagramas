@@ -253,6 +253,7 @@ svg g {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 8px;
+  margin-top: 4px;
 }
 
 .input-with-delete {

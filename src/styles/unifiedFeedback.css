@@ -4,7 +4,7 @@
   justify-content: center;
   pointer-events: none;
   z-index: 1000;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   min-height: 36px;
 }
 
@@ -38,6 +38,6 @@
   }
   
   .unified-feedback {
-    margin-bottom: 24px;
+    margin-bottom: 8px;
   }
 }
