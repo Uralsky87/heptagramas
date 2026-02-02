@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { normalizeString } from './normalizeChar';
 
 export interface DefinitionsDict {
   [word: string]: string;
@@ -21,7 +22,7 @@ export function useDefinitions() {
       }
 
       try {
-        const response = await fetch('/heptagramas/definiciones.txt');
+        const response = await fetch('/heptagramas/definiciones_normalizado.txt');
         if (!response.ok) throw new Error('No se pudo cargar el archivo de definiciones');
         
         const text = await response.text();
@@ -36,8 +37,11 @@ export function useDefinitions() {
             if (match) {
               const word = match[1];
               const definition = match[2];
-              // Normalizar la palabra (minúsculas) como clave
-              defs[word.toLowerCase()] = definition.trim();
+              // Normalizar la palabra con la misma lógica del juego
+              const normalized = normalizeString(word, true);
+              if (normalized) {
+                defs[normalized] = definition.trim();
+              }
             }
           }
         }
@@ -54,7 +58,7 @@ export function useDefinitions() {
   }, [language]);
 
   const getDefinition = (word: string): string | null => {
-    return definitions[word.toLowerCase()] || null;
+    return definitions[normalizeString(word, true)] || null;
   };
 
   return { definitions, loading, error, getDefinition };

@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-puzzles": "tsx src/scripts/validateAndGeneratePuzzles.ts"
+    "generate-puzzles": "tsx src/scripts/validateAndGeneratePuzzles.ts",
+    "build-wordlist": "node scripts/buildWordlistNormalized.cjs",
+    "test-femininos": "node scripts/buildWordlistNormalized.cjs"
   },
   "dependencies": {
     "idb": "^8.0.3",

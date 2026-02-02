@@ -24,7 +24,7 @@ async function main() {
 
   // 1. Cargar diccionario
   console.log('Cargando diccionario...');
-  const wordlistPath = path.join(__dirname, '../../public/wordlist.txt');
+  const wordlistPath = path.join(__dirname, '../../public/wordlist_normalizado.txt');
   const wordlistContent = fs.readFileSync(wordlistPath, 'utf-8');
   
   // loadDictionary espera texto, no URL, así que lo llamamos directamente

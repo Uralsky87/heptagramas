@@ -26,7 +26,7 @@ function letterMask(word: string): number {
 }
 
 /**
- * Carga y preprocesa el diccionario desde wordlist.txt (español) o wordlisten.txt (inglés):
+ * Carga y preprocesa el diccionario desde wordlist_normalizado.txt (español) o wordlisten.txt (inglés):
  * - Normaliza con normalizeString (consistente con validateWord)
  * - Filtra palabras < 3 letras
  * - Elimina duplicados
@@ -45,8 +45,8 @@ export async function loadDictionary(wordlistContent?: string, language: 'es' | 
       console.log('Usando contenido de diccionario proporcionado');
       text = wordlistContent;
     } else {
-      // Cargar desde public/wordlist.txt (español) o wordlisten.txt (inglés)
-      const filename = language === 'en' ? 'wordlisten.txt' : 'wordlist.txt';
+      // Cargar desde public/wordlist_normalizado.txt (español) o wordlisten.txt (inglés)
+      const filename = language === 'en' ? 'wordlisten.txt' : 'wordlist_normalizado.txt';
       const wordlistUrl = `${import.meta.env.BASE_URL}${filename}`;
       console.log('Iniciando carga de diccionario desde', wordlistUrl);
       const response = await fetch(wordlistUrl);
