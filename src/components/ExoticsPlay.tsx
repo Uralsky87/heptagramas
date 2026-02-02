@@ -51,6 +51,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
+  const [isFeedbackActive, setIsFeedbackActive] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
@@ -824,13 +825,17 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       setTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
-      // Mostrar feedback específico
-      if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
-        setFeedbackType('already-found');
-      } else if (result.reason?.includes('Debe contener la letra central')) {
-        setFeedbackType('missing-central');
-      } else {
-        setFeedbackType('incorrect');
+      // Solo mostrar nuevo feedback si no hay uno activo
+      if (!isFeedbackActive) {
+        setIsFeedbackActive(true);
+        // Mostrar feedback específico
+        if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
+          setFeedbackType('already-found');
+        } else if (result.reason?.includes('Debe contener la letra central')) {
+          setFeedbackType('missing-central');
+        } else {
+          setFeedbackType('incorrect');
+        }
       }
       
       if (import.meta.env.DEV) {
@@ -1109,7 +1114,10 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
           <UnifiedFeedback 
             type={feedbackType}
-            onAnimationEnd={() => setFeedbackType(null)}
+            onAnimationEnd={() => {
+              setFeedbackType(null);
+              setIsFeedbackActive(false);
+            }}
           />
 
           <WordInput

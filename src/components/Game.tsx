@@ -52,6 +52,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   } | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
+  const [isFeedbackActive, setIsFeedbackActive] = useState(false);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
@@ -215,13 +216,17 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setMessage(result.reason || 'Error desconocido');
       setClickedWord('');
       
-      // Mostrar feedback específico
-      if (result.reason === 'Ya la encontraste.') {
-        setFeedbackType('already-found');
-      } else if (result.reason?.includes('Debe contener la letra central')) {
-        setFeedbackType('missing-central');
-      } else {
-        setFeedbackType('incorrect');
+      // Solo mostrar nuevo feedback si no hay uno activo
+      if (!isFeedbackActive) {
+        setIsFeedbackActive(true);
+        // Mostrar feedback específico
+        if (result.reason === 'Ya la encontraste.') {
+          setFeedbackType('already-found');
+        } else if (result.reason?.includes('Debe contener la letra central')) {
+          setFeedbackType('missing-central');
+        } else {
+          setFeedbackType('incorrect');
+        }
       }
       
       // Log en desarrollo para debugging
@@ -320,7 +325,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       {/* Mensajes de feedback encima del heptagrama */}
       <UnifiedFeedback 
         type={feedbackType}
-        onAnimationEnd={() => setFeedbackType(null)}
+        onAnimationEnd={() => {
+          setFeedbackType(null);
+          setIsFeedbackActive(false);
+        }}
       />
 
       <HeptagramBoardSvg 
