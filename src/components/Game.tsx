@@ -333,14 +333,23 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
       />
 
-      <HeptagramBoardSvg 
-        ref={heptagramRef}
-        center={currentPuzzle.center} 
-        outer={shuffledOuter}
-        onLetterClick={handleLetterClick}
-        successAnimation={showSuccessAnim}
-        onShuffleOuter={setShuffledOuter}
-      />
+      <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+        <HeptagramBoardSvg 
+          ref={heptagramRef}
+          center={currentPuzzle.center} 
+          outer={shuffledOuter}
+          onLetterClick={handleLetterClick}
+          successAnimation={showSuccessAnim}
+          onShuffleOuter={setShuffledOuter}
+        />
+        <button 
+          onClick={handleClearClicked}
+          className="btn-delete-letter"
+          title="Borrar última letra"
+        >
+          ⌫
+        </button>
+      </div>
 
       <WordInput 
         onSubmit={handleSubmit} 

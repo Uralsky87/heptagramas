@@ -54,8 +54,9 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Escribe o haz clic en las letras..."
+          placeholder="Haz clic en las letras..."
           className={`word-input ${successAnimation ? 'success-flash' : ''}`}
+          readOnly
         />
         <div className="button-row">
           {input && (
