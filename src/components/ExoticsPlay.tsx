@@ -1093,9 +1093,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         }
       />
       
-      <div className="game-layout">
+      <div className="game-layout exotics-layout">
         {/* Panel central: Tablero y controles */}
-        <div className="game-main">
+        <div className="game-main exotics-main">
           {(() => {
             const foundWordsValid = getFoundWordsValid();
             return (

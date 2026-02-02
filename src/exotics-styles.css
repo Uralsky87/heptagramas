@@ -762,6 +762,18 @@
 }
 
 /* Header del tablero de exóticos con puntos y habilidades */
+.exotics-main {
+  gap: 10px;
+}
+
+.exotics-layout .board-header {
+  margin: 2px 0;
+}
+
+.exotics-main .board-container {
+  margin-bottom: 4px;
+}
+
 .board-header {
   display: flex;
   justify-content: space-between;
