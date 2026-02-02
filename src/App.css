@@ -258,7 +258,7 @@ svg g {
 .input-with-delete {
   display: flex;
   gap: 8px;
-  align-items: stretch;
+  align-items: center;
 }
 
 .word-input {

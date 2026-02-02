@@ -195,10 +195,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setClickedWord(prev => prev + letter.toLowerCase());
   };
 
-  const handleClearClicked = () => {
-    setClickedWord('');
-  };
-
   const handleBackspace = () => {
     setClickedWord(prev => prev.slice(0, -1));
   };
@@ -346,7 +342,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         onSubmit={handleSubmit} 
         message={message}
         clickedWord={clickedWord}
-        onClearClicked={handleClearClicked}
         onBackspace={handleBackspace}
         onShuffle={() => heptagramRef.current?.shuffle()}
         successAnimation={showSuccessAnim}

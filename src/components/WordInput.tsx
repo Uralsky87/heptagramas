@@ -4,13 +4,12 @@ interface WordInputProps {
   onSubmit: (word: string) => void;
   message: string;
   clickedWord?: string;
-  onClearClicked?: () => void;
   onBackspace?: () => void;
   onShuffle?: () => void;
   successAnimation?: boolean;
 }
 
-export default function WordInput({ onSubmit, message, clickedWord = '', onClearClicked, onBackspace, onShuffle, successAnimation }: WordInputProps) {
+export default function WordInput({ onSubmit, message, clickedWord = '', onBackspace, onShuffle, successAnimation }: WordInputProps) {
   const [input, setInput] = useState('');
 
   // Sincronizar input con palabra clickeada
@@ -28,9 +27,14 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
     }
   };
 
-  const handleClear = () => {
-    setInput('');
-    onClearClicked?.();
+  const handleDeleteLetter = () => {
+    if (input.length > 0) {
+      // Borrar la última letra del input
+      setInput(input.slice(0, -1));
+    } else if (clickedWord.length > 0) {
+      // Si el input está vacío pero hay palabra clickeada, borrar de ahí
+      onBackspace?.();
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -60,7 +64,7 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onClear
             readOnly
           />
           <button 
-            onClick={handleClear}
+            onClick={handleDeleteLetter}
             className="btn-delete-letter"
             title="Borrar última letra"
           >

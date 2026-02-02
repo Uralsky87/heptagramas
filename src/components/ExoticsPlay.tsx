@@ -178,10 +178,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setClickedWord(prev => prev + letter.toLowerCase());
   };
 
-  const handleClearClicked = () => {
-    setClickedWord('');
-  };
-
   const handleBackspace = () => {
     setClickedWord(prev => prev.slice(0, -1));
   };
@@ -1118,7 +1114,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             clickedWord={clickedWord}
             message={message}
             onSubmit={handleSubmit}
-            onClearClicked={handleClearClicked}
             onBackspace={handleBackspace}
             successAnimation={showSuccessAnim}
           />
