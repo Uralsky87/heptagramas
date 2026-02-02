@@ -13,29 +13,31 @@
 
 /* Botones de la barra superior */
 .top-bar-btn {
-  height: 44px;
-  width: 44px;
-  padding: 0;
+  padding: 8px 16px;
+  height: auto;
+  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  background: transparent;
+  border: 2px solid #e0e0e0;
+  background: white;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
   border-radius: 8px;
   transition: all 0.2s ease;
-  touch-action: manipulation; /* Evita zoom en iOS */
+  touch-action: manipulation;
 }
 
 .top-bar-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
-  transform: scale(1.05);
+  background: #f5f7fa;
+  border-color: #667eea;
 }
 
 .top-bar-btn:active {
-  background: rgba(102, 126, 234, 0.2);
-  transform: scale(0.95);
+  background: #e8ebf5;
+  border-color: #667eea;
 }
 
 /* Botón izquierda - alineado a la izquierda */

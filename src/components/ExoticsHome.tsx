@@ -130,12 +130,6 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         }
       />
 
-      <header className="header">
-        <button className="btn-back" onClick={onBack}>
-          ← Inicio
-        </button>
-      </header>
-
       <div className="exotics-home-container">
         <div className="exotics-features">
           <div className="exotics-feature">

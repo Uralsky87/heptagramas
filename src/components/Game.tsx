@@ -290,12 +290,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       />
 
       <header className="header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button className="btn-back" onClick={handleBackButton}>
-            ← Inicio
-          </button>
-          <div style={{ width: '70px' }} />
-        </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
           <p className="puzzle-title">{currentPuzzle.title}</p>
           {mode === 'classic' && (
