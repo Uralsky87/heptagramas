@@ -58,6 +58,11 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
 
   // Determinar ID de progreso: usar dailyProgressId si está en modo diario, sino puzzleId
   const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
+  const latestProgressIdRef = useRef(progressId);
+
+  useEffect(() => {
+    latestProgressIdRef.current = progressId;
+  }, [progressId]);
 
   // Calcular soluciones cuando cambia el puzzle
   useEffect(() => {
@@ -91,6 +96,11 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const loadPuzzleProgressState = async (progressIdToLoad: string) => {
     // Precargar del IndexedDB al cache
     await preloadPuzzleProgress(progressIdToLoad);
+
+    // Evitar race condition si el puzzle cambió durante la carga
+    if (progressIdToLoad !== latestProgressIdRef.current) {
+      return;
+    }
     
     // Ahora leer del cache (sync)
     const progress = loadPuzzleProgress(progressIdToLoad);

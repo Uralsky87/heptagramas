@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -13,11 +13,25 @@ export default function Settings({ onBack }: SettingsProps) {
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const timeoutsRef = useRef<number[]>([]);
   const { language, setLanguage, t } = useLanguage();
+
+  const scheduleTimeout = (callback: () => void, delay: number) => {
+    const id = window.setTimeout(callback, delay);
+    timeoutsRef.current.push(id);
+    return id;
+  };
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   const showMessage = (type: 'success' | 'error' | 'info', text: string) => {
     setMessage({ type, text });
-    setTimeout(() => setMessage(null), 5000);
+    scheduleTimeout(() => setMessage(null), 5000);
   };
 
   const handleExport = async () => {
@@ -49,7 +63,7 @@ export default function Settings({ onBack }: SettingsProps) {
         showMessage('success', '✓ ' + result.message);
         
         // Recargar la página después de importar para refrescar el estado
-        setTimeout(() => {
+        scheduleTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
@@ -84,7 +98,7 @@ export default function Settings({ onBack }: SettingsProps) {
       showMessage('success', '✓ Todos los datos han sido borrados');
       
       // Recargar la página después de borrar
-      setTimeout(() => {
+      scheduleTimeout(() => {
         window.location.reload();
       }, 2000);
     } catch (error) {

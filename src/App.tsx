@@ -19,12 +19,12 @@ import { preloadExoticsRun } from './lib/exoticsStorage';
 import puzzlesData from './data/puzzles.json';
 import puzzlesEnData from './data/puzzles_en.json';
 
-// Importar función de test (disponible en consola como testPuzzle())
-import './lib/testPuzzle';
-// Importar test de Exotics Storage (disponible en consola como testExoticsStorage())
-import './lib/testExoticsStorage';
-// Importar test de Exotics Scoring (disponible en consola como testExoticsScoring())
-import './lib/testExoticsScoring';
+// Importar tests solo en desarrollo (disponibles en consola)
+if (import.meta.env.DEV) {
+  import('./lib/testPuzzle');
+  import('./lib/testExoticsStorage');
+  import('./lib/testExoticsScoring');
+}
 
 const PUZZLES_ES: Puzzle[] = puzzlesData as Puzzle[];
 const PUZZLES_EN: Puzzle[] = puzzlesEnData as Puzzle[];
@@ -89,9 +89,7 @@ export default function App() {
       window.history.replaceState({ screen: 'home' }, '');
     }
 
-    const handlePopState = (event: PopStateEvent) => {
-      event.preventDefault();
-      
+    const handlePopState = (_event: PopStateEvent) => {
       // Si estamos en home, permitir salir de la app
       if (currentScreen === 'home') {
         return;
@@ -105,9 +103,6 @@ export default function App() {
         
         setNavigationStack(newStack);
         setCurrentScreen(previousScreen);
-        
-        // Agregar nueva entrada al historial del navegador
-        window.history.pushState({ screen: previousScreen }, '');
         
         // Limpiar estados según la pantalla a la que volvemos
         if (previousScreen === 'home') {

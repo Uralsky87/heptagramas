@@ -65,6 +65,20 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   }>({ type: null, selectedOuterIndex: null });
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const solutionsCacheRef = useRef<Map<string, string[]>>(new Map());
+  const timeoutsRef = useRef<number[]>([]);
+
+  const scheduleTimeout = (callback: () => void, delay: number) => {
+    const id = window.setTimeout(callback, delay);
+    timeoutsRef.current.push(id);
+    return id;
+  };
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   // ============================================
   // TABLERO DINÁMICO: combinar outer + extraLetters
@@ -79,10 +93,22 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   // Calcular índices de letras extra en shuffledOuter (para marcarlas visualmente)
   const extraLetterIndices = new Set<number>();
   if (runState && runState.extraLetters.length > 0) {
-    runState.extraLetters.forEach(extraLetter => {
-      const index = shuffledOuter.indexOf(extraLetter);
-      if (index !== -1) {
+    const counts = new Map<string, number>();
+    runState.extraLetters.forEach(letter => {
+      const key = letter.toLowerCase();
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    });
+
+    shuffledOuter.forEach((letter, index) => {
+      const key = letter.toLowerCase();
+      const remaining = counts.get(key);
+      if (remaining && remaining > 0) {
         extraLetterIndices.add(index);
+        if (remaining === 1) {
+          counts.delete(key);
+        } else {
+          counts.set(key, remaining - 1);
+        }
       }
     });
   }
@@ -132,7 +158,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     // Si no está en caché, calcular con timeout para mostrar loading
     setIsCalculatingSolutions(true);
     
-    const timer = setTimeout(() => {
+    const timer = scheduleTimeout(() => {
       const solutions = solvePuzzle(
         runState.puzzle.center,
         allOuterLetters,
@@ -423,7 +449,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       setIsGeneratingNewPuzzle(false);
       
       setMessage('✨ ¡Nuevo heptagrama cargado! Tus P y XP se mantienen.');
-      setTimeout(() => setMessage(''), 4000);
+      scheduleTimeout(() => setMessage(''), 4000);
       
       if (import.meta.env.DEV) {
         console.log('[ExoticsPlay] NEW_PUZZLE: Puzzle cambiado gratis. foundWordsAll reseteado:', {
@@ -483,7 +509,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setShowAbilitiesPanel(false);
     
     setMessage('💡 Pista de longitud desbloqueada!');
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
     
     if (import.meta.env.DEV) {
       console.log('[ExoticsPlay] Pista longitud comprada:', byLength);
@@ -506,7 +532,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setShowAbilitiesPanel(false);
     
     setMessage('🔓 Estadísticas por letra inicial desbloqueadas!');
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
   };
 
   // 3. Cambiar letra aleatoria (160 P)
@@ -563,7 +589,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setMessage(`🔄 Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
   };
 
   // 4. Cambiar letra concreta (320 P) - abre selector de letra a cambiar
@@ -617,7 +643,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setMessage(`🔄 Letra cambiada: ${oldLetter.toUpperCase()} → ${newLetter.toUpperCase()}`);
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
   };
 
   // 5. Comprar letra aleatoria (450 P)
@@ -651,7 +677,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setMessage(`✨ Letra extra añadida: ${newLetter.toUpperCase()}`);
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
   };
 
   // 6. Comprar letra concreta (900 P) - abre selector
@@ -686,7 +712,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setMessage(`✨ Letra extra añadida: ${letter.toUpperCase()}`);
-    setTimeout(() => setMessage(''), 3000);
+    scheduleTimeout(() => setMessage(''), 3000);
   };
 
   // 7. Mezclar letras (10 P)
@@ -706,7 +732,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setShowAbilitiesPanel(false);
     
     setMessage('🔄 Letras mezcladas!');
-    setTimeout(() => setMessage(''), 2000);
+    scheduleTimeout(() => setMessage(''), 2000);
     
     if (import.meta.env.DEV) {
       console.log('[ExoticsPlay] Mezcla aplicada, nuevo seed:', shuffleSeed + 1);
@@ -728,7 +754,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setShowAbilitiesPanel(false);
     
     setMessage('⚡ ¡Próximas 10 palabras con DOBLE PUNTOS!');
-    setTimeout(() => setMessage(''), 4000);
+    scheduleTimeout(() => setMessage(''), 4000);
   };
 
   // 9. Nuevo puzzle antes del 50% (350 P)
@@ -804,7 +830,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       }
       
       setMessage('✨ ¡Nuevo heptagrama comprado! -350 P');
-      setTimeout(() => setMessage(''), 4000);
+      scheduleTimeout(() => setMessage(''), 4000);
     } catch (error) {
       console.error('[ExoticsPlay] Error al generar puzzle:', error);
       alert('Error. Se devuelven los 350 P.');
@@ -822,7 +848,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     if (!result.ok) {
       setMessage(result.reason || 'Error desconocido');
-      setTimeout(() => setMessage(''), 3000);
+      scheduleTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
       // Solo mostrar nuevo feedback si no hay uno activo
@@ -960,7 +986,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     // Mostrar animación de éxito
     setShowSuccessAnim(true);
     setFeedbackType('correct');
-    setTimeout(() => setShowSuccessAnim(false), 600);
+    scheduleTimeout(() => setShowSuccessAnim(false), 600);
     
     // Mensaje de feedback
     let feedbackMessage = '';
@@ -982,7 +1008,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     setMessage(feedbackMessage);
-    setTimeout(() => setMessage(''), bonus50Percent > 0 ? 6000 : (milestoneBonus > 0 ? 5000 : 3000));
+    scheduleTimeout(() => setMessage(''), bonus50Percent > 0 ? 6000 : (milestoneBonus > 0 ? 5000 : 3000));
   };
 
   const handleEndRun = () => {
