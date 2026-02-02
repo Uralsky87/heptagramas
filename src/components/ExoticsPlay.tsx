@@ -4,10 +4,7 @@ import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
-import CorrectFeedback from './CorrectFeedback';
-import IncorrectFeedback from './IncorrectFeedback';
-import AlreadyFoundFeedback from './AlreadyFoundFeedback';
-import MissingCentralFeedback from './MissingCentralFeedback';
+import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
@@ -53,9 +50,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
-  const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
-  const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
-  const [showMissingCentralAnim, setShowMissingCentralAnim] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
@@ -829,13 +824,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       setTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
-      // Mostrar feedback específico para palabra ya encontrada
+      // Mostrar feedback específico
       if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
-        setShowAlreadyFoundAnim(true);
+        setFeedbackType('already-found');
       } else if (result.reason?.includes('Debe contener la letra central')) {
-        setShowMissingCentralAnim(true);
+        setFeedbackType('missing-central');
       } else {
-        setShowIncorrectAnim(true);
+        setFeedbackType('incorrect');
       }
       
       if (import.meta.env.DEV) {
@@ -959,6 +954,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     // Mostrar animación de éxito
     setShowSuccessAnim(true);
+    setFeedbackType('correct');
     setTimeout(() => setShowSuccessAnim(false), 600);
     
     // Mensaje de feedback
@@ -1066,12 +1062,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         }
       />
       
-      <header className="header">
-        <button className="btn-back" onClick={onBack}>
-          ← Exóticos
-        </button>
-      </header>
-
       <div className="game-layout">
         {/* Panel central: Tablero y controles */}
         <div className="game-main">
@@ -1090,6 +1080,20 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             );
           })()}
 
+          <div className="board-header">
+            <div className="board-points">
+              <span className="points-icon">⭐</span>
+              <span className="points-value">{runState.scorePoints}</span>
+            </div>
+            <button 
+              className="btn-abilities-header"
+              onClick={() => setShowAbilitiesPanel(true)}
+              title="Habilidades"
+            >
+              ⚡
+            </button>
+          </div>
+
           <div className="board-container">
             <HeptagramBoardSvg
               key={`${runState.puzzle.center}-${outerCombined.join('')}`}
@@ -1103,24 +1107,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             />
           </div>
 
-          <CorrectFeedback 
-            isVisible={showSuccessAnim}
-            onAnimationEnd={() => setShowSuccessAnim(false)}
-          />
-
-          <IncorrectFeedback 
-            isVisible={showIncorrectAnim}
-            onAnimationEnd={() => setShowIncorrectAnim(false)}
-          />
-
-          <AlreadyFoundFeedback 
-            isVisible={showAlreadyFoundAnim}
-            onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
-          />
-
-          <MissingCentralFeedback 
-            isVisible={showMissingCentralAnim}
-            onAnimationEnd={() => setShowMissingCentralAnim(false)}
+          <UnifiedFeedback 
+            type={feedbackType}
+            onAnimationEnd={() => setFeedbackType(null)}
           />
 
           <WordInput

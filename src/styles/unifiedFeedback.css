@@ -1,0 +1,43 @@
+/* Feedback unificado - un solo mensaje a la vez */
+.unified-feedback {
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
+  margin-bottom: 24px;
+  min-height: 36px;
+}
+
+.unified-feedback-text {
+  font-size: 28px;
+  font-weight: 500;
+  text-shadow: none;
+  animation: fadeInOut 2.5s ease-in-out forwards;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .unified-feedback-text {
+    font-size: 24px;
+  }
+  
+  .unified-feedback {
+    margin-bottom: 24px;
+  }
+}

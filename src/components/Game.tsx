@@ -6,10 +6,7 @@ import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
-import CorrectFeedback from './CorrectFeedback';
-import IncorrectFeedback from './IncorrectFeedback';
-import AlreadyFoundFeedback from './AlreadyFoundFeedback';
-import MissingCentralFeedback from './MissingCentralFeedback';
+import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -54,9 +51,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     unlockedThemeName?: string;
   } | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
-  const [showIncorrectAnim, setShowIncorrectAnim] = useState(false);
-  const [showAlreadyFoundAnim, setShowAlreadyFoundAnim] = useState(false);
-  const [showMissingCentralAnim, setShowMissingCentralAnim] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
@@ -220,13 +215,13 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setMessage(result.reason || 'Error desconocido');
       setClickedWord('');
       
-      // Mostrar feedback específico para palabra ya encontrada
+      // Mostrar feedback específico
       if (result.reason === 'Ya la encontraste.') {
-        setShowAlreadyFoundAnim(true);
+        setFeedbackType('already-found');
       } else if (result.reason?.includes('Debe contener la letra central')) {
-        setShowMissingCentralAnim(true);
+        setFeedbackType('missing-central');
       } else {
-        setShowIncorrectAnim(true);
+        setFeedbackType('incorrect');
       }
       
       // Log en desarrollo para debugging
@@ -259,6 +254,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     
     // Mostrar animación de éxito
     setShowSuccessAnim(true);
+    setFeedbackType('correct');
     
     if (isSH) {
       setAchievements((prev) => {
@@ -322,24 +318,9 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       )}
 
       {/* Mensajes de feedback encima del heptagrama */}
-      <CorrectFeedback 
-        isVisible={showSuccessAnim}
-        onAnimationEnd={() => setShowSuccessAnim(false)}
-      />
-
-      <IncorrectFeedback 
-        isVisible={showIncorrectAnim}
-        onAnimationEnd={() => setShowIncorrectAnim(false)}
-      />
-
-      <AlreadyFoundFeedback 
-        isVisible={showAlreadyFoundAnim}
-        onAnimationEnd={() => setShowAlreadyFoundAnim(false)}
-      />
-
-      <MissingCentralFeedback 
-        isVisible={showMissingCentralAnim}
-        onAnimationEnd={() => setShowMissingCentralAnim(false)}
+      <UnifiedFeedback 
+        type={feedbackType}
+        onAnimationEnd={() => setFeedbackType(null)}
       />
 
       <HeptagramBoardSvg 

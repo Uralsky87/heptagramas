@@ -131,27 +131,45 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       />
 
       <div className="exotics-home-container">
-        <div className="exotics-features">
-          <div className="exotics-feature">
-            <span className="feature-icon">🎯</span>
-            <h3>Habilidades</h3>
-            <p>Utiliza habilidades para hacer tuyo el puzzle</p>
-          </div>
-          <div className="exotics-feature">
-            <span className="feature-icon">📚</span>
-            <h3>Más Palabras</h3>
-            <p>Muchas más combinaciones posibles</p>
-          </div>
-          <div className="exotics-feature">
-            <span className="feature-icon">⭐</span>
-            <h3>Mayor Desafío</h3>
-            <p>Contra más progreses, más experiencia acumularás</p>
+        <div className="exotics-tutorial">
+          <div className="exotics-tutorial-content">
+            <h3 className="exotics-tutorial-title">¿Cómo funcionan los heptagramas exóticos?</h3>
+            <div className="exotics-tutorial-list">
+              <div className="tutorial-item">
+                <span className="tutorial-icon">💫</span>
+                <span className="tutorial-text">Gana puntos completando palabras</span>
+              </div>
+              <div className="tutorial-item">
+                <span className="tutorial-icon">🔑</span>
+                <span className="tutorial-text">Utiliza los puntos para desbloquear habilidades</span>
+              </div>
+              <div className="tutorial-item">
+                <span className="tutorial-icon">📈</span>
+                <span className="tutorial-text">Cuanto más progreses, más experiencia acumularás</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        <button 
+          className="btn-start-exotic" 
+          onClick={handleStartOrContinue}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <span className="spinner">⏳</span> Generando puzzle...
+            </>
+          ) : hasRun ? (
+            '▶️ Continuar Partida'
+          ) : (
+            '🚀 Iniciar Nueva Partida'
+          )}
+        </button>
+
         {hasRun && runInfo && (
           <div className="exotics-active-run">
-            <h3>🎮 Run en progreso</h3>
+            <h3>🎮 Partida en progreso</h3>
             <div className="run-stats">
               <div className="run-stat">
                 <span className="run-stat-label">Palabras</span>
@@ -167,26 +185,10 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
               </div>
             </div>
             <button className="btn-end-run" onClick={handleEndRun}>
-              🛑 Terminar Run
+              🛑 Terminar Partida
             </button>
           </div>
         )}
-
-        <button 
-          className="btn-start-exotic" 
-          onClick={handleStartOrContinue}
-          disabled={isGenerating}
-        >
-          {isGenerating ? (
-            <>
-              <span className="spinner">⏳</span> Generando puzzle...
-            </>
-          ) : hasRun ? (
-            '▶️ Continuar Run'
-          ) : (
-            '🚀 Iniciar Nueva Run'
-          )}
-        </button>
 
         {isGenerating && (
           <div className="generation-info">
