@@ -103,16 +103,10 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         onSettingsClick={() => {}}
         rightButton={
           <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
-            ← {t('common.home')}
+            {t('common.home')}
           </button>
         }
       />
-      
-      <header className="daily-header">
-        <button className="btn-back" onClick={onBack}>
-          {t('common.home')}
-        </button>
-      </header>
 
       <div className="daily-content">
         {/* Heptagrama de hoy - destacado */}

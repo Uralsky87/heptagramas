@@ -125,7 +125,7 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         onSettingsClick={() => {}}
         rightButton={
           <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
-            ← {t('common.home')}
+            {t('common.home')}
           </button>
         }
       />

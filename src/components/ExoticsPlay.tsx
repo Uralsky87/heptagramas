@@ -1057,7 +1057,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           onSettingsClick={() => {}}
           rightButton={
             <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
-              ← {t('common.home')}
+              {t('common.home')}
             </button>
           }
         />
@@ -1088,7 +1088,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         onSettingsClick={() => {}}
         rightButton={
           <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
-            ← Exóticos
+            Exóticos
           </button>
         }
       />

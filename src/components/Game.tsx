@@ -299,7 +299,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         onSettingsClick={() => {}}
         rightButton={
           <button className="top-bar-btn top-bar-btn-right" onClick={handleBackButton}>
-            ← {t('common.home')}
+            {t('common.home')}
           </button>
         }
       />

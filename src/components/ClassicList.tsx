@@ -79,7 +79,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
         onSettingsClick={() => {}}
         rightButton={
           <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
-            ← {t('common.home')}
+            {t('common.home')}
           </button>
         }
       />

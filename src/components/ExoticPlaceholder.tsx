@@ -6,7 +6,7 @@ export default function ExoticPlaceholder({ onBack }: ExoticPlaceholderProps) {
   return (
     <div className="placeholder-container">
       <button className="btn-back" onClick={onBack}>
-        ← Inicio
+        Inicio
       </button>
       
       <div className="placeholder-content">

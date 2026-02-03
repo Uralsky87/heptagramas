@@ -763,15 +763,29 @@
 
 /* Header del tablero de exóticos con puntos y habilidades */
 .exotics-main {
-  gap: 10px;
+  gap: 6px;
 }
 
 .exotics-layout .board-header {
-  margin: 2px 0;
+  margin: 0;
 }
 
 .exotics-main .board-container {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+}
+
+.exotics-layout .heptagram-section {
+  margin: 4px 0;
+}
+
+.exotics-layout .input-section {
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.exotics-layout .input-container {
+  margin-top: 0;
+  gap: 6px;
 }
 
 .board-header {
