@@ -297,8 +297,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
-        rightButton={
-          <button className="top-bar-btn top-bar-btn-right" onClick={handleBackButton}>
+        title={mode === 'daily' ? t('common.daily') : t('home.classic_title')}
+        showThemeButton={false}
+        leftButton={
+          <button className="top-bar-btn top-bar-btn-left" onClick={handleBackButton}>
             {t('common.home')}
           </button>
         }

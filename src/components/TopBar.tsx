@@ -2,8 +2,11 @@ import type { ReactNode } from 'react';
 import './TopBar.css';
 
 interface TopBarProps {
-  onThemeClick: () => void;
+  onThemeClick?: () => void;
   onSettingsClick: () => void;
+  title?: string;
+  showThemeButton?: boolean;
+  leftButton?: ReactNode;
   rightButton?: ReactNode; // Para permitir botón personalizado a la derecha
 }
 
@@ -24,22 +27,31 @@ interface TopBarProps {
 export default function TopBar({
   onThemeClick,
   onSettingsClick,
+  title = 'Palabrarium',
+  showThemeButton = true,
+  leftButton,
   rightButton,
 }: TopBarProps) {
   return (
     <div className="top-bar">
       {/* Columna izquierda */}
-      <button
-        className="top-bar-btn top-bar-btn-left"
-        onClick={onThemeClick}
-        aria-label="Cambiar tema"
-        title="Cambiar tema"
-      >
-        🎨
-      </button>
+      {leftButton ? (
+        leftButton
+      ) : showThemeButton ? (
+        <button
+          className="top-bar-btn top-bar-btn-left"
+          onClick={onThemeClick}
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          🎨
+        </button>
+      ) : (
+        <div className="top-bar-spacer" aria-hidden="true" />
+      )}
 
       {/* Columna centro */}
-      <h1 className="top-bar-title">Palabrarium</h1>
+      <h1 className="top-bar-title">{title}</h1>
 
       {/* Columna derecha */}
       {rightButton ? (

@@ -50,6 +50,13 @@
   justify-self: end;
 }
 
+/* Espaciador cuando no hay botón a la izquierda */
+.top-bar-spacer {
+  justify-self: start;
+  width: 44px;
+  height: 44px;
+}
+
 /* Título */
 .top-bar-title {
   margin: 0;

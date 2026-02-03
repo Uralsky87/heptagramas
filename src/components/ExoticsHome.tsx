@@ -123,8 +123,10 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
-        rightButton={
-          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+        title={t('home.exotic_title')}
+        showThemeButton={false}
+        leftButton={
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             {t('common.home')}
           </button>
         }

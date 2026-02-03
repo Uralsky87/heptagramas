@@ -77,18 +77,14 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
-        rightButton={
-          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+        title={t('home.classic_title')}
+        showThemeButton={false}
+        leftButton={
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             {t('common.home')}
           </button>
         }
       />
-
-      <header className="classic-header">
-        <button className="btn-back" onClick={onBack}>
-          {t('common.home')}
-        </button>
-      </header>
 
       <div className="puzzles-grid-classic">
         {puzzlesWithMeta.map((puzzle) => {

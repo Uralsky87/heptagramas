@@ -101,8 +101,10 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
-        rightButton={
-          <button className="top-bar-btn top-bar-btn-right" onClick={onBack}>
+        title={t('common.daily')}
+        showThemeButton={false}
+        leftButton={
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             {t('common.home')}
           </button>
         }
