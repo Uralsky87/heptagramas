@@ -53,12 +53,12 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [isFeedbackActive, setIsFeedbackActive] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
-  const [isGeneratingNewPuzzle, setIsGeneratingNewPuzzle] = useState(false);
-  const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
+  const [, setIsGeneratingNewPuzzle] = useState(false);
+  const [, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
   const [showAbilitiesPanel, setShowAbilitiesPanel] = useState(false);
   const [showLetterSelector, setShowLetterSelector] = useState(false);
   const [letterSelectorMode, setLetterSelectorMode] = useState<'swap' | 'buy' | null>(null);
-  const [isCalculatingSolutions, setIsCalculatingSolutions] = useState(false);
+  const [, setIsCalculatingSolutions] = useState(false);
   const [abilityFlow, setAbilityFlow] = useState<{
     type: 'swap-random' | 'swap-concrete' | null;
     selectedOuterIndex: number | null;
@@ -1397,7 +1397,16 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               </button>
 
               {/* Nuevo puzzle */}
-              {!canChangePuzzleFree() && (
+              {canChangePuzzleFree() ? (
+                <button
+                  className="ability-btn"
+                  onClick={handleChangePuzzleFree}
+                >
+                  <span className="ability-icon">🆓</span>
+                  <span className="ability-name">Nuevo heptagrama (gratis)</span>
+                  <span className="ability-cost">0 P</span>
+                </button>
+              ) : (
                 <button 
                   className="ability-btn"
                   onClick={handleBuyNewPuzzle}
