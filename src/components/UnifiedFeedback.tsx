@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../styles/unifiedFeedback.css';
 
 export type FeedbackType = 'correct' | 'incorrect' | 'already-found' | 'missing-central' | null;
@@ -33,22 +33,49 @@ const FEEDBACK_CONFIG = {
 
 export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbackProps) {
   const [currentType, setCurrentType] = useState<FeedbackType>(null);
-  const [animationKey, setAnimationKey] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimers = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+    if (clearTimerRef.current) {
+      clearTimeout(clearTimerRef.current);
+      clearTimerRef.current = null;
+    }
+  };
 
   useEffect(() => {
-    if (type) {
-      // Si hay un tipo nuevo, cancelar el anterior y mostrar el nuevo
-      setCurrentType(type);
-      setAnimationKey(prev => prev + 1); // Forzar reinicio de animación
-
-      const config = FEEDBACK_CONFIG[type];
-      const timer = setTimeout(() => {
+    if (!type) {
+      if (!currentType) {
+        return;
+      }
+      clearTimers();
+      setIsVisible(false);
+      clearTimerRef.current = setTimeout(() => {
         setCurrentType(null);
         onAnimationEnd?.();
-      }, config.duration);
-
-      return () => clearTimeout(timer);
+      }, 180);
+      return () => clearTimers();
     }
+
+    clearTimers();
+    setCurrentType(type);
+    setIsVisible(true);
+
+    const config = FEEDBACK_CONFIG[type];
+    hideTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+      clearTimerRef.current = setTimeout(() => {
+        setCurrentType(null);
+        onAnimationEnd?.();
+      }, 180);
+    }, config.duration);
+
+    return () => clearTimers();
   }, [type, onAnimationEnd]);
 
   if (!currentType) {
@@ -61,8 +88,7 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
   return (
     <div className="unified-feedback">
       <span 
-        key={animationKey}
-        className="unified-feedback-text"
+        className={`unified-feedback-text${isVisible ? ' visible' : ''}`}
         style={{ color: config.color }}
       >
         {config.text}

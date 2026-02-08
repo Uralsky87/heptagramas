@@ -20,7 +20,7 @@ import {
 } from '../lib/storageAdapter';
 import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
-import { calculateSessionXP, checkLevelUp, calculateLevel } from '../lib/xpSystem';
+import { checkLevelUp, calculateLevel } from '../lib/xpSystem';
 import { checkThemeUnlock } from '../lib/themes';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -52,7 +52,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   } | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
-  const [isFeedbackActive, setIsFeedbackActive] = useState(false);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
 
@@ -138,48 +137,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
-    awardSessionXP(); // Otorgar XP al cambiar de puzzle
     setCurrentPuzzle(puzzle);
-  };
-
-  // Otorgar XP por la sesión actual
-  const awardSessionXP = () => {
-    if (foundWords.length === 0) return; // No otorgar XP si no se jugó
-    
-    const xpReward = calculateSessionXP(
-      foundWords.length,
-      puzzleSolutions.length,
-      achievements.superHeptaWords.length,
-      mode
-    );
-    
-    if (xpReward.total === 0) return;
-    
-    const playerState = loadPlayerState();
-    const oldXP = playerState.xpTotal;
-    const newXP = oldXP + xpReward.total;
-    
-    playerState.xpTotal = newXP;
-    playerState.level = calculateLevel(newXP);
-    savePlayerState(playerState);
-    
-    const levelUpInfo = checkLevelUp(oldXP, newXP);
-    
-    // Mostrar notificación de XP (incluye tema desbloqueado si aplicable)
-    const unlockedTheme = levelUpInfo.leveledUp ? checkThemeUnlock(levelUpInfo.newLevel) : null;
-    
-    setXPRewardInfo({
-      xpGained: xpReward.total,
-      levelUp: levelUpInfo.leveledUp,
-      newLevel: levelUpInfo.newLevel,
-      unlockedThemeName: unlockedTheme?.name,
-    });
-    setShowXPReward(true);
-    
-    if (import.meta.env.DEV) {
-      console.log('[Game] XP otorgada:', xpReward);
-      console.log('[Game] Nivel:', levelUpInfo);
-    }
   };
 
   // Manejar timeout de XP reward (evitar memory leak)
@@ -195,19 +153,21 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
 
   const handleBackButton = () => {
     savePuzzleProgressState();
-    awardSessionXP(); // Otorgar XP al salir
     onBack();
   };
 
   const handleLetterClick = (letter: string) => {
+    setFeedbackType(null);
     setClickedWord(prev => prev + letter.toLowerCase());
   };
 
   const handleBackspace = () => {
+    setFeedbackType(null);
     setClickedWord(prev => prev.slice(0, -1));
   };
 
   const handleDeleteLetter = () => {
+    setFeedbackType(null);
     setClickedWord(prev => prev.slice(0, -1));
   };
 
@@ -225,18 +185,14 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     if (!result.ok) {
       setMessage(result.reason || 'Error desconocido');
       setClickedWord('');
-      
-      // Solo mostrar nuevo feedback si no hay uno activo
-      if (!isFeedbackActive) {
-        setIsFeedbackActive(true);
-        // Mostrar feedback específico
-        if (result.reason === 'Ya la encontraste.') {
-          setFeedbackType('already-found');
-        } else if (result.reason?.includes('Debe contener la letra central')) {
-          setFeedbackType('missing-central');
-        } else {
-          setFeedbackType('incorrect');
-        }
+
+      // Mostrar feedback específico
+      if (result.reason === 'Ya la encontraste.') {
+        setFeedbackType('already-found');
+      } else if (result.reason?.includes('Debe contener la letra central')) {
+        setFeedbackType('missing-central');
+      } else {
+        setFeedbackType('incorrect');
       }
       
       // Log en desarrollo para debugging
@@ -254,11 +210,29 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     const normalized = normalizeWord(word);
     setFoundWords((prev) => [...prev, normalized].sort());
     setClickedWord('');
+
+    // XP por palabra: 1 XP por letra (diario y clasico)
+    const wordXP = normalized.length;
+    const playerState = loadPlayerState();
+    const oldXP = playerState.xpTotal;
+    const newXP = oldXP + wordXP;
+    playerState.xpTotal = newXP;
+    playerState.level = calculateLevel(newXP);
+    savePlayerState(playerState);
+    
+    const levelUpInfo = checkLevelUp(oldXP, newXP);
+    const unlockedTheme = levelUpInfo.leveledUp ? checkThemeUnlock(levelUpInfo.newLevel) : null;
+    setXPRewardInfo({
+      xpGained: wordXP,
+      levelUp: levelUpInfo.leveledUp,
+      newLevel: levelUpInfo.newLevel,
+      unlockedThemeName: unlockedTheme?.name,
+    });
+    setShowXPReward(true);
     
     const isSH = isSuperHepta(normalized, currentPuzzle);
     
     // Reproducir sonido si está habilitado
-    const playerState = loadPlayerState();
     if (playerState.settings.soundEnabled) {
       if (isSH) {
         playSuperHeptaSound();
@@ -339,7 +313,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         type={feedbackType}
         onAnimationEnd={() => {
           setFeedbackType(null);
-          setIsFeedbackActive(false);
         }}
       />
 
