@@ -223,7 +223,7 @@ export default function App() {
         />
         <div className="app">
           <header className="header">
-            <h1>🌟 Heptagramas</h1>
+            <h1>🌟 Palabrarium</h1>
             <p className="puzzle-title">
               {!isHydrated ? 'Inicializando almacenamiento...' : 'Cargando diccionario...'}
             </p>

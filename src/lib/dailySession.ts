@@ -43,54 +43,50 @@ export function getDailyKey(date: Date = new Date()): string {
 }
 
 /**
- * Genera hash simple para seleccionar puzzle determinísticamente
+ * Convierte una fecha YYYY-MM-DD a indice de dia (UTC) para rotacion estable
  */
-function simpleHash(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash);
+function getDayIndex(dateKey: string): number {
+  const [year, month, day] = dateKey.split('-').map(Number);
+  const utc = Date.UTC(year, month - 1, day);
+  return Math.floor(utc / 86400000);
 }
 
 /**
  * Selecciona el puzzle del día para una fecha específica
- * Filtra puzzles por rango de soluciones 80-150 para mejor experiencia
+ * Filtra puzzles por rango de soluciones 70-170 para mejor experiencia
  */
 export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzle {
   if (puzzles.length === 0) {
     throw new Error('No hay puzzles disponibles');
   }
   
-  const hash = simpleHash(dateKey);
+  const dayIndex = getDayIndex(dateKey);
   
-  // PREFERENCIA 1: Puzzles en rango óptimo 80-150 soluciones
+  // PREFERENCIA 1: Puzzles en rango óptimo 70-170 soluciones
   const optimalPuzzles = puzzles.filter(p => {
     const count = p.solutionCount;
-    return count !== undefined && count >= 80 && count <= 150;
+    return count !== undefined && count >= 70 && count <= 170;
   });
   
   if (optimalPuzzles.length > 0) {
-    const index = hash % optimalPuzzles.length;
+    const index = dayIndex % optimalPuzzles.length;
     return optimalPuzzles[index];
   }
   
-  // FALLBACK 1: Rango ampliado 70-160 (si no hay en rango óptimo)
+  // FALLBACK 1: Rango ampliado 70-200 (si no hay en rango óptimo)
   const fallbackPuzzles = puzzles.filter(p => {
     const count = p.solutionCount;
-    return count !== undefined && count >= 70 && count <= 160;
+    return count !== undefined && count >= 70 && count <= 200;
   });
   
   if (fallbackPuzzles.length > 0) {
     if (import.meta.env.DEV) {
       console.warn(
-        `[DailyPuzzle] No hay puzzles en rango óptimo (80-150) para ${dateKey}. ` +
-        `Usando rango ampliado (70-160). Puzzles disponibles: ${fallbackPuzzles.length}`
+        `[DailyPuzzle] No hay puzzles en rango óptimo (70-170) para ${dateKey}. ` +
+        `Usando rango ampliado (70-200). Puzzles disponibles: ${fallbackPuzzles.length}`
       );
     }
-    const index = hash % fallbackPuzzles.length;
+    const index = dayIndex % fallbackPuzzles.length;
     return fallbackPuzzles[index];
   }
   
@@ -101,7 +97,7 @@ export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzl
       `Usando cualquier puzzle disponible.`
     );
   }
-  const index = hash % puzzles.length;
+  const index = dayIndex % puzzles.length;
   return puzzles[index];
 }
 

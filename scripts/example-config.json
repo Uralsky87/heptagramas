@@ -23,7 +23,7 @@
     },
     "custom_ranges": {
       "dailyMin": 70,
-      "dailyMax": 140,
+      "dailyMax": 170,
       "classicMin": 140,
       "classicMax": 300,
       "candidates": 5000,

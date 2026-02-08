@@ -73,7 +73,7 @@ node scripts/generatePuzzles.cjs --help
 | Opción | Descripción | Default |
 |--------|-------------|---------|
 | `--daily-min <num>` | Mínimo de soluciones para puzzles diarios | 70 |
-| `--daily-max <num>` | Máximo de soluciones para puzzles diarios | 140 |
+| `--daily-max <num>` | Máximo de soluciones para puzzles diarios | 170 |
 | `--classic-min <num>` | Mínimo de soluciones para puzzles clásicos | 140 |
 | `--classic-max <num>` | Máximo de soluciones para puzzles clásicos | 300 |
 | `--candidates <num>` | Número de candidatos a generar | 5000 |
@@ -117,7 +117,7 @@ El generador sigue estos pasos:
    - Identifica superheptas (palabras de 7+ letras)
 
 4. **Filtrado por categoría**:
-   - **Diarios**: 70-140 soluciones + al menos 1 superhepta
+   - **Diarios**: 70-170 soluciones + al menos 1 superhepta
    - **Clásicos**: 140-300 soluciones
 
 5. **Exportación**:
@@ -153,7 +153,7 @@ El generador sigue estos pasos:
 ## 🔍 Criterios de Validación
 
 ### Puzzles Diarios
-- Rango de soluciones: **70-140 palabras**
+- Rango de soluciones: **70-170 palabras**
 - Requisito especial: **Al menos 1 superhepta** (palabra de 7+ letras)
 - Objetivo: Desafío diario balanceado y alcanzable
 

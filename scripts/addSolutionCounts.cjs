@@ -78,7 +78,7 @@ let inRangeCount = 0;
 
 const updatedPuzzles = puzzles.map((puzzle, index) => {
   const solutions = solvePuzzle(puzzle);
-  const inRange = solutions.length >= 80 && solutions.length <= 150;
+  const inRange = solutions.length >= 70 && solutions.length <= 170;
   
   if (inRange) inRangeCount++;
   
@@ -92,7 +92,7 @@ const updatedPuzzles = puzzles.map((puzzle, index) => {
   };
 });
 
-console.log(`\n📊 Puzzles en rango 80-150: ${inRangeCount}/${puzzles.length}`);
+console.log(`\n📊 Puzzles en rango 70-170: ${inRangeCount}/${puzzles.length}`);
 
 // Guardar
 fs.writeFileSync(puzzlesPath, JSON.stringify(updatedPuzzles, null, 2), 'utf-8');

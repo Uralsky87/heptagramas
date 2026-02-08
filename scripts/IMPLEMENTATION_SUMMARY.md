@@ -38,7 +38,7 @@
 ### Entrada
 - **Diccionario**: `src/data/wordlist.txt` (una palabra por línea)
 - **Configuración CLI**: 
-  - `--daily-min/max`: Rango de soluciones para diarios (default: 70-140)
+  - `--daily-min/max`: Rango de soluciones para diarios (default: 70-170)
   - `--classic-min/max`: Rango de soluciones para clásicos (default: 140-300)
   - `--candidates`: Número de candidatos a generar (default: 5000)
   - `--min-len`: Longitud mínima de palabra (default: 3)
@@ -49,7 +49,7 @@
 1. **Generación de candidatos**: Combinaciones aleatorias de 7 letras únicas
 2. **Cálculo de soluciones**: Valida palabras del diccionario contra cada candidato
 3. **Filtrado por categoría**:
-   - **Diarios**: 70-140 soluciones + al menos 1 superhepta (7+ letras)
+  - **Diarios**: 70-170 soluciones + al menos 1 superhepta (7+ letras)
    - **Clásicos**: 140-300 soluciones
 4. **Ordenamiento**: Por número de soluciones (ascendente)
 5. **Generación de IDs**: `daily-001`, `classic-001`, etc.

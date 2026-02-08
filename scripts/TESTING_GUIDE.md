@@ -4,7 +4,7 @@ Este documento explica cómo probar el generador con el diccionario actual (limi
 
 ## ⚠️ Estado Actual
 
-El diccionario en `src/data/wordlist.txt` tiene solo **185 palabras** (demo). Esto es insuficiente para generar puzzles con los rangos por defecto (70-140 y 140-300 soluciones).
+El diccionario en `src/data/wordlist.txt` tiene solo **185 palabras** (demo). Esto es insuficiente para generar puzzles con los rangos por defecto (70-170 y 140-300 soluciones).
 
 ## ✅ Opción 1: Test con Rangos Ajustados
 

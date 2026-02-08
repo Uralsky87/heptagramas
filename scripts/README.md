@@ -117,7 +117,7 @@ node scripts/quick-generate.cjs quick
 node scripts/generatePuzzles.cjs \
   --candidates 5000 \
   --daily-min 70 \
-  --daily-max 140 \
+   --daily-max 170 \
   --classic-min 140 \
   --classic-max 300
 

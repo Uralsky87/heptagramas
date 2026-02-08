@@ -128,7 +128,7 @@ node scripts/generatePuzzles.cjs
 node scripts/generatePuzzles.cjs --help
 
 # Ejemplo: Generar 5000 candidatos con rangos personalizados
-node scripts/generatePuzzles.cjs --candidates 5000 --daily-min 70 --daily-max 140
+node scripts/generatePuzzles.cjs --candidates 5000 --daily-min 70 --daily-max 170
 ```
 
 **Ver documentación completa**: [scripts/GENERATOR_README.md](scripts/GENERATOR_README.md)

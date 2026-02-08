@@ -4,14 +4,14 @@
  * Generador OFFLINE de puzzles para Heptagramas
  * 
  * Genera dos pools de puzzles:
- * - dailyPool: 70-140 soluciones + al menos 1 superhepta (7+ letras)
+ * - dailyPool: 70-170 soluciones + al menos 1 superhepta (7+ letras)
  * - classicsPool: 140-300 soluciones
  * 
  * Uso: node scripts/generatePuzzles.js [opciones]
  * 
  * Opciones:
  *   --daily-min <num>      Mínimo de soluciones para diarios (default: 70)
- *   --daily-max <num>      Máximo de soluciones para diarios (default: 140)
+ *   --daily-max <num>      Máximo de soluciones para diarios (default: 170)
  *   --classic-min <num>    Mínimo de soluciones para clásicos (default: 140)
  *   --classic-max <num>    Máximo de soluciones para clásicos (default: 300)
  *   --candidates <num>     Número de candidatos a generar (default: 5000)
@@ -29,7 +29,7 @@ const path = require('path');
 
 const DEFAULT_CONFIG = {
   dailyMin: 70,
-  dailyMax: 140,
+  dailyMax: 170,
   classicMin: 140,
   classicMax: 300,
   candidates: 5000,
@@ -264,6 +264,7 @@ function createPuzzle(id, center, outer, mode, solutionCount, minLen, allowEnye)
     center,
     outer,
     mode,
+    solutionCount,
     minLen,
     allowEnye
   };
