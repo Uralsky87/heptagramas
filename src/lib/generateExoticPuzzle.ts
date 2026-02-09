@@ -31,9 +31,13 @@ function isValidLetterSet(center: string, outer: string[]): boolean {
     return false;
   }
   
-  // Regla 3 (opcional): Si el centro es 'q', debe haber 'u' en el set
-  if (center === 'q' && !outer.includes('u')) {
-    return false;
+  // Regla 3: Si hay q, debe existir u y al menos una de e/i para que sea jugable
+  if (allLetters.includes('q')) {
+    const hasU = allLetters.includes('u');
+    const hasEorI = allLetters.includes('e') || allLetters.includes('i');
+    if (!hasU || !hasEorI) {
+      return false;
+    }
   }
   
   return true;

@@ -100,6 +100,16 @@ function isValidPuzzle(
     return { valid: false, reason: 'center no puede estar en outer' };
   }
 
+  // Si hay q, debe existir u y al menos una de e/i para que sea jugable
+  const allLetters = new Set([center, ...outer]);
+  if (allLetters.has('q')) {
+    const hasU = allLetters.has('u');
+    const hasEorI = allLetters.has('e') || allLetters.has('i');
+    if (!hasU || !hasEorI) {
+      return { valid: false, reason: 'q requiere u y e/i en el set' };
+    }
+  }
+
   // Calcular soluciones
   const solutions = solvePuzzleForGenerator(center, outer, dictionary, 3);
 
@@ -110,6 +120,20 @@ function isValidPuzzle(
 
   if (solutions.length > maxSolutions) {
     return { valid: false, reason: `${solutions.length} soluciones (máx: ${maxSolutions})` };
+  }
+
+  // Viabilidad minima: cada letra debe aparecer en al menos 5 soluciones
+  const letterSet = new Set([center, ...outer]);
+  for (const letter of letterSet) {
+    let count = 0;
+    for (const word of solutions) {
+      if (word.includes(letter)) {
+        count++;
+      }
+    }
+    if (count < 5) {
+      return { valid: false, reason: `Letra "${letter}" con solo ${count} soluciones` };
+    }
   }
 
   // Validar que tenga al menos 1 SuperHepta
