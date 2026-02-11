@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { THEMES, getThemeById, isThemeUnlocked, applyTheme, getNextThemeToUnlock } from '../lib/themes';
 import { getLevelProgress } from '../lib/xpSystem';
-import { FONT_OPTIONS, applyFont, getFontById } from '../lib/fonts';
+import { FONT_OPTIONS, applyFont } from '../lib/fonts';
 
 interface ThemeSelectorProps {
   onClose: () => void;

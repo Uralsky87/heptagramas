@@ -36,13 +36,14 @@ export async function exportToJson(): Promise<ExportData> {
   const dailySessions = await getDailySessions();
 
   // PlayerState por defecto si no existe
-  const defaultPlayerState = {
+  const defaultPlayerState: ExportData['data']['playerState'] = {
     xpTotal: 0,
     level: 1,
-    cosmeticsUnlocked: [],
+    cosmeticsUnlocked: [] as string[],
     settings: {
       soundEnabled: true,
       activeTheme: 'default',
+      activeFont: 'classic',
     },
     saveVersion: SAVE_VERSION,
   };

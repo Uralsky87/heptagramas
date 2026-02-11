@@ -20,8 +20,7 @@ import {
 } from '../lib/storageAdapter';
 import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
-import { checkLevelUp, calculateLevel } from '../lib/xpSystem';
-import { checkThemeUnlock } from '../lib/themes';
+import { calculateLevel } from '../lib/xpSystem';
 import { getDailyKey } from '../lib/dailySession';
 import DefinitionModal from './DefinitionModal';
 import { useDefinitions } from '../lib/useDefinitions';
@@ -47,13 +46,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showPuzzleSelector, setShowPuzzleSelector] = useState(false);
-  const [showXPReward, setShowXPReward] = useState(false);
-  const [xpRewardInfo, setXPRewardInfo] = useState<{
-    xpGained: number;
-    levelUp: boolean;
-    newLevel: number;
-    unlockedThemeName?: string;
-  } | null>(null);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
@@ -147,16 +139,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setCurrentPuzzle(puzzle);
   };
 
-  // Manejar timeout de XP reward (evitar memory leak)
-  useEffect(() => {
-    if (!showXPReward) return;
-    
-    const timer = setTimeout(() => {
-      setShowXPReward(false);
-    }, 4000);
-    
-    return () => clearTimeout(timer);
-  }, [showXPReward]);
 
   const handleBackButton = () => {
     savePuzzleProgressState();
@@ -267,15 +249,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     playerState.level = calculateLevel(newXP);
     savePlayerState(playerState);
     
-    const levelUpInfo = checkLevelUp(oldXP, newXP);
-    const unlockedTheme = levelUpInfo.leveledUp ? checkThemeUnlock(levelUpInfo.newLevel) : null;
-    setXPRewardInfo({
-      xpGained: wordXP,
-      levelUp: levelUpInfo.leveledUp,
-      newLevel: levelUpInfo.newLevel,
-      unlockedThemeName: unlockedTheme?.name,
-    });
-    setShowXPReward(true);
     
     const isSH = isSuperHepta(normalized, currentPuzzle);
     
