@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Source+Code+Pro:wght@400;600;700&display=swap');
+
 /* RESET GLOBAL CRÍTICO: Evita shrink-wrap y centra correctamente */
 * {
   box-sizing: border-box;
@@ -16,7 +18,8 @@ html {
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --app-font: 'Courier New', 'Lucida Console', 'Georgia', serif;
+  font-family: var(--app-font);
   line-height: 1.5;
   font-weight: 400;
 

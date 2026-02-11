@@ -6,8 +6,7 @@
   display: flex;
   justify-content: center;   /* centra horizontal */
   align-items: flex-start;
-  /* TEMPORAL: background para ver viewport completo */
-  background: rgba(255, 0, 0, 0.03);
+  background: var(--theme-ui-bg);
 }
 
 .page-container-inner {
@@ -17,6 +16,7 @@
   margin: 0;                 /* NO usar margin:auto, el outer centra con flex */
   display: flex;
   flex-direction: column;
+  font-family: var(--app-font);
   /* TEMPORAL: borde rojo para verificar centrado en móvil */
   /* border: 2px solid red; */
 }

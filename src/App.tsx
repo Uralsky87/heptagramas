@@ -14,6 +14,7 @@ import type { Puzzle } from './types';
 import { loadDictionary, type DictionaryData } from './lib/dictionary';
 import { getDailySession, getDailyPuzzleForDate, preloadDailySessions } from './lib/dailySession';
 import { applyTheme, getThemeById } from './lib/themes';
+import { applyFont } from './lib/fonts';
 import { migrateFromLocalStorage, getPlayerState, openDatabase } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
 import puzzlesData from './data/puzzles.json';
@@ -63,6 +64,7 @@ export default function App() {
           // Aplicar tema
           const theme = getThemeById(playerState.settings.activeTheme);
           applyTheme(theme);
+          applyFont(playerState.settings.activeFont || 'classic');
         }
         
         // Precargar sesiones diarias
@@ -271,6 +273,7 @@ export default function App() {
         onBack={handleBackToDailyList}
         mode="daily"
         dailyProgressId={session.progressId}
+          dailyDateKey={selectedDailyDateKey}
       />
     );
   }

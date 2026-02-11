@@ -7,7 +7,7 @@
   align-items: center;
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--theme-ui-border);
   margin-bottom: 24px;
 }
 
@@ -19,25 +19,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #e0e0e0;
-  background: white;
+  border: 2px solid var(--theme-ui-border);
+  background: var(--theme-ui-surface);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--theme-ui-text);
   border-radius: 8px;
   transition: all 0.2s ease;
   touch-action: manipulation;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .top-bar-btn:hover {
-  background: #f5f7fa;
-  border-color: #667eea;
+  background: var(--theme-ui-surface-alt);
+  border-color: var(--theme-ui-border);
 }
 
 .top-bar-btn:active {
-  background: #e8ebf5;
-  border-color: #667eea;
+  background: var(--theme-ui-surface-alt-2);
+  border-color: var(--theme-ui-border);
 }
 
 /* Botón izquierda - alineado a la izquierda */
@@ -67,7 +71,7 @@
   text-align: center;
   /* Tipografía display: serif elegante + fallback */
   font-family: 'Georgia', 'Garamond', serif;
-  color: inherit;
+  color: var(--theme-ui-text);
   /* Evitar overflow en pantallas pequeñas */
   white-space: nowrap;
   overflow: hidden;

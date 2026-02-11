@@ -62,6 +62,7 @@ function migrateOldData(): void {
         settings: {
           soundEnabled: parsed.soundEnabled ?? true,
           activeTheme: 'default',
+          activeFont: 'classic',
         },
       };
       localStorage.setItem(STORAGE_KEYS.PLAYER_STATE, JSON.stringify(newPlayerState));
@@ -160,7 +161,11 @@ export function loadPlayerState(): PlayerState {
     if (!data) {
       return getDefaultPlayerState();
     }
-    return JSON.parse(data);
+    const parsed = JSON.parse(data) as PlayerState;
+    if (!parsed.settings.activeFont) {
+      parsed.settings.activeFont = 'classic';
+    }
+    return parsed;
   } catch {
     return getDefaultPlayerState();
   }
@@ -205,6 +210,7 @@ function getDefaultPlayerState(): PlayerState {
     settings: {
       soundEnabled: true,
       activeTheme: 'default',
+      activeFont: 'classic',
     },
   };
 }
@@ -236,6 +242,9 @@ export function saveSettings(settings: { soundEnabled: boolean }): void {
   // Mantener tema actual si existe
   if (!playerState.settings.activeTheme) {
     playerState.settings.activeTheme = 'default';
+  }
+  if (!playerState.settings.activeFont) {
+    playerState.settings.activeFont = 'classic';
   }
   savePlayerState(playerState);
 }

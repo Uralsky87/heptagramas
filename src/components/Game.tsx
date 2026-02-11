@@ -22,6 +22,9 @@ import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import { checkLevelUp, calculateLevel } from '../lib/xpSystem';
 import { checkThemeUnlock } from '../lib/themes';
+import { getDailyKey } from '../lib/dailySession';
+import DefinitionModal from './DefinitionModal';
+import { useDefinitions } from '../lib/useDefinitions';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface GameProps {
@@ -31,9 +34,10 @@ interface GameProps {
   onBack: () => void;
   mode: 'daily' | 'classic';
   dailyProgressId?: string; // Para modo diario: "daily-YYYY-MM-DD"
+  dailyDateKey?: string; // Para modo diario: "YYYY-MM-DD"
 }
 
-export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mode, dailyProgressId }: GameProps) {
+export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mode, dailyProgressId, dailyDateKey }: GameProps) {
   const { t } = useLanguage();
   const [currentPuzzle, setCurrentPuzzle] = useState<Puzzle>(initialPuzzle);
   const [foundWords, setFoundWords] = useState<string[]>([]);
@@ -53,7 +57,10 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
+  const [showAnswers, setShowAnswers] = useState(false);
+  const [selectedAnswerWord, setSelectedAnswerWord] = useState<string | null>(null);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
+  const { getDefinition } = useDefinitions();
 
   // Determinar ID de progreso: usar dailyProgressId si está en modo diario, sino puzzleId
   const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
@@ -154,6 +161,46 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const handleBackButton = () => {
     savePuzzleProgressState();
     onBack();
+  };
+
+  const isPastDaily =
+    mode === 'daily' &&
+    typeof dailyDateKey === 'string' &&
+    dailyDateKey < getDailyKey();
+
+  const solutionsByLength = puzzleSolutions.reduce<Record<number, string[]>>((acc, word) => {
+    const length = word.length;
+    if (!acc[length]) {
+      acc[length] = [];
+    }
+    acc[length].push(word);
+    return acc;
+  }, {});
+
+  const sortedLengths = Object.keys(solutionsByLength)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  sortedLengths.forEach((length) => {
+    solutionsByLength[length].sort((a, b) => a.localeCompare(b, 'es'));
+  });
+
+  const renderWordWithCenter = (word: string, center: string) => {
+    const centerLower = center.toLowerCase();
+    return word.split('').map((char, index) =>
+      char.toLowerCase() === centerLower ? (
+        <strong key={`${word}-${index}`}>{char}</strong>
+      ) : (
+        <span key={`${word}-${index}`}>{char}</span>
+      )
+    );
+  };
+
+  const handleAnswerClick = (word: string) => {
+    const definition = getDefinition(word);
+    if (definition) {
+      setSelectedAnswerWord(word);
+    }
   };
 
   const handleLetterClick = (letter: string) => {
@@ -273,6 +320,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         onSettingsClick={() => {}}
         title={mode === 'daily' ? t('common.daily') : t('home.classic_title')}
         showThemeButton={false}
+        showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={handleBackButton}>
             {t('common.home')}
@@ -295,19 +343,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       </header>
 
       {/* Notificación de XP */}
-      {showXPReward && xpRewardInfo && (
-        <div className="xp-notification">
-          <div className="xp-notification-content">
-            <div className="xp-amount">+{xpRewardInfo.xpGained} XP</div>
-            {xpRewardInfo.levelUp && (
-              <div className="xp-level-up">
-                🎉 ¡Nivel {xpRewardInfo.newLevel}! 🎉
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Mensajes de feedback encima del heptagrama */}
       <UnifiedFeedback 
         type={feedbackType}
@@ -335,6 +370,48 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         successAnimation={showSuccessAnim}
       />
 
+      {isPastDaily && (
+        <div className="answers-section">
+          <button
+            className="btn-action btn-answers"
+            onClick={() => setShowAnswers((prev) => !prev)}
+          >
+            {showAnswers ? 'Ocultar respuestas' : 'Ver respuestas'}
+          </button>
+
+          {showAnswers && (
+            <div className="answers-list">
+              {sortedLengths.map((length) => (
+                <div key={length} className="answers-group">
+                  <div className="answers-group-title">{length} letras</div>
+                  <div className="answers-words">
+                    {solutionsByLength[length].map((word) => (
+                      <span
+                        key={word}
+                        className="answers-word"
+                        onClick={() => handleAnswerClick(word)}
+                        title={getDefinition(word) ? 'Haz clic para ver la definición' : ''}
+                      >
+                        {renderWordWithCenter(word, currentPuzzle.center)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {selectedAnswerWord && getDefinition(selectedAnswerWord) && (
+        <DefinitionModal
+          word={selectedAnswerWord}
+          definition={getDefinition(selectedAnswerWord) as string}
+          isOpen={true}
+          onClose={() => setSelectedAnswerWord(null)}
+        />
+      )}
+
       <FoundWordsList 
         words={foundWords} 
         total={puzzleSolutions.length}
@@ -357,21 +434,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         />
       )}
 
-      {showXPReward && xpRewardInfo && (
-        <div className="xp-notification">
-          <div className="xp-content">
-            <div className="xp-amount">+{xpRewardInfo.xpGained} XP</div>
-            {xpRewardInfo.levelUp && (
-              <>
-                <div className="level-up-text">¡Nivel {xpRewardInfo.newLevel}!</div>
-                {xpRewardInfo.unlockedThemeName && (
-                  <div className="theme-unlocked">🎨 Tema desbloqueado: {xpRewardInfo.unlockedThemeName}</div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </PageContainer>
   );
 }

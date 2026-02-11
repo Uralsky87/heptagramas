@@ -22,6 +22,18 @@ export interface Theme {
     levelBgEnd: string;
     levelBarStart: string;
     levelBarEnd: string;
+    // Colores de UI (Home/menus)
+    uiBackground: string;
+    uiSurface: string;
+    uiSurfaceAlt: string;
+    uiSurfaceAlt2: string;
+    uiBorder: string;
+    uiText: string;
+    uiMuted: string;
+    uiIcon: string;
+    uiXpTrack: string;
+    uiXpFillStart: string;
+    uiXpFillEnd: string;
   };
 }
 
@@ -33,16 +45,27 @@ export const THEMES: Theme[] = [
     unlockLevel: 1,
     description: 'El tema original de Heptagramas',
     colors: {
-      centerGradientStart: '#ed4b82',
-      centerGradientEnd: '#c9356a',
-      outerGradientStart: '#667eea',
-      outerGradientEnd: '#764ba2',
-      primaryBtnStart: '#667eea',
-      primaryBtnEnd: '#764ba2',
-      levelBgStart: '#667eea',
-      levelBgEnd: '#764ba2',
-      levelBarStart: '#4facfe',
-      levelBarEnd: '#00f2fe',
+      centerGradientStart: '#5b4aa6',
+      centerGradientEnd: '#8774d6',
+      outerGradientStart: '#2b2833',
+      outerGradientEnd: '#4d4460',
+      primaryBtnStart: '#5b4aa6',
+      primaryBtnEnd: '#8774d6',
+      levelBgStart: '#3b3450',
+      levelBgEnd: '#6153a0',
+      levelBarStart: '#9b8be3',
+      levelBarEnd: '#c2b2f4',
+      uiBackground: '#f4f1fb',
+      uiSurface: '#f2edff',
+      uiSurfaceAlt: '#ece4ff',
+      uiSurfaceAlt2: '#e7ddff',
+      uiBorder: '#a79ad7',
+      uiText: '#1f1f1f',
+      uiMuted: '#4f4a59',
+      uiIcon: '#5b4aa6',
+      uiXpTrack: '#d7cdf4',
+      uiXpFillStart: '#7d6bd6',
+      uiXpFillEnd: '#b29cff',
     },
   },
   {
@@ -62,6 +85,17 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#fdc830',
       levelBarStart: '#ffbe0b',
       levelBarEnd: '#fb5607',
+      uiBackground: '#fff3ee',
+      uiSurface: '#ffe7dd',
+      uiSurfaceAlt: '#ffd9cc',
+      uiSurfaceAlt2: '#ffcab8',
+      uiBorder: '#f0a98f',
+      uiText: '#2b1e1c',
+      uiMuted: '#6b4f49',
+      uiIcon: '#e05c4b',
+      uiXpTrack: '#f4bca8',
+      uiXpFillStart: '#ff6b6b',
+      uiXpFillEnd: '#fdc830',
     },
   },
   {
@@ -81,6 +115,17 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#0891b2',
       levelBarStart: '#22d3ee',
       levelBarEnd: '#06b6d4',
+      uiBackground: '#eef7fb',
+      uiSurface: '#e0f1f8',
+      uiSurfaceAlt: '#d2eaf5',
+      uiSurfaceAlt2: '#c6e3f2',
+      uiBorder: '#8bbad1',
+      uiText: '#0f2633',
+      uiMuted: '#375464',
+      uiIcon: '#0ea5e9',
+      uiXpTrack: '#b9dcec',
+      uiXpFillStart: '#22d3ee',
+      uiXpFillEnd: '#06b6d4',
     },
   },
   {
@@ -100,6 +145,17 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#059669',
       levelBarStart: '#34d399',
       levelBarEnd: '#10b981',
+      uiBackground: '#eef8f1',
+      uiSurface: '#e0f3e6',
+      uiSurfaceAlt: '#d2eddc',
+      uiSurfaceAlt2: '#c4e7d2',
+      uiBorder: '#84b99d',
+      uiText: '#132a1f',
+      uiMuted: '#3b5a4b',
+      uiIcon: '#059669',
+      uiXpTrack: '#bfe3cc',
+      uiXpFillStart: '#34d399',
+      uiXpFillEnd: '#10b981',
     },
   },
   {
@@ -119,6 +175,17 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#8b5cf6',
       levelBarStart: '#c084fc',
       levelBarEnd: '#a855f7',
+      uiBackground: '#f5f0ff',
+      uiSurface: '#eee6ff',
+      uiSurfaceAlt: '#e6dcff',
+      uiSurfaceAlt2: '#dccfff',
+      uiBorder: '#b49ce9',
+      uiText: '#2b1f3a',
+      uiMuted: '#5a4a70',
+      uiIcon: '#8b5cf6',
+      uiXpTrack: '#d7c9f4',
+      uiXpFillStart: '#c084fc',
+      uiXpFillEnd: '#a855f7',
     },
   },
   {
@@ -138,6 +205,17 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#f97316',
       levelBarStart: '#fde047',
       levelBarEnd: '#fbbf24',
+      uiBackground: '#fff4ec',
+      uiSurface: '#ffe7d7',
+      uiSurfaceAlt: '#ffdcc2',
+      uiSurfaceAlt2: '#ffd0ad',
+      uiBorder: '#f2b58d',
+      uiText: '#3a2215',
+      uiMuted: '#6e4b35',
+      uiIcon: '#f472b6',
+      uiXpTrack: '#f6c7a6',
+      uiXpFillStart: '#fde047',
+      uiXpFillEnd: '#fbbf24',
     },
   },
 ];
@@ -195,6 +273,19 @@ export function applyTheme(theme: Theme): void {
   root.style.setProperty('--theme-level-bg-end', colors.levelBgEnd);
   root.style.setProperty('--theme-level-bar-start', colors.levelBarStart);
   root.style.setProperty('--theme-level-bar-end', colors.levelBarEnd);
+
+  // Variables de UI
+  root.style.setProperty('--theme-ui-bg', colors.uiBackground);
+  root.style.setProperty('--theme-ui-surface', colors.uiSurface);
+  root.style.setProperty('--theme-ui-surface-alt', colors.uiSurfaceAlt);
+  root.style.setProperty('--theme-ui-surface-alt-2', colors.uiSurfaceAlt2);
+  root.style.setProperty('--theme-ui-border', colors.uiBorder);
+  root.style.setProperty('--theme-ui-text', colors.uiText);
+  root.style.setProperty('--theme-ui-muted', colors.uiMuted);
+  root.style.setProperty('--theme-ui-icon', colors.uiIcon);
+  root.style.setProperty('--theme-ui-xp-track', colors.uiXpTrack);
+  root.style.setProperty('--theme-ui-xp-fill-start', colors.uiXpFillStart);
+  root.style.setProperty('--theme-ui-xp-fill-end', colors.uiXpFillEnd);
 }
 
 /**

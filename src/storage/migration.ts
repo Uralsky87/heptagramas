@@ -49,6 +49,9 @@ export async function migrateFromLocalStorage(): Promise<void> {
     if (playerStateStr) {
       try {
         const playerState: PlayerState = JSON.parse(playerStateStr);
+        if (!playerState.settings.activeFont) {
+          playerState.settings.activeFont = 'classic';
+        }
         await setPlayerState(playerState);
         migratedCount++;
         console.log('[Migration] ✓ PlayerState migrado');

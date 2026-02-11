@@ -263,6 +263,7 @@ function getDefaultPlayerState(): PlayerState {
     settings: {
       soundEnabled: true,
       activeTheme: 'default',
+      activeFont: 'classic',
     },
   };
 }
@@ -307,6 +308,9 @@ export async function saveSettings(settings: { soundEnabled: boolean }): Promise
   playerState.settings.soundEnabled = settings.soundEnabled;
   if (!playerState.settings.activeTheme) {
     playerState.settings.activeTheme = 'default';
+  }
+  if (!playerState.settings.activeFont) {
+    playerState.settings.activeFont = 'classic';
   }
   await savePlayerState(playerState);
 }

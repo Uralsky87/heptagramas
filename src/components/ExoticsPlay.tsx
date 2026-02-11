@@ -1057,6 +1057,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           onSettingsClick={() => {}}
           title={t('home.exotic_title')}
           showThemeButton={false}
+          showSettingsButton={false}
           leftButton={
             <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
               {t('common.home')}
@@ -1090,6 +1091,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         onSettingsClick={() => {}}
         title={t('home.exotic_title')}
         showThemeButton={false}
+        showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             Exóticos

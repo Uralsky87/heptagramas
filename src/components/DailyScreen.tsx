@@ -103,6 +103,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         onSettingsClick={() => {}}
         title={t('common.daily')}
         showThemeButton={false}
+        showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             {t('common.home')}
@@ -169,6 +170,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         {/* Lista de días anteriores */}
         <div className="previous-days">
           <h3 className="section-title">{t('daily.previous_days')}</h3>
+          <p className="section-hint">Comprueba resultados</p>
           <div className="days-list">
             {daysInfo.slice(1).map((dayInfo) => {
               const hasProgress = dayInfo.progress && dayInfo.progress.foundWords.length > 0;

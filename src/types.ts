@@ -29,6 +29,7 @@ export interface PlayerState {
 export interface PlayerSettings {
   soundEnabled: boolean;
   activeTheme: string; // ID del tema activo
+  activeFont: string; // ID de la fuente activa
 }
 
 export interface ValidationResult {

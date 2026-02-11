@@ -77,7 +77,14 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onBacks
         <div className="button-row">
           {onShuffle && (
             <button onClick={onShuffle} className="btn-action btn-shuffle-inline" title="Reordenar">
-              🔄
+              <svg className="shuffle-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M12 24A12 12 0 0 1 30 14" />
+                <path d="M30 14L26 12" />
+                <path d="M30 14L28 18" />
+                <path d="M36 24A12 12 0 0 1 18 34" />
+                <path d="M18 34L22 36" />
+                <path d="M18 34L20 30" />
+              </svg>
             </button>
           )}
           <button onClick={handleSubmit} className="btn-action btn-submit">

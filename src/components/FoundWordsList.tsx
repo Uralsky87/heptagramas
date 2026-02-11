@@ -49,6 +49,7 @@ export default function FoundWordsList({ words, total, superHeptaWords, invalidW
           )}
         </div>
       </div>
+      <p className="found-hint">Haz click para ver la definición</p>
 
       {words.length === 0 ? (
         <p className="empty-message">Aún no has encontrado ninguna palabra.</p>

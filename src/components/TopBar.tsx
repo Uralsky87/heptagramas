@@ -6,6 +6,7 @@ interface TopBarProps {
   onSettingsClick: () => void;
   title?: string;
   showThemeButton?: boolean;
+  showSettingsButton?: boolean;
   leftButton?: ReactNode;
   rightButton?: ReactNode; // Para permitir botón personalizado a la derecha
 }
@@ -29,6 +30,7 @@ export default function TopBar({
   onSettingsClick,
   title = 'Palabrarium',
   showThemeButton = true,
+  showSettingsButton = true,
   leftButton,
   rightButton,
 }: TopBarProps) {
@@ -56,7 +58,7 @@ export default function TopBar({
       {/* Columna derecha */}
       {rightButton ? (
         rightButton
-      ) : (
+      ) : showSettingsButton ? (
         <button
           className="top-bar-btn top-bar-btn-right"
           onClick={onSettingsClick}
@@ -65,6 +67,8 @@ export default function TopBar({
         >
           ⚙️
         </button>
+      ) : (
+        <div className="top-bar-spacer" aria-hidden="true" />
       )}
     </div>
   );

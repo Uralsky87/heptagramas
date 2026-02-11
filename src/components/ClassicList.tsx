@@ -79,6 +79,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
         onSettingsClick={() => {}}
         title={t('home.classic_title')}
         showThemeButton={false}
+        showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
             {t('common.home')}
