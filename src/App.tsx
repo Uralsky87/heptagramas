@@ -60,11 +60,10 @@ export default function App() {
         if (playerState) {
           // Guardar en cache para acceso síncrono
           (window as any).__playerStateCache = playerState;
-          
           // Aplicar tema
           const theme = getThemeById(playerState.settings.activeTheme);
           applyTheme(theme);
-          applyFont(playerState.settings.activeFont || 'classic');
+          applyFont('source-code-pro');
         }
         
         // Precargar sesiones diarias

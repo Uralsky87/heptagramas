@@ -9,11 +9,13 @@
   padding: 12px 0;
   border-bottom: 1px solid var(--theme-ui-border);
   margin-bottom: 24px;
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
 }
 
 /* Botones de la barra superior */
 .top-bar-btn {
-  padding: 8px 16px;
+  padding: 7px 16px;
+  min-width: 80px;
   height: auto;
   width: auto;
   display: flex;
@@ -22,16 +24,16 @@
   border: 2px solid var(--theme-ui-border);
   background: var(--theme-ui-surface);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: 600;
   color: var(--theme-ui-text);
   border-radius: 8px;
   transition: all 0.2s ease;
   touch-action: manipulation;
   max-width: 120px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  word-break: break-word;
 }
 
 .top-bar-btn:hover {
@@ -65,12 +67,11 @@
 .top-bar-title {
   margin: 0;
   padding: 0;
-  font-size: 24px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-align: center;
-  /* Tipografía display: serif elegante + fallback */
-  font-family: 'Georgia', 'Garamond', serif;
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
   color: var(--theme-ui-text);
   /* Evitar overflow en pantallas pequeñas */
   white-space: nowrap;

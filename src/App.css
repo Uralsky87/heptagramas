@@ -3,30 +3,35 @@
   box-sizing: border-box;
 }
 
+body, html {
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
+}
+
 /* Variables CSS para temas */
 :root {
   /* Colores por defecto (tema Clásico) */
-  --theme-center-start: #5b4aa6;
-  --theme-center-end: #8774d6;
-  --theme-outer-start: #2b2833;
-  --theme-outer-end: #4d4460;
-  --theme-primary-start: #5b4aa6;
-  --theme-primary-end: #8774d6;
-  --theme-level-bg-start: #3b3450;
-  --theme-level-bg-end: #6153a0;
-  --theme-level-bar-start: #9b8be3;
-  --theme-level-bar-end: #c2b2f4;
-  --theme-ui-bg: #f4f1fb;
-  --theme-ui-surface: #f2edff;
-  --theme-ui-surface-alt: #ece4ff;
-  --theme-ui-surface-alt-2: #e7ddff;
-  --theme-ui-border: #a79ad7;
-  --theme-ui-text: #1f1f1f;
-  --theme-ui-muted: #4f4a59;
-  --theme-ui-icon: #5b4aa6;
-  --theme-ui-xp-track: #d7cdf4;
-  --theme-ui-xp-fill-start: #7d6bd6;
-  --theme-ui-xp-fill-end: #b29cff;
+  --app-font: 'Source Code Pro', 'Courier New', monospace;
+  --theme-center-start: #2563EB;
+  --theme-center-end: #2563EB;
+  --theme-outer-start: #6B7280;
+  --theme-outer-end: #6B7280;
+  --theme-primary-start: #2563EB;
+  --theme-primary-end: #2563EB;
+  --theme-level-bg-start: #F2F1ED;
+  --theme-level-bg-end: #F2F1ED;
+  --theme-level-bar-start: #2563EB;
+  --theme-level-bar-end: #6B7280;
+  --theme-ui-bg: #F2F1ED;
+  --theme-ui-surface: #F2F1ED;
+  --theme-ui-surface-alt: #F2F1ED;
+  --theme-ui-surface-alt-2: #F2F1ED;
+  --theme-ui-border: #6B7280;
+  --theme-ui-text: #1F2933;
+  --theme-ui-muted: #6B7280;
+  --theme-ui-icon: #2563EB;
+  --theme-ui-xp-track: #F2F1ED;
+  --theme-ui-xp-fill-start: #2563EB;
+  --theme-ui-xp-fill-end: #6B7280;
 }
 
 /* PageContainer - Layout base reutilizable */
@@ -37,7 +42,7 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: var(--app-font);
 }
 
 @media (max-width: 480px) {
@@ -68,9 +73,18 @@
 }
 
 .header h1 {
+  }
+  h2, h3, h4, h5, h6 {
+    }
+    .theme-selector-header h2 {
+      font-size: 14px !important;
+    }
+    font-family: 'Source Code Pro', 'Courier New', monospace !important;
+  }
   margin: 0 0 8px 0;
   font-size: 28px;
   color: #2c3e50;
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
 }
 
 .puzzle-title {
@@ -78,6 +92,7 @@
   font-size: 14px;
   color: #7f8c8d;
   font-weight: 500;
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
 }
 
 /* XP Notification */
@@ -558,20 +573,24 @@ svg g {
 }
 
 .found-list li {
-  padding: 10px 12px;
+  padding: 13px 14px;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 8px;
+  border-radius: 10px;
   text-align: center;
-  font-weight: 600;
-  font-size: 14px;
-  color: #2c3e50;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+  font-size: 18px;
+  color: #1a1a1a;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
   text-transform: lowercase;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   transition: all 0.2s ease;
+  outline: 1.5px solid #a79ad7;
+  outline-offset: 1px;
+  letter-spacing: 0.3px;
+  user-select: text;
 }
 
 .found-list li.has-definition {
@@ -937,12 +956,12 @@ svg g {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 50px;
-  padding: 10px 12px;
+  min-width: 60px;
+  padding: 12px 15px;
   background: var(--theme-ui-surface-alt);
-  border: 2px solid var(--theme-ui-border);
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 2.5px solid var(--theme-ui-border);
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;
 }
 
@@ -953,18 +972,18 @@ svg g {
 }
 
 .stats-chip-letter {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--theme-ui-icon);
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .stats-chip-count {
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--theme-ui-muted);
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .stats-value {
@@ -1337,10 +1356,11 @@ svg g {
    ======================================== */
 
 .btn-back {
-  padding: 8px 16px;
+  padding: 12px 28px;
+  min-width: 180px;
   background: white;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 14px;
   color: #667eea;
   font-weight: 600;
   font-size: 14px;
@@ -1348,6 +1368,8 @@ svg g {
   transition: all 0.2s;
   align-self: flex-start;
   margin-bottom: 16px;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .btn-back:hover {

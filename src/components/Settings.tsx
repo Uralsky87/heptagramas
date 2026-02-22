@@ -15,6 +15,7 @@ export default function Settings({ onBack }: SettingsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const { language, setLanguage, t } = useLanguage();
+  // Eliminar cualquier lógica relacionada con la fuente
 
   const scheduleTimeout = (callback: () => void, delay: number) => {
     const id = window.setTimeout(callback, delay);
