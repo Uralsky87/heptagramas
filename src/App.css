@@ -5,33 +5,38 @@
 
 body, html {
   font-family: 'Source Code Pro', 'Courier New', monospace !important;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.46), transparent 46%),
+    radial-gradient(circle at 82% 28%, rgba(224, 209, 184, 0.28), transparent 50%),
+    linear-gradient(180deg, #f8f0e2 0%, #f1e7d6 100%);
+  color: var(--theme-ui-text);
 }
 
 /* Variables CSS para temas */
 :root {
   /* Colores por defecto (tema Clásico) */
   --app-font: 'Source Code Pro', 'Courier New', monospace;
-  --theme-center-start: #2563EB;
-  --theme-center-end: #2563EB;
-  --theme-outer-start: #6B7280;
-  --theme-outer-end: #6B7280;
-  --theme-primary-start: #2563EB;
-  --theme-primary-end: #2563EB;
-  --theme-level-bg-start: #F2F1ED;
-  --theme-level-bg-end: #F2F1ED;
-  --theme-level-bar-start: #2563EB;
-  --theme-level-bar-end: #6B7280;
-  --theme-ui-bg: #F2F1ED;
-  --theme-ui-surface: #F2F1ED;
-  --theme-ui-surface-alt: #F2F1ED;
-  --theme-ui-surface-alt-2: #F2F1ED;
-  --theme-ui-border: #6B7280;
-  --theme-ui-text: #1F2933;
-  --theme-ui-muted: #6B7280;
-  --theme-ui-icon: #2563EB;
-  --theme-ui-xp-track: #F2F1ED;
-  --theme-ui-xp-fill-start: #2563EB;
-  --theme-ui-xp-fill-end: #6B7280;
+  --theme-center-start: #8f7558;
+  --theme-center-end: #a88a66;
+  --theme-outer-start: #7f7568;
+  --theme-outer-end: #9c907f;
+  --theme-primary-start: #8f7558;
+  --theme-primary-end: #a88a66;
+  --theme-level-bg-start: #dfd1bc;
+  --theme-level-bg-end: #d4c2a8;
+  --theme-level-bar-start: #b49571;
+  --theme-level-bar-end: #927759;
+  --theme-ui-bg: #f6eedf;
+  --theme-ui-surface: #fbf5ea;
+  --theme-ui-surface-alt: #f4ebdc;
+  --theme-ui-surface-alt-2: #ece0cd;
+  --theme-ui-border: #b6a489;
+  --theme-ui-text: #3f3429;
+  --theme-ui-muted: #7a6a58;
+  --theme-ui-icon: #8f7558;
+  --theme-ui-xp-track: #dbccb4;
+  --theme-ui-xp-fill-start: #b49571;
+  --theme-ui-xp-fill-end: #927759;
 }
 
 /* PageContainer - Layout base reutilizable */
@@ -69,28 +74,28 @@ body, html {
   text-align: center;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--theme-ui-border);
 }
 
 .header h1 {
-  }
-  h2, h3, h4, h5, h6 {
-    }
-    .theme-selector-header h2 {
-      font-size: 14px !important;
-    }
-    font-family: 'Source Code Pro', 'Courier New', monospace !important;
-  }
   margin: 0 0 8px 0;
   font-size: 28px;
-  color: #2c3e50;
+  color: var(--theme-ui-text);
   font-family: 'Source Code Pro', 'Courier New', monospace !important;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: 'Source Code Pro', 'Courier New', monospace !important;
+}
+
+.theme-selector-header h2 {
+  font-size: 14px !important;
 }
 
 .puzzle-title {
   margin: 0;
   font-size: 14px;
-  color: #7f8c8d;
+  color: var(--theme-ui-muted);
   font-weight: 500;
   font-family: 'Source Code Pro', 'Courier New', monospace !important;
 }
@@ -106,11 +111,11 @@ body, html {
 }
 
 .xp-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, var(--theme-primary-end) 100%);
   color: white;
   padding: 16px 32px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 24px rgba(122, 106, 88, 0.4);
   text-align: center;
 }
 
@@ -502,13 +507,13 @@ svg g {
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--theme-ui-border);
 }
 
 .found-header h2 {
   margin: 0;
   font-size: 20px;
-  color: #2c3e50;
+  color: var(--theme-ui-text);
 }
 
 .found-hint {
@@ -540,8 +545,8 @@ svg g {
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  color: #2c3e50;
+  background: linear-gradient(135deg, #dfd0b8 0%, #ccb28f 100%);
+  color: var(--theme-ui-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -551,14 +556,14 @@ svg g {
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  background: linear-gradient(135deg, #c3a178 0%, #8f7558 100%);
   color: white;
   letter-spacing: 0.3px;
 }
 
 .empty-message {
   text-align: center;
-  color: #95a5a6;
+  color: var(--theme-ui-muted);
   font-style: italic;
   margin: 32px 0;
 }
@@ -574,12 +579,12 @@ svg g {
 
 .found-list li {
   padding: 13px 14px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, var(--theme-ui-surface) 0%, var(--theme-ui-surface-alt-2) 100%);
   border-radius: 10px;
   text-align: center;
   font-weight: 700;
   font-size: 18px;
-  color: #1a1a1a;
+  color: var(--theme-ui-text);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
   text-transform: lowercase;
   display: flex;
@@ -587,7 +592,7 @@ svg g {
   justify-content: center;
   gap: 5px;
   transition: all 0.2s ease;
-  outline: 1.5px solid #a79ad7;
+  outline: 1.5px solid var(--theme-ui-border);
   outline-offset: 1px;
   letter-spacing: 0.3px;
   user-select: text;
@@ -598,7 +603,7 @@ svg g {
 }
 
 .found-list li.has-definition:hover {
-  background: linear-gradient(135deg, #e8ecf1 0%, #b0bfd6 100%);
+  background: linear-gradient(135deg, var(--theme-ui-surface-alt) 0%, var(--theme-ui-surface-alt-2) 100%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }
@@ -618,7 +623,7 @@ svg g {
 
 .invalid-tag {
   font-size: 10px;
-  color: #e74c3c;
+  color: #b35d48;
   font-weight: 600;
   margin-left: 4px;
 }
@@ -686,13 +691,13 @@ svg g {
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--theme-ui-border);
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 24px;
-  color: #2c3e50;
+  color: var(--theme-ui-text);
 }
 
 .btn-close-modal {
@@ -700,8 +705,8 @@ svg g {
   height: 36px;
   border-radius: 50%;
   border: none;
-  background: #f5f5f5;
-  color: #7f8c8d;
+  background: var(--theme-ui-surface-alt);
+  color: var(--theme-ui-muted);
   font-size: 20px;
   cursor: pointer;
   display: flex;
@@ -711,8 +716,8 @@ svg g {
 }
 
 .btn-close-modal:hover {
-  background: #fee;
-  color: #e74c3c;
+  background: #f0ddd5;
+  color: #a05040;
 }
 
 .modal-content {
@@ -726,8 +731,8 @@ svg g {
   width: 100%;
   padding: 20px;
   border-radius: 12px;
-  border: 3px solid #667eea;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3px solid var(--theme-primary-start);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, var(--theme-primary-end) 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -735,12 +740,12 @@ svg g {
   cursor: pointer;
   transition: all 0.3s;
   margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(122, 106, 88, 0.35);
 }
 
 .btn-daily-puzzle:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 16px rgba(122, 106, 88, 0.45);
 }
 
 .daily-icon {
@@ -768,7 +773,7 @@ svg g {
 .puzzles-list h3 {
   margin: 0 0 16px 0;
   font-size: 18px;
-  color: #2c3e50;
+  color: var(--theme-ui-text);
 }
 
 .puzzles-grid {
@@ -780,8 +785,8 @@ svg g {
 .puzzle-card {
   padding: 16px;
   border-radius: 12px;
-  border: 2px solid #e0e0e0;
-  background: white;
+  border: 2px solid var(--theme-ui-border);
+  background: var(--theme-ui-surface);
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -791,14 +796,14 @@ svg g {
 }
 
 .puzzle-card:hover {
-  border-color: #667eea;
+  border-color: var(--theme-ui-icon);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .puzzle-card.active {
-  border-color: #667eea;
-  background: linear-gradient(135deg, #f0f3ff 0%, #e8ecff 100%);
+  border-color: var(--theme-ui-icon);
+  background: linear-gradient(135deg, var(--theme-ui-surface-alt) 0%, var(--theme-ui-surface-alt-2) 100%);
 }
 
 .puzzle-card.daily {
@@ -815,7 +820,7 @@ svg g {
 .puzzle-number {
   font-size: 14px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--theme-ui-icon);
 }
 
 .badge-daily {
@@ -837,7 +842,7 @@ svg g {
 .puzzle-card-letters .center-letter {
   font-size: 32px;
   font-weight: 700;
-  color: #f5576c;
+  color: var(--theme-primary-start);
 }
 
 .outer-letters-mini {
@@ -850,18 +855,18 @@ svg g {
 .outer-letters-mini span {
   font-size: 12px;
   font-weight: 600;
-  color: #764ba2;
+  color: var(--theme-ui-icon);
 }
 
 .puzzle-card-progress {
   text-align: center;
   padding-top: 8px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--theme-ui-border);
 }
 
 .puzzle-card-progress small {
   font-size: 11px;
-  color: #7f8c8d;
+  color: var(--theme-ui-muted);
   font-weight: 600;
 }
 
@@ -873,7 +878,7 @@ svg g {
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 12px;
-  background: #667eea;
+  background: var(--theme-primary-start);
   color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
@@ -882,9 +887,9 @@ svg g {
 .btn-change-puzzle {
   padding: 8px 16px;
   border-radius: 8px;
-  border: 2px solid #667eea;
-  background: white;
-  color: #667eea;
+  border: 2px solid var(--theme-ui-icon);
+  background: var(--theme-ui-surface);
+  color: var(--theme-ui-icon);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -892,7 +897,7 @@ svg g {
 }
 
 .btn-change-puzzle:hover {
-  background: #667eea;
+  background: var(--theme-ui-icon);
   color: white;
 }
 
@@ -1211,13 +1216,13 @@ svg g {
 }
 
 .exotic-info-card {
-  background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, #9f8160 100%);
   padding: 20px;
   border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -1358,10 +1363,10 @@ svg g {
 .btn-back {
   padding: 12px 28px;
   min-width: 180px;
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: var(--theme-ui-surface);
+  border: 2px solid var(--theme-ui-border);
   border-radius: 14px;
-  color: #667eea;
+  color: var(--theme-ui-icon);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -1373,8 +1378,8 @@ svg g {
 }
 
 .btn-back:hover {
-  background: #f5f7fa;
-  border-color: #667eea;
+  background: var(--theme-ui-surface-alt);
+  border-color: var(--theme-ui-icon);
 }
 
 @media (max-width: 400px) {
@@ -1425,6 +1430,61 @@ svg g {
   gap: 20px;
 }
 
+.classic-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.classic-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.classic-section-card {
+  border: 2px solid var(--theme-ui-border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--theme-ui-surface-alt);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.classic-section-card:hover {
+  border-color: var(--theme-ui-icon);
+  background: var(--theme-ui-surface);
+  transform: translateY(-2px);
+}
+
+.classic-section {
+  border: 2px solid var(--theme-ui-border);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--theme-ui-surface-alt);
+}
+
+.classic-section-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--theme-ui-text);
+}
+
+.classic-section-info {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  color: var(--theme-ui-muted);
+}
+
+.classic-section-progress {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--theme-ui-icon);
+}
+
 .puzzle-card {
   background: var(--theme-ui-surface);
   border: 2px solid var(--theme-ui-border);
@@ -1437,7 +1497,7 @@ svg g {
 
 .puzzle-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 6px 16px rgba(143, 117, 88, 0.2);
   border-color: var(--theme-ui-icon);
 }
 
@@ -1533,7 +1593,7 @@ svg g {
 
 .btn-play:hover {
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.3);
 }
 
 .btn-play.has-progress {
@@ -1543,6 +1603,14 @@ svg g {
 @media (max-width: 700px) {
   .puzzles-grid-classic {
     grid-template-columns: 1fr;
+  }
+
+  .classic-sections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .classic-section {
+    padding: 12px;
   }
 }
 
@@ -1588,7 +1656,7 @@ svg g {
   padding: 32px;
   color: var(--theme-ui-text);
   border: 2px solid var(--theme-ui-border);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 24px rgba(143, 117, 88, 0.3);
 }
 
 .today-card-header {
@@ -1735,7 +1803,7 @@ svg g {
 
 .day-card:hover {
   border-color: var(--theme-ui-icon);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.15);
   transform: translateY(-2px);
 }
 
@@ -2083,7 +2151,7 @@ svg g {
 
 .theme-card:hover:not(.theme-card-locked) {
   border-color: var(--theme-ui-icon);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.2);
   transform: translateY(-2px);
 }
 
@@ -2193,7 +2261,7 @@ svg g {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.3);
 }
 
 .btn-primary:active {
@@ -3076,7 +3144,7 @@ svg g {
 
 .settings-btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.4);
 }
 
 .settings-btn-primary:active:not(:disabled) {

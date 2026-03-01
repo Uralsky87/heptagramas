@@ -105,8 +105,8 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
-            {t('common.home')}
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+            ←
           </button>
         }
       />

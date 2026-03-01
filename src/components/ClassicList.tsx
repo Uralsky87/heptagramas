@@ -20,8 +20,10 @@ interface PuzzleWithMeta extends Omit<Puzzle, 'solutionCount'> {
 }
 
 export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBack }: ClassicListProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [puzzlesWithMeta, setPuzzlesWithMeta] = useState<PuzzleWithMeta[]>([]);
+  const [selectedSectionIndex, setSelectedSectionIndex] = useState<number | null>(null);
+  const PUZZLES_PER_SECTION = 20;
 
   // Filtrar solo puzzles clásicos
   const classicPuzzles = puzzles.filter(p => p.mode === 'classic');
@@ -72,81 +74,142 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
     onSelectPuzzle(puzzle);
   };
 
+  const sections: PuzzleWithMeta[][] = [];
+  for (let i = 0; i < puzzlesWithMeta.length; i += PUZZLES_PER_SECTION) {
+    sections.push(puzzlesWithMeta.slice(i, i + PUZZLES_PER_SECTION));
+  }
+
+  const selectedSection = selectedSectionIndex !== null ? sections[selectedSectionIndex] || [] : [];
+  const totalSections = sections.length;
+
+  const sectionLabel = language === 'en' ? 'Section' : 'Sección';
+  const sectionRangeLabel = (index: number) => {
+    const start = index * PUZZLES_PER_SECTION + 1;
+    const end = Math.min((index + 1) * PUZZLES_PER_SECTION, classicPuzzles.length);
+    return `${start}-${end}`;
+  };
+
+  const handleBack = () => {
+    if (selectedSectionIndex !== null) {
+      setSelectedSectionIndex(null);
+      return;
+    }
+    onBack();
+  };
+
+  const topBarTitle = selectedSectionIndex !== null
+    ? `${sectionLabel} ${selectedSectionIndex + 1}`
+    : t('home.classic_title');
+
   return (
     <PageContainer>
       <TopBar 
         onThemeClick={() => {}} 
         onSettingsClick={() => {}}
-        title={t('home.classic_title')}
+        title={topBarTitle}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
-            {t('common.home')}
+          <button className="top-bar-btn top-bar-btn-left" onClick={handleBack} aria-label="Volver" title="Volver">
+            ←
           </button>
         }
       />
 
-      <div className="puzzles-grid-classic">
-        {puzzlesWithMeta.map((puzzle) => {
-          const hasProgress = puzzle.progress && puzzle.progress.foundWords.length > 0;
-          const progressPercent = puzzle.solutionCount 
-            ? Math.round((puzzle.progress?.foundWords.length || 0) / puzzle.solutionCount * 100)
-            : 0;
+      {selectedSectionIndex === null ? (
+        <div className="classic-sections-grid">
+          {sections.map((sectionPuzzles, sectionIndex) => {
+            const completedCount = sectionPuzzles.filter(
+              (puzzle) => (puzzle.progress?.foundWords.length || 0) > 0
+            ).length;
 
-          return (
-            <div 
-              key={puzzle.id} 
-              className="puzzle-card"
-              onClick={() => handleSelectPuzzle(puzzle as Puzzle)}
-            >
-              <div className="puzzle-card-header">
-                <h3 className="puzzle-card-title">{puzzle.title}</h3>
-                <div className="puzzle-card-letters">
-                  <span className="center-letter">{puzzle.center.toUpperCase()}</span>
-                  <span className="outer-letters">
-                    {puzzle.outer.map(l => l.toUpperCase()).join(' ')}
-                  </span>
-                </div>
-              </div>
-
-              <div className="puzzle-card-meta">
-                <div className="solution-count">
-                  {puzzle.solutionCount === null ? (
-                    <span className="calculating">{t('classic.calculating')}</span>
-                  ) : (
-                    <span>📝 {puzzle.solutionCount} {t('classic.words')}</span>
-                  )}
-                </div>
-
-                {hasProgress && (
-                  <div className="puzzle-progress">
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${progressPercent}%` }}
-                      />
-                    </div>
-                    <span className="progress-text">
-                      {puzzle.progress!.foundWords.length} / {puzzle.solutionCount || '?'} ({progressPercent}%)
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <button 
-                className={`btn-play ${hasProgress ? 'has-progress' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelectPuzzle(puzzle as Puzzle);
-                }}
+            return (
+              <button
+                key={`section-card-${sectionIndex + 1}`}
+                className="classic-section-card"
+                onClick={() => setSelectedSectionIndex(sectionIndex)}
               >
-                {hasProgress ? t('classic.continue') : t('classic.play')}
+                <h2 className="classic-section-title">{sectionLabel} {sectionIndex + 1}</h2>
+                <p className="classic-section-info">
+                  {language === 'en' ? 'Heptagrams' : 'Heptagramas'} {sectionRangeLabel(sectionIndex)}
+                </p>
+                <p className="classic-section-info">{sectionPuzzles.length} puzzles</p>
+                <p className="classic-section-progress">
+                  {completedCount} / {sectionPuzzles.length} {language === 'en' ? 'started' : 'iniciados'}
+                </p>
               </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="classic-sections">
+          <section className="classic-section" key={`section-${selectedSectionIndex + 1}`}>
+            <h2 className="classic-section-title">
+              {sectionLabel} {selectedSectionIndex + 1} / {totalSections}
+            </h2>
+            <div className="puzzles-grid-classic">
+              {selectedSection.map((puzzle) => {
+                const hasProgress = puzzle.progress && puzzle.progress.foundWords.length > 0;
+                const progressPercent = puzzle.solutionCount
+                  ? Math.round((puzzle.progress?.foundWords.length || 0) / puzzle.solutionCount * 100)
+                  : 0;
+
+                return (
+                  <div
+                    key={puzzle.id}
+                    className="puzzle-card"
+                    onClick={() => handleSelectPuzzle(puzzle as Puzzle)}
+                  >
+                    <div className="puzzle-card-header">
+                      <h3 className="puzzle-card-title">{puzzle.title}</h3>
+                      <div className="puzzle-card-letters">
+                        <span className="center-letter">{puzzle.center.toUpperCase()}</span>
+                        <span className="outer-letters">
+                          {puzzle.outer.map(l => l.toUpperCase()).join(' ')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="puzzle-card-meta">
+                      <div className="solution-count">
+                        {puzzle.solutionCount === null ? (
+                          <span className="calculating">{t('classic.calculating')}</span>
+                        ) : (
+                          <span>📝 {puzzle.solutionCount} {t('classic.words')}</span>
+                        )}
+                      </div>
+
+                      {hasProgress && (
+                        <div className="puzzle-progress">
+                          <div className="progress-bar">
+                            <div
+                              className="progress-fill"
+                              style={{ width: `${progressPercent}%` }}
+                            />
+                          </div>
+                          <span className="progress-text">
+                            {puzzle.progress!.foundWords.length} / {puzzle.solutionCount || '?'} ({progressPercent}%)
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      className={`btn-play ${hasProgress ? 'has-progress' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectPuzzle(puzzle as Puzzle);
+                      }}
+                    >
+                      {hasProgress ? t('classic.continue') : t('classic.play')}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          </section>
+        </div>
+      )}
     </PageContainer>
   );
 }

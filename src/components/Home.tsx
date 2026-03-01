@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { loadPlayerState } from '../lib/storageAdapter';
 import { getLevelProgress } from '../lib/xpSystem';
-import ThemeSelector from './ThemeSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -19,8 +18,6 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
     xpInLevel: number;
     xpNeeded: number;
   } | null>(null);
-  const [showThemeSelector, setShowThemeSelector] = useState(false);
-
   useEffect(() => {
     const playerState = loadPlayerState();
     const progress = getLevelProgress(playerState.xpTotal);
@@ -37,13 +34,10 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
     <PageContainer>
       <div className="home-screen">
         <TopBar 
-          onThemeClick={() => setShowThemeSelector(true)}
           onSettingsClick={onNavigateToSettings || (() => {})}
         />
 
         <header className="home-header">
-          <p className="home-subtitle">{t('home.subtitle')}</p>
-          
           {levelInfo && (
             <div className="level-display">
               <div className="level-header">
@@ -117,10 +111,6 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
           </button>
         </div>
 
-        {showThemeSelector && (
-          <ThemeSelector onClose={() => setShowThemeSelector(false)} />
-        )}
-        
         <div className="app-version">
           {t('home.version')} v0.6
         </div>

@@ -1,353 +1,3401 @@
 [
   {
-    "id": "puzzle-001",
-    "title": "Puzzle 1: 163 palabras",
-    "center": "i",
+    "id": "classic-001",
+    "title": "Clásico #001: 100 palabras",
+    "center": "p",
     "outer": [
-      "a",
-      "c",
-      "f",
-      "m",
-      "o",
-      "t"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-002",
-    "title": "Puzzle 2: 198 palabras",
-    "center": "m",
-    "outer": [
-      "a",
-      "c",
-      "g",
-      "i",
-      "l",
-      "o"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-003",
-    "title": "Puzzle 3: 233 palabras",
-    "center": "c",
-    "outer": [
-      "i",
-      "n",
-      "o",
-      "r",
       "s",
+      "i",
+      "v",
+      "e",
+      "a",
+      "g"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-002",
+    "title": "Clásico #002: 100 palabras",
+    "center": "e",
+    "outer": [
+      "a",
+      "b",
+      "m",
+      "p",
+      "x",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-003",
+    "title": "Clásico #003: 100 palabras",
+    "center": "s",
+    "outer": [
+      "j",
+      "a",
+      "c",
+      "y",
+      "l",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-004",
+    "title": "Clásico #004: 100 palabras",
+    "center": "f",
+    "outer": [
+      "e",
+      "d",
+      "r",
+      "a",
+      "l",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-005",
+    "title": "Clásico #005: 100 palabras",
+    "center": "l",
+    "outer": [
+      "t",
+      "e",
+      "o",
+      "g",
+      "p",
       "u"
     ],
     "mode": "classic",
+    "solutionCount": 100,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-004",
-    "title": "Puzzle 4: 187 palabras",
-    "center": "b",
-    "outer": [
-      "a",
-      "g",
-      "i",
-      "l",
-      "n",
-      "o"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-005",
-    "title": "Puzzle 5: 137 palabras",
-    "center": "p",
+    "id": "classic-006",
+    "title": "Clásico #006: 100 palabras",
+    "center": "i",
     "outer": [
       "e",
-      "f",
-      "i",
-      "l",
+      "a",
       "o",
+      "x",
+      "b",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-007",
+    "title": "Clásico #007: 100 palabras",
+    "center": "o",
+    "outer": [
+      "l",
+      "u",
+      "s",
+      "i",
+      "b",
+      "j"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-008",
+    "title": "Clásico #008: 100 palabras",
+    "center": "r",
+    "outer": [
+      "o",
+      "w",
+      "p",
+      "s",
+      "e",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-009",
+    "title": "Clásico #009: 100 palabras",
+    "center": "a",
+    "outer": [
+      "x",
+      "p",
+      "b",
+      "s",
+      "o",
+      "z"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-010",
+    "title": "Clásico #010: 100 palabras",
+    "center": "z",
+    "outer": [
+      "c",
+      "o",
+      "x",
+      "a",
+      "r",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-011",
+    "title": "Clásico #011: 100 palabras",
+    "center": "a",
+    "outer": [
+      "n",
+      "v",
+      "g",
+      "z",
+      "u",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-012",
+    "title": "Clásico #012: 100 palabras",
+    "center": "o",
+    "outer": [
+      "e",
+      "c",
+      "t",
+      "p",
+      "w",
+      "u"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-013",
+    "title": "Clásico #013: 100 palabras",
+    "center": "c",
+    "outer": [
+      "h",
+      "ñ",
+      "v",
+      "a",
+      "t",
       "r"
     ],
     "mode": "classic",
+    "solutionCount": 100,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-006",
-    "title": "Puzzle 6: 209 palabras",
+    "id": "classic-014",
+    "title": "Clásico #014: 100 palabras",
+    "center": "o",
+    "outer": [
+      "v",
+      "ñ",
+      "f",
+      "a",
+      "c",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 100,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-015",
+    "title": "Clásico #015: 101 palabras",
+    "center": "c",
+    "outer": [
+      "s",
+      "ñ",
+      "e",
+      "l",
+      "o",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-016",
+    "title": "Clásico #016: 101 palabras",
+    "center": "s",
+    "outer": [
+      "d",
+      "o",
+      "a",
+      "h",
+      "b",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-017",
+    "title": "Clásico #017: 101 palabras",
     "center": "e",
     "outer": [
       "i",
-      "l",
-      "o",
+      "z",
       "r",
+      "l",
       "s",
-      "v"
+      "m"
     ],
     "mode": "classic",
+    "solutionCount": 101,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-007",
-    "title": "Puzzle 7: 237 palabras",
-    "center": "e",
+    "id": "classic-018",
+    "title": "Clásico #018: 101 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "b",
+      "j",
+      "w",
+      "h",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-019",
+    "title": "Clásico #019: 101 palabras",
+    "center": "p",
+    "outer": [
+      "s",
+      "m",
+      "i",
+      "l",
+      "v",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-020",
+    "title": "Clásico #020: 101 palabras",
+    "center": "r",
+    "outer": [
+      "n",
+      "b",
+      "p",
+      "v",
+      "a",
+      "z"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-021",
+    "title": "Clásico #021: 101 palabras",
+    "center": "a",
     "outer": [
       "g",
-      "o",
+      "p",
+      "d",
+      "y",
+      "j",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-022",
+    "title": "Clásico #022: 101 palabras",
+    "center": "o",
+    "outer": [
+      "y",
+      "p",
+      "r",
+      "t",
+      "u",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-023",
+    "title": "Clásico #023: 101 palabras",
+    "center": "g",
+    "outer": [
+      "v",
+      "c",
+      "a",
+      "t",
+      "r",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-024",
+    "title": "Clásico #024: 101 palabras",
+    "center": "n",
+    "outer": [
+      "r",
+      "i",
+      "g",
+      "a",
+      "ñ",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 101,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-025",
+    "title": "Clásico #025: 102 palabras",
+    "center": "s",
+    "outer": [
+      "j",
+      "i",
+      "u",
+      "e",
+      "a",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-026",
+    "title": "Clásico #026: 102 palabras",
+    "center": "r",
+    "outer": [
+      "t",
+      "b",
+      "y",
+      "k",
+      "c",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-027",
+    "title": "Clásico #027: 102 palabras",
+    "center": "z",
+    "outer": [
+      "b",
+      "a",
       "r",
       "s",
-      "t",
+      "o",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-028",
+    "title": "Clásico #028: 102 palabras",
+    "center": "c",
+    "outer": [
+      "a",
+      "j",
+      "h",
+      "w",
+      "s",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-029",
+    "title": "Clásico #029: 102 palabras",
+    "center": "e",
+    "outer": [
+      "l",
+      "i",
+      "a",
+      "y",
+      "z",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-030",
+    "title": "Clásico #030: 102 palabras",
+    "center": "a",
+    "outer": [
+      "f",
+      "n",
+      "o",
+      "c",
+      "w",
       "u"
     ],
     "mode": "classic",
+    "solutionCount": 102,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-008",
-    "title": "Puzzle 8: 180 palabras",
+    "id": "classic-031",
+    "title": "Clásico #031: 102 palabras",
+    "center": "i",
+    "outer": [
+      "u",
+      "o",
+      "d",
+      "a",
+      "n",
+      "q"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-032",
+    "title": "Clásico #032: 102 palabras",
+    "center": "p",
+    "outer": [
+      "i",
+      "l",
+      "z",
+      "y",
+      "t",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-033",
+    "title": "Clásico #033: 102 palabras",
+    "center": "e",
+    "outer": [
+      "l",
+      "w",
+      "o",
+      "p",
+      "s",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 102,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-034",
+    "title": "Clásico #034: 103 palabras",
+    "center": "m",
+    "outer": [
+      "s",
+      "x",
+      "n",
+      "o",
+      "e",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-035",
+    "title": "Clásico #035: 103 palabras",
+    "center": "n",
+    "outer": [
+      "ñ",
+      "d",
+      "t",
+      "a",
+      "x",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-036",
+    "title": "Clásico #036: 103 palabras",
     "center": "t",
     "outer": [
+      "x",
       "a",
-      "c",
-      "e",
-      "h",
+      "u",
+      "o",
+      "b",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-037",
+    "title": "Clásico #037: 103 palabras",
+    "center": "i",
+    "outer": [
+      "r",
+      "s",
+      "p",
+      "t",
+      "x",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-038",
+    "title": "Clásico #038: 103 palabras",
+    "center": "i",
+    "outer": [
+      "k",
+      "l",
+      "o",
+      "a",
+      "f",
+      "v"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-039",
+    "title": "Clásico #039: 103 palabras",
+    "center": "a",
+    "outer": [
+      "d",
+      "u",
+      "z",
+      "ñ",
       "i",
       "l"
     ],
     "mode": "classic",
+    "solutionCount": 103,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-009",
-    "title": "Puzzle 9: 174 palabras",
-    "center": "o",
+    "id": "classic-040",
+    "title": "Clásico #040: 103 palabras",
+    "center": "a",
     "outer": [
-      "a",
-      "c",
-      "e",
-      "g",
-      "p",
-      "t"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-010",
-    "title": "Puzzle 10: 282 palabras",
-    "center": "d",
-    "outer": [
-      "a",
-      "g",
-      "i",
-      "o",
-      "r",
-      "s"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-011",
-    "title": "Puzzle 11: 108 palabras",
-    "center": "o",
-    "outer": [
-      "b",
-      "d",
-      "e",
-      "i",
       "n",
+      "e",
+      "y",
+      "c",
+      "z",
       "v"
     ],
     "mode": "classic",
+    "solutionCount": 103,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-012",
-    "title": "Puzzle 12: 100 palabras",
-    "center": "u",
-    "outer": [
-      "c",
-      "e",
-      "g",
-      "o",
-      "r",
-      "s"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-013",
-    "title": "Puzzle 13: 217 palabras",
-    "center": "d",
-    "outer": [
-      "a",
-      "b",
-      "e",
-      "r",
-      "s",
-      "t"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-014",
-    "title": "Puzzle 14: 173 palabras",
-    "center": "l",
-    "outer": [
-      "a",
-      "c",
-      "g",
-      "i",
-      "p",
-      "t"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-015",
-    "title": "Puzzle 15: 130 palabras",
+    "id": "classic-041",
+    "title": "Clásico #041: 103 palabras",
     "center": "a",
     "outer": [
-      "d",
+      "z",
       "e",
+      "b",
       "m",
+      "g",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-042",
+    "title": "Clásico #042: 103 palabras",
+    "center": "o",
+    "outer": [
+      "ñ",
+      "z",
+      "c",
+      "l",
+      "s",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-043",
+    "title": "Clásico #043: 103 palabras",
+    "center": "m",
+    "outer": [
+      "u",
+      "l",
+      "w",
+      "a",
+      "d",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-044",
+    "title": "Clásico #044: 103 palabras",
+    "center": "v",
+    "outer": [
+      "i",
+      "t",
+      "z",
+      "e",
+      "r",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-045",
+    "title": "Clásico #045: 103 palabras",
+    "center": "e",
+    "outer": [
+      "s",
+      "g",
+      "l",
+      "ñ",
+      "u",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 103,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-046",
+    "title": "Clásico #046: 104 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "y",
+      "j",
+      "v",
+      "i",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-047",
+    "title": "Clásico #047: 104 palabras",
+    "center": "a",
+    "outer": [
+      "f",
+      "n",
       "o",
-      "p",
+      "d",
+      "x",
       "z"
     ],
     "mode": "classic",
+    "solutionCount": 104,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-016",
-    "title": "Puzzle 16: 189 palabras",
-    "center": "s",
+    "id": "classic-048",
+    "title": "Clásico #048: 104 palabras",
+    "center": "i",
     "outer": [
-      "a",
-      "e",
-      "f",
       "o",
-      "r",
-      "y"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-017",
-    "title": "Puzzle 17: 102 palabras",
-    "center": "u",
-    "outer": [
-      "a",
-      "d",
-      "e",
-      "l",
-      "o",
-      "s"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-018",
-    "title": "Puzzle 18: 271 palabras",
-    "center": "n",
-    "outer": [
-      "a",
-      "c",
-      "e",
+      "v",
       "s",
-      "t",
-      "u"
-    ],
-    "mode": "classic",
-    "minLen": 3,
-    "allowEnye": true
-  },
-  {
-    "id": "puzzle-019",
-    "title": "Puzzle 19: 280 palabras",
-    "center": "e",
-    "outer": [
       "a",
-      "c",
-      "m",
-      "o",
-      "s",
+      "j",
       "t"
     ],
     "mode": "classic",
+    "solutionCount": 104,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-020",
-    "title": "Puzzle 20: 153 palabras",
-    "center": "i",
+    "id": "classic-049",
+    "title": "Clásico #049: 104 palabras",
+    "center": "s",
     "outer": [
-      "a",
+      "t",
       "e",
+      "z",
+      "n",
+      "w",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-050",
+    "title": "Clásico #050: 104 palabras",
+    "center": "o",
+    "outer": [
+      "s",
+      "f",
+      "t",
+      "w",
+      "c",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-051",
+    "title": "Clásico #051: 104 palabras",
+    "center": "n",
+    "outer": [
+      "v",
+      "g",
+      "t",
+      "r",
+      "u",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-052",
+    "title": "Clásico #052: 104 palabras",
+    "center": "m",
+    "outer": [
+      "r",
+      "a",
+      "n",
+      "f",
+      "g",
+      "u"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-053",
+    "title": "Clásico #053: 104 palabras",
+    "center": "r",
+    "outer": [
+      "z",
+      "a",
+      "s",
+      "b",
+      "h",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-054",
+    "title": "Clásico #054: 104 palabras",
+    "center": "e",
+    "outer": [
+      "q",
+      "p",
+      "a",
+      "z",
+      "u",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 104,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-055",
+    "title": "Clásico #055: 105 palabras",
+    "center": "l",
+    "outer": [
+      "c",
+      "r",
+      "j",
+      "a",
+      "m",
+      "ñ"
+    ],
+    "mode": "classic",
+    "solutionCount": 105,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-056",
+    "title": "Clásico #056: 105 palabras",
+    "center": "a",
+    "outer": [
+      "e",
+      "m",
+      "j",
+      "g",
+      "u",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 105,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-057",
+    "title": "Clásico #057: 105 palabras",
+    "center": "a",
+    "outer": [
       "g",
       "l",
-      "o",
+      "b",
+      "z",
+      "y",
       "s"
     ],
     "mode": "classic",
+    "solutionCount": 105,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-021",
-    "title": "Puzzle 21: 230 palabras",
+    "id": "classic-058",
+    "title": "Clásico #058: 105 palabras",
+    "center": "c",
+    "outer": [
+      "p",
+      "o",
+      "b",
+      "k",
+      "a",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 105,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-059",
+    "title": "Clásico #059: 106 palabras",
+    "center": "o",
+    "outer": [
+      "p",
+      "s",
+      "h",
+      "l",
+      "g",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-060",
+    "title": "Clásico #060: 106 palabras",
+    "center": "e",
+    "outer": [
+      "d",
+      "h",
+      "a",
+      "t",
+      "c",
+      "f"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-061",
+    "title": "Clásico #061: 106 palabras",
     "center": "l",
     "outer": [
+      "m",
+      "d",
+      "y",
+      "i",
       "a",
-      "c",
-      "e",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-062",
+    "title": "Clásico #062: 106 palabras",
+    "center": "t",
+    "outer": [
+      "o",
       "n",
+      "a",
+      "k",
+      "h",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-063",
+    "title": "Clásico #063: 106 palabras",
+    "center": "c",
+    "outer": [
+      "l",
+      "p",
+      "j",
+      "a",
+      "b",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-064",
+    "title": "Clásico #064: 106 palabras",
+    "center": "z",
+    "outer": [
+      "a",
+      "t",
+      "o",
+      "r",
+      "d",
+      "g"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-065",
+    "title": "Clásico #065: 106 palabras",
+    "center": "c",
+    "outer": [
+      "l",
+      "u",
+      "f",
+      "b",
+      "s",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-066",
+    "title": "Clásico #066: 106 palabras",
+    "center": "n",
+    "outer": [
+      "e",
+      "a",
+      "m",
+      "x",
+      "r",
+      "f"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-067",
+    "title": "Clásico #067: 106 palabras",
+    "center": "c",
+    "outer": [
+      "r",
+      "h",
+      "u",
+      "o",
+      "i",
+      "w"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-068",
+    "title": "Clásico #068: 106 palabras",
+    "center": "a",
+    "outer": [
+      "v",
+      "r",
+      "x",
+      "k",
+      "e",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-069",
+    "title": "Clásico #069: 106 palabras",
+    "center": "a",
+    "outer": [
+      "k",
+      "l",
+      "r",
+      "ñ",
+      "p",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-070",
+    "title": "Clásico #070: 106 palabras",
+    "center": "p",
+    "outer": [
+      "h",
+      "r",
+      "s",
+      "k",
+      "a",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-071",
+    "title": "Clásico #071: 106 palabras",
+    "center": "o",
+    "outer": [
+      "r",
+      "p",
+      "j",
+      "z",
+      "i",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-072",
+    "title": "Clásico #072: 106 palabras",
+    "center": "m",
+    "outer": [
+      "n",
+      "u",
+      "o",
+      "l",
+      "a",
+      "v"
+    ],
+    "mode": "classic",
+    "solutionCount": 106,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-073",
+    "title": "Clásico #073: 107 palabras",
+    "center": "a",
+    "outer": [
+      "x",
+      "m",
+      "n",
+      "l",
+      "c",
+      "ñ"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-074",
+    "title": "Clásico #074: 107 palabras",
+    "center": "i",
+    "outer": [
+      "a",
+      "o",
+      "r",
+      "g",
+      "f",
+      "j"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-075",
+    "title": "Clásico #075: 107 palabras",
+    "center": "s",
+    "outer": [
+      "y",
+      "ñ",
+      "r",
+      "a",
+      "e",
+      "v"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-076",
+    "title": "Clásico #076: 107 palabras",
+    "center": "a",
+    "outer": [
+      "i",
+      "e",
+      "g",
+      "u",
+      "t",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-077",
+    "title": "Clásico #077: 107 palabras",
+    "center": "c",
+    "outer": [
+      "p",
+      "t",
+      "o",
+      "d",
+      "k",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-078",
+    "title": "Clásico #078: 107 palabras",
+    "center": "i",
+    "outer": [
+      "o",
+      "w",
+      "l",
+      "s",
+      "e",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-079",
+    "title": "Clásico #079: 107 palabras",
+    "center": "o",
+    "outer": [
+      "t",
+      "k",
+      "n",
+      "w",
+      "e",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-080",
+    "title": "Clásico #080: 107 palabras",
+    "center": "a",
+    "outer": [
+      "n",
+      "y",
+      "g",
+      "j",
+      "c",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-081",
+    "title": "Clásico #081: 107 palabras",
+    "center": "d",
+    "outer": [
+      "u",
+      "i",
+      "e",
+      "l",
+      "f",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-082",
+    "title": "Clásico #082: 107 palabras",
+    "center": "e",
+    "outer": [
+      "j",
+      "p",
+      "l",
+      "o",
+      "b",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-083",
+    "title": "Clásico #083: 107 palabras",
+    "center": "o",
+    "outer": [
+      "i",
+      "r",
+      "b",
+      "u",
+      "z",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-084",
+    "title": "Clásico #084: 107 palabras",
+    "center": "c",
+    "outer": [
+      "z",
+      "v",
+      "o",
+      "a",
+      "y",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-085",
+    "title": "Clásico #085: 107 palabras",
+    "center": "p",
+    "outer": [
+      "t",
+      "n",
+      "u",
+      "r",
+      "a",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-086",
+    "title": "Clásico #086: 107 palabras",
+    "center": "n",
+    "outer": [
+      "y",
+      "e",
+      "f",
+      "c",
+      "l",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 107,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-087",
+    "title": "Clásico #087: 108 palabras",
+    "center": "t",
+    "outer": [
+      "r",
+      "p",
+      "a",
+      "m",
+      "g",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-088",
+    "title": "Clásico #088: 108 palabras",
+    "center": "s",
+    "outer": [
+      "u",
+      "d",
+      "e",
+      "p",
+      "a",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-089",
+    "title": "Clásico #089: 108 palabras",
+    "center": "e",
+    "outer": [
+      "p",
+      "u",
+      "s",
+      "l",
+      "r",
+      "q"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-090",
+    "title": "Clásico #090: 108 palabras",
+    "center": "c",
+    "outer": [
+      "i",
+      "a",
+      "b",
+      "y",
+      "t",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-091",
+    "title": "Clásico #091: 108 palabras",
+    "center": "e",
+    "outer": [
+      "ñ",
+      "p",
+      "l",
+      "k",
+      "a",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-092",
+    "title": "Clásico #092: 108 palabras",
+    "center": "o",
+    "outer": [
+      "j",
+      "t",
+      "e",
+      "r",
+      "ñ",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-093",
+    "title": "Clásico #093: 108 palabras",
+    "center": "m",
+    "outer": [
+      "j",
+      "r",
+      "t",
+      "a",
+      "n",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-094",
+    "title": "Clásico #094: 108 palabras",
+    "center": "g",
+    "outer": [
+      "e",
+      "t",
+      "b",
+      "a",
+      "r",
+      "m"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-095",
+    "title": "Clásico #095: 108 palabras",
+    "center": "a",
+    "outer": [
+      "l",
+      "b",
+      "g",
+      "h",
+      "e",
+      "x"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-096",
+    "title": "Clásico #096: 108 palabras",
+    "center": "a",
+    "outer": [
+      "t",
+      "b",
+      "j",
+      "z",
+      "i",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-097",
+    "title": "Clásico #097: 108 palabras",
+    "center": "n",
+    "outer": [
+      "f",
+      "i",
+      "e",
+      "g",
+      "t",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 108,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-098",
+    "title": "Clásico #098: 109 palabras",
+    "center": "i",
+    "outer": [
+      "j",
+      "a",
+      "k",
+      "r",
       "p",
       "s"
     ],
     "mode": "classic",
+    "solutionCount": 109,
     "minLen": 3,
     "allowEnye": true
   },
   {
-    "id": "puzzle-022",
-    "title": "Puzzle 22: 164 palabras",
+    "id": "classic-099",
+    "title": "Clásico #099: 109 palabras",
     "center": "s",
     "outer": [
-      "a",
+      "t",
       "c",
-      "e",
+      "r",
+      "g",
+      "o",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-100",
+    "title": "Clásico #100: 109 palabras",
+    "center": "o",
+    "outer": [
+      "y",
+      "d",
+      "a",
+      "h",
+      "p",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-101",
+    "title": "Clásico #101: 109 palabras",
+    "center": "i",
+    "outer": [
+      "d",
+      "f",
       "l",
+      "t",
+      "r",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-102",
+    "title": "Clásico #102: 109 palabras",
+    "center": "a",
+    "outer": [
       "m",
+      "g",
+      "y",
+      "p",
+      "i",
       "u"
     ],
     "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-103",
+    "title": "Clásico #103: 109 palabras",
+    "center": "o",
+    "outer": [
+      "s",
+      "a",
+      "v",
+      "l",
+      "j",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-104",
+    "title": "Clásico #104: 109 palabras",
+    "center": "r",
+    "outer": [
+      "t",
+      "s",
+      "j",
+      "l",
+      "h",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-105",
+    "title": "Clásico #105: 109 palabras",
+    "center": "l",
+    "outer": [
+      "a",
+      "o",
+      "z",
+      "d",
+      "i",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-106",
+    "title": "Clásico #106: 109 palabras",
+    "center": "o",
+    "outer": [
+      "g",
+      "d",
+      "t",
+      "y",
+      "m",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-107",
+    "title": "Clásico #107: 109 palabras",
+    "center": "s",
+    "outer": [
+      "o",
+      "a",
+      "v",
+      "w",
+      "e",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 109,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-108",
+    "title": "Clásico #108: 110 palabras",
+    "center": "i",
+    "outer": [
+      "l",
+      "e",
+      "p",
+      "s",
+      "m",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-109",
+    "title": "Clásico #109: 110 palabras",
+    "center": "a",
+    "outer": [
+      "i",
+      "v",
+      "d",
+      "y",
+      "e",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-110",
+    "title": "Clásico #110: 110 palabras",
+    "center": "a",
+    "outer": [
+      "j",
+      "r",
+      "h",
+      "p",
+      "l",
+      "ñ"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-111",
+    "title": "Clásico #111: 110 palabras",
+    "center": "t",
+    "outer": [
+      "a",
+      "ñ",
+      "s",
+      "u",
+      "o",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-112",
+    "title": "Clásico #112: 110 palabras",
+    "center": "r",
+    "outer": [
+      "f",
+      "c",
+      "v",
+      "d",
+      "a",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-113",
+    "title": "Clásico #113: 110 palabras",
+    "center": "o",
+    "outer": [
+      "c",
+      "r",
+      "g",
+      "z",
+      "l",
+      "u"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-114",
+    "title": "Clásico #114: 110 palabras",
+    "center": "a",
+    "outer": [
+      "u",
+      "v",
+      "s",
+      "o",
+      "b",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-115",
+    "title": "Clásico #115: 110 palabras",
+    "center": "r",
+    "outer": [
+      "f",
+      "a",
+      "v",
+      "o",
+      "h",
+      "u"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-116",
+    "title": "Clásico #116: 110 palabras",
+    "center": "e",
+    "outer": [
+      "n",
+      "t",
+      "g",
+      "o",
+      "z",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-117",
+    "title": "Clásico #117: 110 palabras",
+    "center": "g",
+    "outer": [
+      "u",
+      "s",
+      "y",
+      "l",
+      "a",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 110,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-118",
+    "title": "Clásico #118: 111 palabras",
+    "center": "r",
+    "outer": [
+      "o",
+      "e",
+      "u",
+      "h",
+      "i",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-119",
+    "title": "Clásico #119: 111 palabras",
+    "center": "l",
+    "outer": [
+      "t",
+      "g",
+      "f",
+      "a",
+      "o",
+      "w"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-120",
+    "title": "Clásico #120: 111 palabras",
+    "center": "o",
+    "outer": [
+      "e",
+      "b",
+      "i",
+      "p",
+      "z",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-121",
+    "title": "Clásico #121: 111 palabras",
+    "center": "l",
+    "outer": [
+      "a",
+      "m",
+      "w",
+      "i",
+      "p",
+      "g"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-122",
+    "title": "Clásico #122: 111 palabras",
+    "center": "e",
+    "outer": [
+      "o",
+      "p",
+      "y",
+      "v",
+      "m",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-123",
+    "title": "Clásico #123: 111 palabras",
+    "center": "v",
+    "outer": [
+      "e",
+      "r",
+      "i",
+      "c",
+      "a",
+      "z"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-124",
+    "title": "Clásico #124: 111 palabras",
+    "center": "i",
+    "outer": [
+      "n",
+      "y",
+      "a",
+      "d",
+      "p",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-125",
+    "title": "Clásico #125: 111 palabras",
+    "center": "a",
+    "outer": [
+      "c",
+      "k",
+      "e",
+      "o",
+      "z",
+      "m"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-126",
+    "title": "Clásico #126: 111 palabras",
+    "center": "e",
+    "outer": [
+      "j",
+      "p",
+      "o",
+      "z",
+      "b",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-127",
+    "title": "Clásico #127: 111 palabras",
+    "center": "c",
+    "outer": [
+      "z",
+      "d",
+      "r",
+      "a",
+      "i",
+      "g"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-128",
+    "title": "Clásico #128: 111 palabras",
+    "center": "s",
+    "outer": [
+      "o",
+      "c",
+      "a",
+      "ñ",
+      "p",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-129",
+    "title": "Clásico #129: 111 palabras",
+    "center": "a",
+    "outer": [
+      "ñ",
+      "g",
+      "i",
+      "n",
+      "z",
+      "m"
+    ],
+    "mode": "classic",
+    "solutionCount": 111,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-130",
+    "title": "Clásico #130: 112 palabras",
+    "center": "e",
+    "outer": [
+      "c",
+      "n",
+      "w",
+      "t",
+      "o",
+      "u"
+    ],
+    "mode": "classic",
+    "solutionCount": 112,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-131",
+    "title": "Clásico #131: 112 palabras",
+    "center": "c",
+    "outer": [
+      "g",
+      "l",
+      "a",
+      "d",
+      "r",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 112,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-132",
+    "title": "Clásico #132: 112 palabras",
+    "center": "i",
+    "outer": [
+      "r",
+      "a",
+      "g",
+      "e",
+      "f",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 112,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-133",
+    "title": "Clásico #133: 112 palabras",
+    "center": "r",
+    "outer": [
+      "j",
+      "o",
+      "e",
+      "f",
+      "t",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 112,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-134",
+    "title": "Clásico #134: 113 palabras",
+    "center": "r",
+    "outer": [
+      "b",
+      "g",
+      "t",
+      "d",
+      "a",
+      "w"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-135",
+    "title": "Clásico #135: 113 palabras",
+    "center": "n",
+    "outer": [
+      "m",
+      "p",
+      "a",
+      "h",
+      "d",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-136",
+    "title": "Clásico #136: 113 palabras",
+    "center": "o",
+    "outer": [
+      "e",
+      "d",
+      "ñ",
+      "r",
+      "v",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-137",
+    "title": "Clásico #137: 113 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "l",
+      "d",
+      "b",
+      "ñ",
+      "j"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-138",
+    "title": "Clásico #138: 113 palabras",
+    "center": "n",
+    "outer": [
+      "m",
+      "a",
+      "r",
+      "i",
+      "w",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-139",
+    "title": "Clásico #139: 113 palabras",
+    "center": "s",
+    "outer": [
+      "a",
+      "v",
+      "m",
+      "u",
+      "l",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-140",
+    "title": "Clásico #140: 113 palabras",
+    "center": "e",
+    "outer": [
+      "r",
+      "x",
+      "a",
+      "m",
+      "w",
+      "f"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-141",
+    "title": "Clásico #141: 113 palabras",
+    "center": "i",
+    "outer": [
+      "t",
+      "r",
+      "j",
+      "ñ",
+      "m",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-142",
+    "title": "Clásico #142: 113 palabras",
+    "center": "a",
+    "outer": [
+      "s",
+      "i",
+      "t",
+      "p",
+      "v",
+      "h"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-143",
+    "title": "Clásico #143: 113 palabras",
+    "center": "o",
+    "outer": [
+      "t",
+      "c",
+      "ñ",
+      "h",
+      "r",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-144",
+    "title": "Clásico #144: 113 palabras",
+    "center": "a",
+    "outer": [
+      "m",
+      "u",
+      "s",
+      "i",
+      "q",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-145",
+    "title": "Clásico #145: 113 palabras",
+    "center": "c",
+    "outer": [
+      "i",
+      "d",
+      "b",
+      "h",
+      "m",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-146",
+    "title": "Clásico #146: 113 palabras",
+    "center": "t",
+    "outer": [
+      "e",
+      "o",
+      "y",
+      "r",
+      "ñ",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-147",
+    "title": "Clásico #147: 113 palabras",
+    "center": "t",
+    "outer": [
+      "j",
+      "a",
+      "m",
+      "d",
+      "o",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 113,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-148",
+    "title": "Clásico #148: 114 palabras",
+    "center": "u",
+    "outer": [
+      "m",
+      "c",
+      "l",
+      "e",
+      "a",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-149",
+    "title": "Clásico #149: 114 palabras",
+    "center": "o",
+    "outer": [
+      "x",
+      "ñ",
+      "r",
+      "t",
+      "f",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-150",
+    "title": "Clásico #150: 114 palabras",
+    "center": "p",
+    "outer": [
+      "k",
+      "x",
+      "a",
+      "d",
+      "r",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-151",
+    "title": "Clásico #151: 114 palabras",
+    "center": "o",
+    "outer": [
+      "a",
+      "u",
+      "s",
+      "d",
+      "k",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-152",
+    "title": "Clásico #152: 114 palabras",
+    "center": "m",
+    "outer": [
+      "u",
+      "n",
+      "e",
+      "q",
+      "a",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-153",
+    "title": "Clásico #153: 114 palabras",
+    "center": "o",
+    "outer": [
+      "e",
+      "w",
+      "g",
+      "r",
+      "s",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 114,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-154",
+    "title": "Clásico #154: 115 palabras",
+    "center": "i",
+    "outer": [
+      "a",
+      "n",
+      "o",
+      "x",
+      "s",
+      "b"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-155",
+    "title": "Clásico #155: 115 palabras",
+    "center": "a",
+    "outer": [
+      "r",
+      "p",
+      "l",
+      "h",
+      "n",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-156",
+    "title": "Clásico #156: 115 palabras",
+    "center": "a",
+    "outer": [
+      "ñ",
+      "l",
+      "n",
+      "e",
+      "j",
+      "f"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-157",
+    "title": "Clásico #157: 115 palabras",
+    "center": "a",
+    "outer": [
+      "z",
+      "v",
+      "c",
+      "p",
+      "w",
+      "r"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-158",
+    "title": "Clásico #158: 115 palabras",
+    "center": "o",
+    "outer": [
+      "r",
+      "f",
+      "e",
+      "a",
+      "k",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-159",
+    "title": "Clásico #159: 115 palabras",
+    "center": "o",
+    "outer": [
+      "l",
+      "e",
+      "n",
+      "j",
+      "p",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-160",
+    "title": "Clásico #160: 115 palabras",
+    "center": "c",
+    "outer": [
+      "o",
+      "i",
+      "d",
+      "n",
+      "s",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-161",
+    "title": "Clásico #161: 115 palabras",
+    "center": "a",
+    "outer": [
+      "t",
+      "i",
+      "z",
+      "x",
+      "p",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-162",
+    "title": "Clásico #162: 115 palabras",
+    "center": "m",
+    "outer": [
+      "z",
+      "a",
+      "i",
+      "l",
+      "j",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-163",
+    "title": "Clásico #163: 115 palabras",
+    "center": "a",
+    "outer": [
+      "h",
+      "c",
+      "j",
+      "n",
+      "e",
+      "w"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-164",
+    "title": "Clásico #164: 115 palabras",
+    "center": "a",
+    "outer": [
+      "g",
+      "d",
+      "b",
+      "i",
+      "h",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-165",
+    "title": "Clásico #165: 115 palabras",
+    "center": "c",
+    "outer": [
+      "j",
+      "f",
+      "i",
+      "h",
+      "a",
+      "n"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-166",
+    "title": "Clásico #166: 115 palabras",
+    "center": "a",
+    "outer": [
+      "z",
+      "y",
+      "n",
+      "r",
+      "p",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 115,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-167",
+    "title": "Clásico #167: 116 palabras",
+    "center": "a",
+    "outer": [
+      "y",
+      "s",
+      "u",
+      "c",
+      "e",
+      "j"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-168",
+    "title": "Clásico #168: 116 palabras",
+    "center": "c",
+    "outer": [
+      "m",
+      "ñ",
+      "i",
+      "u",
+      "a",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-169",
+    "title": "Clásico #169: 116 palabras",
+    "center": "t",
+    "outer": [
+      "x",
+      "y",
+      "h",
+      "r",
+      "e",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-170",
+    "title": "Clásico #170: 116 palabras",
+    "center": "l",
+    "outer": [
+      "a",
+      "e",
+      "z",
+      "r",
+      "ñ",
+      "s"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-171",
+    "title": "Clásico #171: 116 palabras",
+    "center": "a",
+    "outer": [
+      "w",
+      "t",
+      "o",
+      "l",
+      "ñ",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-172",
+    "title": "Clásico #172: 116 palabras",
+    "center": "a",
+    "outer": [
+      "j",
+      "d",
+      "n",
+      "z",
+      "u",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-173",
+    "title": "Clásico #173: 116 palabras",
+    "center": "u",
+    "outer": [
+      "a",
+      "h",
+      "r",
+      "ñ",
+      "c",
+      "z"
+    ],
+    "mode": "classic",
+    "solutionCount": 116,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-174",
+    "title": "Clásico #174: 117 palabras",
+    "center": "t",
+    "outer": [
+      "r",
+      "i",
+      "k",
+      "h",
+      "c",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-175",
+    "title": "Clásico #175: 117 palabras",
+    "center": "a",
+    "outer": [
+      "u",
+      "m",
+      "y",
+      "r",
+      "i",
+      "k"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-176",
+    "title": "Clásico #176: 117 palabras",
+    "center": "c",
+    "outer": [
+      "e",
+      "r",
+      "o",
+      "j",
+      "h",
+      "f"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-177",
+    "title": "Clásico #177: 117 palabras",
+    "center": "c",
+    "outer": [
+      "d",
+      "z",
+      "s",
+      "a",
+      "e",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-178",
+    "title": "Clásico #178: 117 palabras",
+    "center": "a",
+    "outer": [
+      "g",
+      "r",
+      "v",
+      "f",
+      "m",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-179",
+    "title": "Clásico #179: 117 palabras",
+    "center": "a",
+    "outer": [
+      "m",
+      "v",
+      "b",
+      "h",
+      "r",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-180",
+    "title": "Clásico #180: 117 palabras",
+    "center": "a",
+    "outer": [
+      "b",
+      "v",
+      "x",
+      "h",
+      "r",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 117,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-181",
+    "title": "Clásico #181: 118 palabras",
+    "center": "n",
+    "outer": [
+      "m",
+      "ñ",
+      "f",
+      "c",
+      "o",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 118,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-182",
+    "title": "Clásico #182: 118 palabras",
+    "center": "a",
+    "outer": [
+      "h",
+      "j",
+      "i",
+      "g",
+      "l",
+      "e"
+    ],
+    "mode": "classic",
+    "solutionCount": 118,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-183",
+    "title": "Clásico #183: 118 palabras",
+    "center": "r",
+    "outer": [
+      "a",
+      "y",
+      "u",
+      "c",
+      "k",
+      "m"
+    ],
+    "mode": "classic",
+    "solutionCount": 118,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-184",
+    "title": "Clásico #184: 118 palabras",
+    "center": "o",
+    "outer": [
+      "s",
+      "f",
+      "d",
+      "n",
+      "x",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 118,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-185",
+    "title": "Clásico #185: 118 palabras",
+    "center": "r",
+    "outer": [
+      "b",
+      "e",
+      "ñ",
+      "n",
+      "l",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 118,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-186",
+    "title": "Clásico #186: 119 palabras",
+    "center": "c",
+    "outer": [
+      "p",
+      "w",
+      "e",
+      "l",
+      "u",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-187",
+    "title": "Clásico #187: 119 palabras",
+    "center": "r",
+    "outer": [
+      "i",
+      "x",
+      "u",
+      "f",
+      "a",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-188",
+    "title": "Clásico #188: 119 palabras",
+    "center": "b",
+    "outer": [
+      "a",
+      "r",
+      "m",
+      "g",
+      "o",
+      "y"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-189",
+    "title": "Clásico #189: 119 palabras",
+    "center": "t",
+    "outer": [
+      "a",
+      "p",
+      "e",
+      "w",
+      "u",
+      "l"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-190",
+    "title": "Clásico #190: 119 palabras",
+    "center": "i",
+    "outer": [
+      "n",
+      "s",
+      "d",
+      "x",
+      "a",
+      "m"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-191",
+    "title": "Clásico #191: 119 palabras",
+    "center": "e",
+    "outer": [
+      "u",
+      "l",
+      "v",
+      "i",
+      "a",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-192",
+    "title": "Clásico #192: 119 palabras",
+    "center": "e",
+    "outer": [
+      "s",
+      "v",
+      "z",
+      "n",
+      "p",
+      "a"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-193",
+    "title": "Clásico #193: 119 palabras",
+    "center": "a",
+    "outer": [
+      "j",
+      "e",
+      "i",
+      "p",
+      "w",
+      "t"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-194",
+    "title": "Clásico #194: 119 palabras",
+    "center": "r",
+    "outer": [
+      "s",
+      "i",
+      "o",
+      "k",
+      "e",
+      "d"
+    ],
+    "mode": "classic",
+    "solutionCount": 119,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-195",
+    "title": "Clásico #195: 120 palabras",
+    "center": "r",
+    "outer": [
+      "x",
+      "e",
+      "n",
+      "i",
+      "g",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-196",
+    "title": "Clásico #196: 120 palabras",
+    "center": "r",
+    "outer": [
+      "v",
+      "b",
+      "a",
+      "p",
+      "d",
+      "g"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-197",
+    "title": "Clásico #197: 120 palabras",
+    "center": "a",
+    "outer": [
+      "j",
+      "s",
+      "u",
+      "z",
+      "l",
+      "p"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-198",
+    "title": "Clásico #198: 120 palabras",
+    "center": "t",
+    "outer": [
+      "h",
+      "ñ",
+      "a",
+      "s",
+      "c",
+      "o"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-199",
+    "title": "Clásico #199: 120 palabras",
+    "center": "t",
+    "outer": [
+      "h",
+      "r",
+      "d",
+      "u",
+      "a",
+      "i"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
+    "minLen": 3,
+    "allowEnye": true
+  },
+  {
+    "id": "classic-200",
+    "title": "Clásico #200: 120 palabras",
+    "center": "a",
+    "outer": [
+      "p",
+      "z",
+      "k",
+      "l",
+      "u",
+      "c"
+    ],
+    "mode": "classic",
+    "solutionCount": 120,
     "minLen": 3,
     "allowEnye": true
   }

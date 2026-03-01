@@ -173,12 +173,12 @@
 
 .letter-stats {
   font-weight: 600;
-  color: #00b894;
+  color: var(--theme-ui-icon);
 }
 
 .pending-count {
   font-size: 12px;
-  color: #e17055;
+  color: #a56a52;
   margin-left: 8px;
 }
 
@@ -197,7 +197,7 @@
 
 .btn-toggle-hint {
   background: rgba(0, 0, 0, 0.15);
-  color: #2d3436;
+  color: var(--theme-ui-text);
   border: none;
   border-radius: 6px;
   width: 32px;
@@ -236,7 +236,7 @@
 
 /* Modal de cambio de letra */
 .letter-change-panel {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, var(--theme-primary-end) 100%);
   border-radius: 16px;
   padding: 24px;
   max-width: 500px;
@@ -281,14 +281,14 @@
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  background: linear-gradient(135deg, #d9c6a7 0%, #c2a17a 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
   font-weight: 700;
-  color: #2d3436;
+  color: var(--theme-ui-text);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 2;
 }
@@ -303,7 +303,7 @@
   position: absolute;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  background: linear-gradient(135deg, var(--theme-outer-start) 0%, var(--theme-outer-end) 100%);
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   display: flex;
@@ -324,10 +324,10 @@
 }
 
 .mini-outer-letter.selected {
-  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, var(--theme-primary-end) 100%);
   border-color: #fff;
   transform: scale(1.2);
-  box-shadow: 0 0 20px rgba(85, 239, 196, 0.6);
+  box-shadow: 0 0 20px rgba(143, 117, 88, 0.55);
 }
 
 /* Posiciones de las 6 letras exteriores (hexágono) */
@@ -346,8 +346,8 @@
 }
 
 .btn-confirm-change {
-  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
-  color: #2d3436;
+  background: linear-gradient(135deg, #d6c1a0 0%, #be9b72 100%);
+  color: #3a2f24;
   border: none;
   border-radius: 8px;
   padding: 14px 20px;
@@ -355,12 +355,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.3);
 }
 
 .btn-confirm-change:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 184, 148, 0.5);
+  box-shadow: 0 6px 16px rgba(143, 117, 88, 0.45);
 }
 
 .btn-confirm-change:active {
@@ -369,7 +369,7 @@
 
 /* Panel de Habilidades */
 .abilities-panel {
-  background: white;
+  background: var(--theme-ui-surface);
   border-radius: 16px;
   padding: 24px;
   max-width: 500px;
@@ -393,7 +393,7 @@
 
 .abilities-panel h2 {
   margin: 0 0 8px 0;
-  color: #2d3436;
+  color: var(--theme-ui-text);
   font-size: 24px;
 }
 
@@ -401,7 +401,7 @@
   margin: 0 0 20px 0;
   font-size: 18px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--theme-ui-icon);
 }
 
 .abilities-list {
@@ -416,8 +416,8 @@
   grid-template-columns: 40px 1fr auto;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, #f5f6fa 0%, #e8eaf6 100%);
-  border: 2px solid #dfe4ea;
+  background: linear-gradient(135deg, var(--theme-ui-surface) 0%, var(--theme-ui-surface-alt) 100%);
+  border: 2px solid var(--theme-ui-border);
   border-radius: 12px;
   padding: 14px 16px;
   cursor: pointer;
@@ -427,8 +427,8 @@
 
 .ability-btn:not(:disabled):hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.3);
+  border-color: var(--theme-ui-icon);
 }
 
 .ability-btn:disabled {
@@ -443,22 +443,22 @@
 .ability-name {
   font-size: 15px;
   font-weight: 600;
-  color: #2d3436;
+  color: var(--theme-ui-text);
 }
 
 .ability-cost {
   font-size: 14px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--theme-ui-icon);
   padding: 4px 12px;
-  background: white;
+  background: var(--theme-ui-surface);
   border-radius: 20px;
 }
 
 .btn-close-panel {
   width: 100%;
-  background: #dfe4ea;
-  color: #2d3436;
+  background: var(--theme-ui-surface-alt-2);
+  color: var(--theme-ui-text);
   border: none;
   border-radius: 8px;
   padding: 12px;
@@ -469,12 +469,12 @@
 }
 
 .btn-close-panel:hover {
-  background: #ced6e0;
+  background: var(--theme-ui-surface-alt);
 }
 
 /* Selector de Letras */
 .letter-selector-panel {
-  background: white;
+  background: var(--theme-ui-surface);
   border-radius: 16px;
   padding: 24px;
   max-width: 400px;
@@ -485,14 +485,14 @@
 
 .letter-selector-panel h2 {
   margin: 0 0 8px 0;
-  color: #2d3436;
+  color: var(--theme-ui-text);
   font-size: 22px;
 }
 
 .selector-cost {
   margin: 0 0 20px 0;
   font-size: 16px;
-  color: #636e72;
+  color: var(--theme-ui-muted);
 }
 
 .letter-grid {
@@ -504,7 +504,7 @@
 
 .letter-btn {
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-primary-start) 0%, var(--theme-primary-end) 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -512,12 +512,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(143, 117, 88, 0.3);
 }
 
 .letter-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.5);
 }
 
 .letter-btn:active {
@@ -640,7 +640,7 @@
   /* Hover effects más pronunciados */
   .ability-btn:not(:disabled):hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 16px rgba(143, 117, 88, 0.4);
   }
   
   .letter-btn:hover {
@@ -683,7 +683,7 @@
   border-radius: 12px;
   padding: 24px;
   margin: 0 0 24px 0;
-  box-shadow: 0 4px 12px rgba(91, 74, 166, 0.2);
+  box-shadow: 0 4px 12px rgba(143, 117, 88, 0.22);
 }
 
 .exotics-tutorial-content {

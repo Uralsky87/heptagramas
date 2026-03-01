@@ -15,7 +15,7 @@ interface TopBarProps {
  * TopBar - Barra superior unificada para todas las pantallas
  * 
  * Layout:
- * - Izquierda: botón de tema (🎨)
+ * - Izquierda: botón custom o espacio reservado
  * - Centro: título "Palabrarium" centrado
  * - Derecha: botón de ajustes (⚙️)
  * 
@@ -29,7 +29,7 @@ export default function TopBar({
   onThemeClick,
   onSettingsClick,
   title = 'Palabrarium',
-  showThemeButton = true,
+  showThemeButton = false,
   showSettingsButton = true,
   leftButton,
   rightButton,

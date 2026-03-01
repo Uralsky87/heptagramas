@@ -1059,8 +1059,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           showThemeButton={false}
           showSettingsButton={false}
           leftButton={
-            <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
-              {t('common.home')}
+            <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+              ←
             </button>
           }
         />
@@ -1093,8 +1093,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={onBack}>
-            Exóticos
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+            ←
           </button>
         }
       />

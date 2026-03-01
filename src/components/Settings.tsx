@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
+import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsProps {
@@ -12,6 +13,7 @@ export default function Settings({ onBack }: SettingsProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(() => loadPlayerState().settings.soundEnabled);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const { language, setLanguage, t } = useLanguage();
@@ -116,6 +118,27 @@ export default function Settings({ onBack }: SettingsProps) {
     setDeleteConfirmText('');
   };
 
+  const handleToggleSound = async () => {
+    const newValue = !soundEnabled;
+    setSoundEnabled(newValue);
+
+    try {
+      const currentState = loadPlayerState();
+      const updatedState = {
+        ...currentState,
+        settings: {
+          ...currentState.settings,
+          soundEnabled: newValue,
+        },
+      };
+      await savePlayerState(updatedState);
+    } catch (error) {
+      console.error('[Settings] Error al guardar sonido:', error);
+      setSoundEnabled(!newValue);
+      showMessage('error', '✗ Error al actualizar el sonido');
+    }
+  };
+
   return (
     <PageContainer>
       <header className="header">
@@ -155,6 +178,27 @@ export default function Settings({ onBack }: SettingsProps) {
               disabled={isProcessing}
             >
               🇬🇧 {t('settings.english')}
+            </button>
+          </div>
+        </section>
+
+        <section className="settings-section">
+          <h2>🔊 {t('settings.sound')}</h2>
+          <p className="settings-description">
+            Activa o desactiva los efectos al acertar palabras.
+          </p>
+          <div className="setting-item">
+            <div className="setting-info">
+              <span className="setting-label">Efectos de sonido</span>
+              <span className="setting-desc">{soundEnabled ? 'Activados' : 'Desactivados'}</span>
+            </div>
+            <button
+              className={`toggle-btn ${soundEnabled ? 'toggle-active' : ''}`}
+              onClick={handleToggleSound}
+              disabled={isProcessing}
+              aria-label={soundEnabled ? 'Desactivar sonido' : 'Activar sonido'}
+            >
+              <span className="toggle-slider" />
             </button>
           </div>
         </section>
