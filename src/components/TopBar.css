@@ -87,7 +87,7 @@
 
 @media (max-width: 768px) {
   .top-bar-title {
-    font-size: 36px;
+    font-size: 22px;
     letter-spacing: 0.3px;
   }
 
@@ -96,7 +96,7 @@
     width: 48px;
     min-width: 48px;
     padding: 0;
-    font-size: 28px;
+    font-size: 27px;
   }
 }
 
@@ -108,7 +108,7 @@
   }
 
   .top-bar-title {
-    font-size: 30px;
+    font-size: 18px;
     letter-spacing: 0.3px;
   }
 
@@ -123,7 +123,7 @@
     width: 44px;
     min-width: 44px;
     padding: 0;
-    font-size: 24px;
+    font-size: 23px;
   }
 }
 
