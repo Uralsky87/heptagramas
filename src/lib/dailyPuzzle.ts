@@ -1,4 +1,9 @@
 import type { Puzzle } from '../types';
+import {
+  DAILY_FALLBACK_MIN_SOLUTIONS,
+  DAILY_MAX_SOLUTIONS,
+  DAILY_MIN_SOLUTIONS,
+} from './puzzleRanges';
 
 // Convierte una fecha YYYY-MM-DD a indice de dia (UTC) para rotacion estable
 function getDayIndex(dateKey: string): number {
@@ -16,8 +21,8 @@ function getTodayString(): string {
   return `${year}-${month}-${day}`;
 }
 
-// Seleccionar puzzle del día de forma determinística
-// Filtra por rango óptimo 70-170 soluciones
+// Seleccionar puzzle del día de forma determinística.
+// Filtra por rango objetivo 120-350 soluciones.
 export function getDailyPuzzle(puzzles: Puzzle[]): Puzzle {
   if (puzzles.length === 0) {
     throw new Error('No hay puzzles disponibles');
@@ -26,10 +31,10 @@ export function getDailyPuzzle(puzzles: Puzzle[]): Puzzle {
   const today = getTodayString();
   const dayIndex = getDayIndex(today);
   
-  // PREFERENCIA 1: Puzzles en rango óptimo 70-170 soluciones
+  // PREFERENCIA 1: Puzzles en rango objetivo 120-350 soluciones.
   const optimalPuzzles = puzzles.filter(p => {
     const count = p.solutionCount;
-    return count !== undefined && count >= 70 && count <= 170;
+    return count !== undefined && count >= DAILY_MIN_SOLUTIONS && count <= DAILY_MAX_SOLUTIONS;
   });
   
   if (optimalPuzzles.length > 0) {
@@ -37,17 +42,17 @@ export function getDailyPuzzle(puzzles: Puzzle[]): Puzzle {
     return optimalPuzzles[index];
   }
   
-  // FALLBACK 1: Rango ampliado 70-200
+  // FALLBACK 1: Mantener minimo alto y permitir techo abierto.
   const fallbackPuzzles = puzzles.filter(p => {
     const count = p.solutionCount;
-    return count !== undefined && count >= 70 && count <= 200;
+    return count !== undefined && count >= DAILY_FALLBACK_MIN_SOLUTIONS;
   });
   
   if (fallbackPuzzles.length > 0) {
     if (import.meta.env.DEV) {
       console.warn(
-        `[DailyPuzzle] No hay puzzles en rango óptimo (70-170). ` +
-        `Usando rango ampliado (70-200).`
+        `[DailyPuzzle] No hay puzzles en rango objetivo (${DAILY_MIN_SOLUTIONS}-${DAILY_MAX_SOLUTIONS}). ` +
+        `Usando fallback >=${DAILY_FALLBACK_MIN_SOLUTIONS}.`
       );
     }
     const index = dayIndex % fallbackPuzzles.length;

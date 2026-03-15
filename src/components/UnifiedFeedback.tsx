@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../styles/unifiedFeedback.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export type FeedbackType = 'correct' | 'incorrect' | 'already-found' | 'missing-central' | null;
 
@@ -10,28 +11,25 @@ interface UnifiedFeedbackProps {
 
 const FEEDBACK_CONFIG = {
   'correct': {
-    text: '¡Correcto!',
     color: '#22c55e',
     duration: 1500,
   },
   'incorrect': {
-    text: 'Prueba de nuevo',
     color: '#ef4444',
     duration: 1500,
   },
   'already-found': {
-    text: 'Palabra ya encontrada',
     color: '#3b82f6',
     duration: 1500,
   },
   'missing-central': {
-    text: 'Falta letra central',
     color: '#f97316',
     duration: 2500,
   },
-};
+} as const;
 
 export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbackProps) {
+  const { t } = useLanguage();
   const [currentType, setCurrentType] = useState<FeedbackType>(null);
   const [isVisible, setIsVisible] = useState(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -84,6 +82,12 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
   }
 
   const config = FEEDBACK_CONFIG[currentType];
+  const feedbackTextMap = {
+    'correct': t('feedback.correct'),
+    'incorrect': t('feedback.try_again'),
+    'already-found': t('feedback.already_found'),
+    'missing-central': t('feedback.missing_central'),
+  } as const;
 
   return (
     <div className="unified-feedback">
@@ -91,7 +95,7 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
         className={`unified-feedback-text${isVisible ? ' visible' : ''}`}
         style={{ color: config.color }}
       >
-        {config.text}
+        {feedbackTextMap[currentType]}
       </span>
     </div>
   );

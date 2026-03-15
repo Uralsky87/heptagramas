@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/correctFeedback.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface CorrectFeedbackProps {
   isVisible: boolean;
@@ -8,6 +9,7 @@ interface CorrectFeedbackProps {
 
 export default function CorrectFeedback({ isVisible, onAnimationEnd }: CorrectFeedbackProps) {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isVisible) {
@@ -25,7 +27,7 @@ export default function CorrectFeedback({ isVisible, onAnimationEnd }: CorrectFe
 
   return (
     <div className="correct-feedback">
-      <span className="correct-text">¡Correcto!</span>
+      <span className="correct-text">{t('feedback.correct')}</span>
     </div>
   );
 }

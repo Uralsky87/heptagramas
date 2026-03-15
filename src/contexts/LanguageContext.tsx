@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { clearProgressCache } from '../lib/storageAdapter';
 
 export type Language = 'es' | 'en';
+export const ENABLE_ENGLISH = false;
 
 interface LanguageContextType {
   language: Language;
@@ -21,10 +22,14 @@ const translations: Record<Language, Record<string, string>> = {
 const loadTranslations = async () => {
   try {
     const esResponse = await fetch('/heptagramas/i18n/es.json');
-    const enResponse = await fetch('/heptagramas/i18n/en.json');
     
     translations.es = await esResponse.json();
-    translations.en = await enResponse.json();
+
+    // Mantener EN aparcado: se carga solo si se reactiva la feature flag.
+    if (ENABLE_ENGLISH) {
+      const enResponse = await fetch('/heptagramas/i18n/en.json');
+      translations.en = await enResponse.json();
+    }
   } catch (err) {
     console.error('[LanguageProvider] Error cargando traducciones:', err);
   }
@@ -38,6 +43,9 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
     // Cargar idioma guardado o usar español por defecto
     const saved = localStorage.getItem('app-language') as Language | null;
+    if (saved === 'en' && !ENABLE_ENGLISH) {
+      return 'es';
+    }
     return saved || 'es';
   });
 
@@ -48,14 +56,15 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, []);
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem('app-language', lang);
+    const nextLanguage: Language = ENABLE_ENGLISH ? lang : 'es';
+    setLanguageState(nextLanguage);
+    localStorage.setItem('app-language', nextLanguage);
     // Limpiar caché de progreso para forzar recarga desde IndexedDB
     clearProgressCache();
   };
 
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    return translations[language][key] || translations.es[key] || key;
   };
 
   if (!isLoaded) {

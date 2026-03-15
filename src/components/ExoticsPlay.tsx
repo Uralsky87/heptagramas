@@ -118,7 +118,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   useEffect(() => {
     const run = loadExoticsRun();
     if (!run) {
-      alert('No hay run activa. Volviendo al menú de Exóticos.');
+      alert(t('exotic.no_active_run_returning'));
       onBack();
       return;
     }
@@ -253,14 +253,14 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
 
   const validateWordExotic = (word: string): ValidationResult => {
     if (!runState) {
-      return { ok: false, reason: 'No hay run activa.' };
+      return { ok: false, reason: t('exotic.no_active_run') };
     }
     
     const normalized = normalizeWord(word);
     
     // 1. Longitud mínima
     if (normalized.length < 3) {
-      return { ok: false, reason: 'Mínimo 3 letras.' };
+      return { ok: false, reason: t('game.min_letters').replace('{0}', '3') };
     }
     
     // 2. Debe contener la letra central
@@ -268,7 +268,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (!normalized.includes(normalizedCenter)) {
       return {
         ok: false,
-        reason: `Debe contener la letra central: "${normalizedCenter.toUpperCase()}".`,
+        reason: t('game.must_contain').replace('{0}', normalizedCenter.toUpperCase()),
       };
     }
     
@@ -292,19 +292,19 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             `\n  Extra: [${runState.extraLetters.join(', ')}] → [${normalizedExtra.join(', ')}]`
           );
         }
-        return { ok: false, reason: 'Solo puedes usar las letras disponibles.' };
+        return { ok: false, reason: t('exotic.only_available_letters') };
       }
     }
     
     // 4. Debe existir en las soluciones
     if (!puzzleSolutions.includes(normalized)) {
-      return { ok: false, reason: 'Palabra no válida.' };
+      return { ok: false, reason: t('exotic.invalid_word') };
     }
     
     // 5. No debe estar ya encontrada (verificar contra foundWordsAll normalizado)
     const foundSet = getFoundWordsNormalizedSet();
     if (foundSet.has(normalized)) {
-      return { ok: false, reason: 'Ya encontraste esta palabra.' };
+      return { ok: false, reason: t('game.already_found_word') };
     }
     
     return { ok: true };
@@ -448,7 +448,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       saveExoticsRun(updatedRun);
       setIsGeneratingNewPuzzle(false);
       
-      setMessage('✨ ¡Nuevo heptagrama cargado! Tus P y XP se mantienen.');
+      setMessage(t('exotic.new_heptagram_loaded'));
       scheduleTimeout(() => setMessage(''), 4000);
       
       if (import.meta.env.DEV) {
@@ -531,7 +531,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     saveExoticsRun(updated);
     setShowAbilitiesPanel(false);
     
-    setMessage('🔓 Estadísticas por letra inicial desbloqueadas!');
+    setMessage(t('exotic.start_letter_unlocked'));
     scheduleTimeout(() => setMessage(''), 3000);
   };
 
@@ -552,7 +552,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     // Elegir letra nueva aleatoria DIFERENTE
     const availableForSwap = available.filter(l => l !== oldLetter.toLowerCase());
     if (availableForSwap.length === 0) {
-      alert('No hay letras disponibles diferentes para intercambiar.');
+      alert(t('exotic.no_letters_to_swap'));
       setAbilityFlow({ type: null, selectedOuterIndex: null });
       return;
     }
@@ -652,7 +652,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     const available = getAvailableLetters();
     if (available.length === 0) {
-      alert('No hay letras disponibles para comprar.');
+      alert(t('exotic.no_letters_to_buy'));
       return;
     }
     
@@ -753,7 +753,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     saveExoticsRun(updated);
     setShowAbilitiesPanel(false);
     
-    setMessage('⚡ ¡Próximas 10 palabras con DOBLE PUNTOS!');
+    setMessage(t('exotic.double_points_active'));
     scheduleTimeout(() => setMessage(''), 4000);
   };
 
@@ -767,7 +767,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       : 0;
     
     if (progressPercent >= 0.5) {
-      alert('Solo puedes comprar un nuevo heptagrama antes de alcanzar el 50% de progreso.');
+      alert(t('exotic.buy_new_before_50'));
       return;
     }
     
@@ -791,7 +791,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       );
       
       if (!newPuzzle) {
-        alert('No se pudo generar puzzle. Se devuelven los 350 P.');
+        alert(t('exotic.refund_generate_failed'));
         const refunded = { ...updatedWithCost, scorePoints: updatedWithCost.scorePoints + 350 };
         setRunState(refunded);
         saveExoticsRun(refunded);
@@ -829,11 +829,11 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         });
       }
       
-      setMessage('✨ ¡Nuevo heptagrama comprado! -350 P');
+      setMessage(t('exotic.new_heptagram_bought'));
       scheduleTimeout(() => setMessage(''), 4000);
     } catch (error) {
       console.error('[ExoticsPlay] Error al generar puzzle:', error);
-      alert('Error. Se devuelven los 350 P.');
+      alert(t('exotic.refund_error'));
       const refunded = { ...updatedWithCost, scorePoints: updatedWithCost.scorePoints + 350 };
       setRunState(refunded);
       saveExoticsRun(refunded);
@@ -847,7 +847,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     const result = validateWordExotic(word);
     
     if (!result.ok) {
-      setMessage(result.reason || 'Error desconocido');
+      setMessage(result.reason || t('settings.msg_unknown_error'));
       scheduleTimeout(() => setMessage(''), 3000);
       setClickedWord('');
       
@@ -855,9 +855,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       if (!isFeedbackActive) {
         setIsFeedbackActive(true);
         // Mostrar feedback específico
-        if (result.reason === 'Ya la encontraste.' || result.reason?.includes('Ya la encontraste')) {
+        if (result.reason === t('game.already_found_word') || result.reason?.includes(t('game.already_found_word'))) {
           setFeedbackType('already-found');
-        } else if (result.reason?.includes('Debe contener la letra central')) {
+        } else if (result.reason?.includes(t('game.must_contain').split('{0}')[0])) {
           setFeedbackType('missing-central');
         } else {
           setFeedbackType('incorrect');
@@ -1059,13 +1059,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           showThemeButton={false}
           showSettingsButton={false}
           leftButton={
-            <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+            <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
               ←
             </button>
           }
         />
         <header className="header">
-          <h1>✨ Cargando...</h1>
+            <h1>{t('common.loading')}</h1>
         </header>
       </PageContainer>
     );
@@ -1093,7 +1093,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
             ←
           </button>
         }
@@ -1107,10 +1107,10 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             return (
               <div className="puzzle-header">
                 <h2 className="puzzle-title">
-                  Encontradas: {foundWordsValid.length}
+                  {t('game.words_found')}: {foundWordsValid.length}
                   {runState.solutionsTotal > 0 && ` / ${runState.solutionsTotal}`}
                   {runState.foundWordsAll.length > foundWordsValid.length && 
-                    <span className="invalid-count"> ({runState.foundWordsAll.length - foundWordsValid.length} inválidas)</span>
+                    <span className="invalid-count"> ({runState.foundWordsAll.length - foundWordsValid.length} {t('game.invalid_words')})</span>
                   }
                 </h2>
               </div>
@@ -1125,7 +1125,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             <button 
               className="btn-abilities-header"
               onClick={() => setShowAbilitiesPanel(true)}
-              title="Habilidades"
+              title={t('exotic.abilities_title')}
             >
               ⚡
             </button>
@@ -1165,7 +1165,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         {/* Botón único de finalizar partida */}
         <div className="exotic-run-panel">
           <button className="btn-end-run" onClick={handleEndRun}>
-            🛑 Terminar partida
+            {t('exotic.end_run')}
           </button>
         </div>
 
@@ -1300,8 +1300,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       {showAbilitiesPanel && (
         <div className="modal-overlay" onClick={() => setShowAbilitiesPanel(false)}>
           <div className="abilities-panel" onClick={(e) => e.stopPropagation()}>
-            <h2>⚡ Habilidades</h2>
-            <p className="abilities-balance">Tienes: {runState.scorePoints} P</p>
+            <h2>{t('exotic.abilities_title')}</h2>
+            <p className="abilities-balance">{t('exotic.you_have_points').replace('{0}', String(runState.scorePoints))}</p>
             
             <div className="abilities-list">
               {/* Pista longitud */}
@@ -1422,7 +1422,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             </div>
 
             <button className="btn-close-panel" onClick={() => setShowAbilitiesPanel(false)}>
-              Cerrar
+              {t('settings.cancel_btn')}
             </button>
           </div>
         </div>
@@ -1435,8 +1435,8 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             <h2>🔄 Cambiar Letra</h2>
             <p className="selector-instruction">
               {abilityFlow.selectedOuterIndex === null 
-                ? 'Selecciona la letra exterior que quieres cambiar:' 
-                : `Letra seleccionada: ${runState.puzzle.outer[abilityFlow.selectedOuterIndex].toUpperCase()}`}
+                ? t('exotic.select_outer_to_change')
+                : t('exotic.selected_letter').replace('{0}', runState.puzzle.outer[abilityFlow.selectedOuterIndex].toUpperCase())}
             </p>
             
             {/* Mini tablero para selección */}
@@ -1444,7 +1444,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               <div className="mini-board">
                 <div 
                   className="mini-center-letter"
-                  onClick={() => setMessage('❌ La letra central no se puede cambiar')}
+                  onClick={() => setMessage(t('exotic.center_cannot_change'))}
                   style={{ cursor: 'not-allowed', opacity: 0.5 }}
                 >
                   {runState.puzzle.center.toUpperCase()}
@@ -1466,24 +1466,24 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             <div className="letter-change-actions">
               {abilityFlow.selectedOuterIndex === null ? (
                 <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
-                  Cancelar
+                  {t('settings.cancel_btn')}
                 </button>
               ) : abilityFlow.type === 'swap-random' ? (
                 <>
                   <button className="btn-confirm-change" onClick={confirmSwapRandom}>
-                    ✓ Cambiar por aleatoria (160 P)
+                    {t('exotic.change_random_for_cost')}
                   </button>
                   <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
-                    Cancelar
+                    {t('settings.cancel_btn')}
                   </button>
                 </>
               ) : (
                 <>
                   <button className="btn-confirm-change" onClick={openLetterSelectorForSwap}>
-                    → Elegir letra nueva (320 P)
+                    {t('exotic.choose_new_letter_for_cost')}
                   </button>
                   <button className="btn-close-panel" onClick={() => setAbilityFlow({ type: null, selectedOuterIndex: null })}>
-                    Cancelar
+                    {t('settings.cancel_btn')}
                   </button>
                 </>
               )}
@@ -1498,7 +1498,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           <div className="letter-selector-panel" onClick={(e) => e.stopPropagation()}>
             <h2>🔤 Selecciona una letra</h2>
             <p className="selector-cost">
-              Coste: {letterSelectorMode === 'swap' ? '320 P' : '900 P'}
+              {t('exotic.cost')}: {letterSelectorMode === 'swap' ? t('exotic.cost_320') : t('exotic.cost_900')}
             </p>
             
             <div className="letter-grid">
@@ -1520,7 +1520,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             </div>
 
             <button className="btn-close-panel" onClick={() => setShowLetterSelector(false)}>
-              Cancelar
+              {t('settings.cancel_btn')}
             </button>
           </div>
         </div>

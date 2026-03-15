@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
 import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
-import { useLanguage } from '../contexts/LanguageContext';
+import { ENABLE_ENGLISH, useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsProps {
   onBack: () => void;
@@ -17,6 +17,7 @@ export default function Settings({ onBack }: SettingsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const { language, setLanguage, t } = useLanguage();
+  const deleteKeyword = t('settings.delete_keyword');
   // Eliminar cualquier lógica relacionada con la fuente
 
   const scheduleTimeout = (callback: () => void, delay: number) => {
@@ -41,10 +42,10 @@ export default function Settings({ onBack }: SettingsProps) {
     try {
       setIsProcessing(true);
       await downloadExportJson();
-      showMessage('success', '✓ Progreso exportado correctamente');
+      showMessage('success', `✓ ${t('settings.msg_export_success')}`);
     } catch (error) {
       console.error('[Settings] Error al exportar:', error);
-      showMessage('error', '✗ Error al exportar: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+      showMessage('error', `✗ ${t('settings.msg_export_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
     }
@@ -74,7 +75,7 @@ export default function Settings({ onBack }: SettingsProps) {
       }
     } catch (error) {
       console.error('[Settings] Error al importar:', error);
-      showMessage('error', '✗ Error al importar: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+      showMessage('error', `✗ ${t('settings.msg_import_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
       // Reset input
@@ -90,15 +91,15 @@ export default function Settings({ onBack }: SettingsProps) {
   };
 
   const handleDeleteConfirm = async () => {
-    if (deleteConfirmText.toLowerCase() !== 'borrar') {
-      showMessage('error', 'Debes escribir "BORRAR" para confirmar');
+    if (deleteConfirmText.toLowerCase() !== deleteKeyword.toLowerCase()) {
+      showMessage('error', t('settings.msg_delete_keyword_required').replace('{0}', deleteKeyword));
       return;
     }
 
     try {
       setIsProcessing(true);
       await clearAllData();
-      showMessage('success', '✓ Todos los datos han sido borrados');
+      showMessage('success', `✓ ${t('settings.msg_delete_success')}`);
       
       // Recargar la página después de borrar
       scheduleTimeout(() => {
@@ -106,7 +107,7 @@ export default function Settings({ onBack }: SettingsProps) {
       }, 2000);
     } catch (error) {
       console.error('[Settings] Error al borrar:', error);
-      showMessage('error', '✗ Error al borrar datos: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+      showMessage('error', `✗ ${t('settings.msg_delete_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
@@ -135,7 +136,7 @@ export default function Settings({ onBack }: SettingsProps) {
     } catch (error) {
       console.error('[Settings] Error al guardar sonido:', error);
       setSoundEnabled(!newValue);
-      showMessage('error', '✗ Error al actualizar el sonido');
+      showMessage('error', `✗ ${t('settings.msg_sound_error')}`);
     }
   };
 
@@ -161,42 +162,61 @@ export default function Settings({ onBack }: SettingsProps) {
 
         <section className="settings-section">
           <h2>🌐 {t('settings.language')}</h2>
-          <p className="settings-description">
-            Selecciona tu idioma preferido. El cambio se aplicará inmediatamente.
-          </p>
-          <div className="settings-actions">
-            <button 
-              className={`settings-btn ${language === 'es' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
-              onClick={() => setLanguage('es')}
-              disabled={isProcessing}
-            >
-              🇪🇸 {t('settings.spanish')}
-            </button>
-            <button 
-              className={`settings-btn ${language === 'en' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
-              onClick={() => setLanguage('en')}
-              disabled={isProcessing}
-            >
-              🇬🇧 {t('settings.english')}
-            </button>
-          </div>
+          {ENABLE_ENGLISH ? (
+            <>
+              <p className="settings-description">
+                {t('settings.language_desc')}
+              </p>
+              <div className="settings-actions">
+                <button 
+                  className={`settings-btn ${language === 'es' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
+                  onClick={() => setLanguage('es')}
+                  disabled={isProcessing}
+                >
+                  🇪🇸 {t('settings.spanish')}
+                </button>
+                <button 
+                  className={`settings-btn ${language === 'en' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
+                  onClick={() => setLanguage('en')}
+                  disabled={isProcessing}
+                >
+                  🇬🇧 {t('settings.english')}
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="settings-description">
+                {t('settings.language_locked_desc')}
+              </p>
+              <div className="settings-actions">
+                <button
+                  className="settings-btn settings-btn-primary"
+                  onClick={() => setLanguage('es')}
+                  disabled={isProcessing}
+                >
+                  🇪🇸 {t('settings.spanish')}
+                </button>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="settings-section">
           <h2>🔊 {t('settings.sound')}</h2>
           <p className="settings-description">
-            Activa o desactiva los efectos al acertar palabras.
+            {t('settings.sound_desc')}
           </p>
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Efectos de sonido</span>
-              <span className="setting-desc">{soundEnabled ? 'Activados' : 'Desactivados'}</span>
+              <span className="setting-label">{t('settings.sound_effects_label')}</span>
+              <span className="setting-desc">{soundEnabled ? t('settings.sound_on') : t('settings.sound_off')}</span>
             </div>
             <button
               className={`toggle-btn ${soundEnabled ? 'toggle-active' : ''}`}
               onClick={handleToggleSound}
               disabled={isProcessing}
-              aria-label={soundEnabled ? 'Desactivar sonido' : 'Activar sonido'}
+              aria-label={soundEnabled ? t('settings.sound_aria_disable') : t('settings.sound_aria_enable')}
             >
               <span className="toggle-slider" />
             </button>
@@ -204,9 +224,9 @@ export default function Settings({ onBack }: SettingsProps) {
         </section>
 
         <section className="settings-section">
-          <h2>📦 Gestión de datos</h2>
+          <h2>📦 {t('settings.data_title')}</h2>
           <p className="settings-description">
-            Exporta tu progreso para guardarlo como respaldo o importa un archivo guardado previamente.
+            {t('settings.data_desc')}
           </p>
 
           <div className="settings-actions">
@@ -215,7 +235,7 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleExport}
               disabled={isProcessing}
             >
-              📥 Exportar progreso (JSON)
+              📥 {t('settings.export_btn')}
             </button>
 
             <button 
@@ -223,7 +243,7 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleImportClick}
               disabled={isProcessing}
             >
-              📤 Importar progreso (JSON)
+              📤 {t('settings.import_btn')}
             </button>
             <input
               ref={fileInputRef}
@@ -236,18 +256,18 @@ export default function Settings({ onBack }: SettingsProps) {
 
           <div className="settings-info">
             <p>
-              <strong>Exportar:</strong> Descarga un archivo JSON con todo tu progreso (puzzles diarios, clásicos, exóticos y nivel).
+              <strong>{t('settings.export_label')}</strong> {t('settings.export_info_text')}
             </p>
             <p>
-              <strong>Importar:</strong> Carga un archivo JSON previamente exportado. ⚠️ Esto reemplazará todos tus datos actuales.
+              <strong>{t('settings.import_label')}</strong> {t('settings.import_info_text')}
             </p>
           </div>
         </section>
 
         <section className="settings-section settings-section-danger">
-          <h2>🗑️ Zona de peligro</h2>
+          <h2>🗑️ {t('settings.danger_title')}</h2>
           <p className="settings-description">
-            Elimina permanentemente todos tus datos locales.
+            {t('settings.danger_desc')}
           </p>
 
           {!showDeleteConfirm ? (
@@ -256,38 +276,38 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleDeleteRequest}
               disabled={isProcessing}
             >
-              🗑️ Borrar datos locales
+              🗑️ {t('settings.delete_local_btn')}
             </button>
           ) : (
             <div className="settings-confirm">
               <p className="settings-confirm-text">
-                ⚠️ <strong>¿Estás seguro?</strong> Esta acción no se puede deshacer.
+                ⚠️ <strong>{t('settings.confirm_sure')}</strong> {t('settings.confirm_irreversible')}
               </p>
               <p className="settings-confirm-text">
-                Escribe <strong>"BORRAR"</strong> para confirmar:
+                {t('settings.confirm_type_delete')} <strong>"{deleteKeyword}"</strong>:
               </p>
               <input
                 type="text"
                 className="settings-confirm-input"
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder="Escribe BORRAR"
+                placeholder={t('settings.confirm_placeholder')}
                 autoFocus
               />
               <div className="settings-confirm-actions">
                 <button 
                   className="settings-btn settings-btn-danger"
                   onClick={handleDeleteConfirm}
-                  disabled={isProcessing || deleteConfirmText.toLowerCase() !== 'borrar'}
+                  disabled={isProcessing || deleteConfirmText.toLowerCase() !== deleteKeyword.toLowerCase()}
                 >
-                  Confirmar borrado
+                  {t('settings.confirm_delete_btn')}
                 </button>
                 <button 
                   className="settings-btn settings-btn-secondary"
                   onClick={handleDeleteCancel}
                   disabled={isProcessing}
                 >
-                  Cancelar
+                  {t('settings.cancel_btn')}
                 </button>
               </div>
             </div>
@@ -295,12 +315,12 @@ export default function Settings({ onBack }: SettingsProps) {
         </section>
 
         <section className="settings-section">
-          <h2>ℹ️ Información</h2>
+          <h2>ℹ️ {t('settings.info_title')}</h2>
           <p className="settings-info-text">
-            <strong>Almacenamiento:</strong> IndexedDB (offline)
+            <strong>{t('settings.info_storage_label')}</strong> {t('settings.info_storage_value')}
           </p>
           <p className="settings-info-text">
-            <strong>Versión:</strong> 1.0.0
+            <strong>{t('settings.info_version_label')}</strong> 1.0.0
           </p>
         </section>
       </div>

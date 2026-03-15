@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
@@ -6,6 +6,7 @@ import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import { useLanguage } from '../contexts/LanguageContext';
+import { CLASSIC_LONG_MIN_SOLUTIONS } from '../lib/puzzleRanges';
 
 interface ClassicListProps {
   puzzles: Puzzle[];
@@ -19,20 +20,23 @@ interface PuzzleWithMeta extends Omit<Puzzle, 'solutionCount'> {
   progress: PuzzleProgress | null;
 }
 
+type ClassicMenu = 'sections' | 'long';
+
 export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBack }: ClassicListProps) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [puzzlesWithMeta, setPuzzlesWithMeta] = useState<PuzzleWithMeta[]>([]);
+  const [activeMenu, setActiveMenu] = useState<ClassicMenu>('sections');
   const [selectedSectionIndex, setSelectedSectionIndex] = useState<number | null>(null);
   const PUZZLES_PER_SECTION = 20;
 
   // Filtrar solo puzzles clásicos
-  const classicPuzzles = puzzles.filter(p => p.mode === 'classic');
+  const classicPuzzles = useMemo(() => puzzles.filter(p => p.mode === 'classic'), [puzzles]);
 
   useEffect(() => {
     // Inicializar con progreso y solutionCount null
     const initial: PuzzleWithMeta[] = classicPuzzles.map(puzzle => ({
       ...puzzle,
-      solutionCount: null,
+      solutionCount: puzzle.solutionCount ?? null,
       progress: loadPuzzleProgress(puzzle.id),
     }));
     setPuzzlesWithMeta(initial);
@@ -67,25 +71,36 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
     return () => {
       timers.forEach(timer => clearTimeout(timer));
     };
-  }, [dictionary]);
+  }, [classicPuzzles, dictionary]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     saveActivePuzzleId(puzzle.id);
     onSelectPuzzle(puzzle);
   };
 
-  const sections: PuzzleWithMeta[][] = [];
-  for (let i = 0; i < puzzlesWithMeta.length; i += PUZZLES_PER_SECTION) {
-    sections.push(puzzlesWithMeta.slice(i, i + PUZZLES_PER_SECTION));
-  }
+  const longPuzzles = useMemo(
+    () => puzzlesWithMeta.filter((puzzle) => (puzzle.solutionCount ?? 0) >= CLASSIC_LONG_MIN_SOLUTIONS),
+    [puzzlesWithMeta]
+  );
+
+  const buildSections = (pool: PuzzleWithMeta[]) => {
+    const grouped: PuzzleWithMeta[][] = [];
+    for (let i = 0; i < pool.length; i += PUZZLES_PER_SECTION) {
+      grouped.push(pool.slice(i, i + PUZZLES_PER_SECTION));
+    }
+    return grouped;
+  };
+
+  const activePool = activeMenu === 'sections' ? puzzlesWithMeta : longPuzzles;
+  const sections = buildSections(activePool);
 
   const selectedSection = selectedSectionIndex !== null ? sections[selectedSectionIndex] || [] : [];
   const totalSections = sections.length;
 
-  const sectionLabel = language === 'en' ? 'Section' : 'Sección';
-  const sectionRangeLabel = (index: number) => {
+  const sectionLabel = t('classic.section_label');
+  const sectionRangeLabel = (index: number, poolSize: number) => {
     const start = index * PUZZLES_PER_SECTION + 1;
-    const end = Math.min((index + 1) * PUZZLES_PER_SECTION, classicPuzzles.length);
+    const end = Math.min((index + 1) * PUZZLES_PER_SECTION, poolSize);
     return `${start}-${end}`;
   };
 
@@ -110,14 +125,48 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={handleBack} aria-label="Volver" title="Volver">
+          <button className="top-bar-btn top-bar-btn-left" onClick={handleBack} aria-label={t('common.back')} title={t('common.back')}>
             ←
           </button>
         }
       />
 
+      {selectedSectionIndex === null && (
+        <div className="classic-menu-tabs" role="tablist" aria-label={t('home.classic_title')}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeMenu === 'sections'}
+            className={`classic-menu-tab ${activeMenu === 'sections' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveMenu('sections');
+              setSelectedSectionIndex(null);
+            }}
+          >
+            {t('classic.tab_sections')}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeMenu === 'long'}
+            className={`classic-menu-tab ${activeMenu === 'long' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveMenu('long');
+              setSelectedSectionIndex(null);
+            }}
+          >
+            {t('classic.tab_long')}
+          </button>
+        </div>
+      )}
+
       {selectedSectionIndex === null ? (
         <div className="classic-sections-grid">
+          {sections.length === 0 && activeMenu === 'long' && (
+            <div className="classic-empty-state">
+              <p>{t('classic.no_long_puzzles')}</p>
+            </div>
+          )}
           {sections.map((sectionPuzzles, sectionIndex) => {
             const completedCount = sectionPuzzles.filter(
               (puzzle) => (puzzle.progress?.foundWords.length || 0) > 0
@@ -131,11 +180,14 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
               >
                 <h2 className="classic-section-title">{sectionLabel} {sectionIndex + 1}</h2>
                 <p className="classic-section-info">
-                  {language === 'en' ? 'Heptagrams' : 'Heptagramas'} {sectionRangeLabel(sectionIndex)}
+                  {t('classic.heptagrams_label')} {sectionRangeLabel(sectionIndex, activePool.length)}
                 </p>
-                <p className="classic-section-info">{sectionPuzzles.length} puzzles</p>
+                <p className="classic-section-info">{sectionPuzzles.length} {t('classic.puzzles_label')}</p>
+                {activeMenu === 'long' && (
+                  <p className="classic-section-info">{t('classic.long_hint')}</p>
+                )}
                 <p className="classic-section-progress">
-                  {completedCount} / {sectionPuzzles.length} {language === 'en' ? 'started' : 'iniciados'}
+                  {completedCount} / {sectionPuzzles.length} {t('classic.started_label')}
                 </p>
               </button>
             );

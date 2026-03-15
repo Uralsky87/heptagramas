@@ -55,7 +55,7 @@ export const THEMES: Theme[] = [
       levelBgEnd: '#d4c2a8',
       levelBarStart: '#b49571',
       levelBarEnd: '#927759',
-      uiBackground: '#f6eedf',
+      uiBackground: '#faf3e7',
       uiSurface: '#fbf5ea',
       uiSurfaceAlt: '#f4ebdc',
       uiSurfaceAlt2: '#ece0cd',

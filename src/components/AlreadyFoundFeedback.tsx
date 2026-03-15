@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/alreadyFoundFeedback.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AlreadyFoundFeedbackProps {
   isVisible: boolean;
@@ -8,6 +9,7 @@ interface AlreadyFoundFeedbackProps {
 
 export default function AlreadyFoundFeedback({ isVisible, onAnimationEnd }: AlreadyFoundFeedbackProps) {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isVisible) {
@@ -25,7 +27,7 @@ export default function AlreadyFoundFeedback({ isVisible, onAnimationEnd }: Alre
 
   return (
     <div className="already-found-feedback">
-      <span className="already-found-text">Palabra ya encontrada</span>
+      <span className="already-found-text">{t('feedback.already_found')}</span>
     </div>
   );
 }

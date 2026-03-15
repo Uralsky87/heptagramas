@@ -1,6 +1,7 @@
 import type { Puzzle } from '../types';
 import { isToday } from '../lib/dailyPuzzle';
 import { loadPuzzleProgress } from '../lib/storageAdapter';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface PuzzleSelectorProps {
   puzzles: Puzzle[];
@@ -17,6 +18,8 @@ export default function PuzzleSelector({
   onSelectDaily,
   onClose,
 }: PuzzleSelectorProps) {
+  const { t } = useLanguage();
+
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     onSelectPuzzle(puzzle);
     onClose();
@@ -42,7 +45,7 @@ export default function PuzzleSelector({
     <div className="puzzle-selector-overlay" onClick={onClose}>
       <div className="puzzle-selector-modal" onClick={(e) => e.stopPropagation()}>
         <header className="modal-header">
-          <h2>🎯 Elegir Puzzle</h2>
+          <h2>{t('selector.title')}</h2>
           <button className="btn-close-modal" onClick={onClose}>
             ✕
           </button>
@@ -53,14 +56,14 @@ export default function PuzzleSelector({
           <button className="btn-daily-puzzle" onClick={handleSelectDaily}>
             <span className="daily-icon">📅</span>
             <div className="daily-text">
-              <strong>Puzzle del Día</strong>
-              <small>Actualizado diariamente</small>
+              <strong>{t('selector.daily_title')}</strong>
+              <small>{t('selector.daily_subtitle')}</small>
             </div>
           </button>
 
           {/* Lista de puzzles */}
           <div className="puzzles-list">
-            <h3>Todos los Puzzles</h3>
+            <h3>{t('selector.all_puzzles')}</h3>
             <div className="puzzles-grid">
               {puzzles.map((puzzle) => {
                 const progress = getProgressInfo(puzzle.id);
@@ -77,7 +80,7 @@ export default function PuzzleSelector({
                       <span className="puzzle-number">
                         {puzzle.id.replace(/\D/g, '')}
                       </span>
-                      {isDailyPuzzle && <span className="badge-daily">HOY</span>}
+                      {isDailyPuzzle && <span className="badge-daily">{t('selector.today_badge')}</span>}
                     </div>
                     <div className="puzzle-card-letters">
                       <span className="center-letter">{puzzle.center.toUpperCase()}</span>
@@ -90,12 +93,12 @@ export default function PuzzleSelector({
                     {progress && (
                       <div className="puzzle-card-progress">
                         <small>
-                          {progress.wordsFound} palabra{progress.wordsFound !== 1 ? 's' : ''}
+                          {progress.wordsFound} {t('daily.words')}
                           {progress.superHeptas > 0 && ` · ${progress.superHeptas}⭐`}
                         </small>
                       </div>
                     )}
-                    {isCurrent && <div className="badge-current">Actual</div>}
+                    {isCurrent && <div className="badge-current">{t('selector.current_badge')}</div>}
                   </button>
                 );
               })}

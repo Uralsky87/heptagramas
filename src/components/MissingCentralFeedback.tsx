@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/missingCentralFeedback.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface MissingCentralFeedbackProps {
   isVisible: boolean;
@@ -8,6 +9,7 @@ interface MissingCentralFeedbackProps {
 
 export default function MissingCentralFeedback({ isVisible, onAnimationEnd }: MissingCentralFeedbackProps) {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isVisible) {
@@ -25,7 +27,7 @@ export default function MissingCentralFeedback({ isVisible, onAnimationEnd }: Mi
 
   return (
     <div className="missing-central-feedback">
-      <span className="missing-central-text">Falta letra central</span>
+      <span className="missing-central-text">{t('feedback.missing_central')}</span>
     </div>
   );
 }

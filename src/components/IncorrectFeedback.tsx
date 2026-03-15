@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/incorrectFeedback.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface IncorrectFeedbackProps {
   isVisible: boolean;
@@ -8,6 +9,7 @@ interface IncorrectFeedbackProps {
 
 export default function IncorrectFeedback({ isVisible, onAnimationEnd }: IncorrectFeedbackProps) {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isVisible) {
@@ -25,7 +27,7 @@ export default function IncorrectFeedback({ isVisible, onAnimationEnd }: Incorre
 
   return (
     <div className="incorrect-feedback">
-      <span className="incorrect-text">Prueba de nuevo</span>
+      <span className="incorrect-text">{t('feedback.try_again')}</span>
     </div>
   );
 }

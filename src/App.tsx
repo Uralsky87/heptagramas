@@ -17,8 +17,6 @@ import { applyTheme, getThemeById } from './lib/themes';
 import { applyFont } from './lib/fonts';
 import { migrateFromLocalStorage, getPlayerState, openDatabase } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
-import puzzlesData from './data/puzzles.json';
-import puzzlesEnData from './data/puzzles_en.json';
 
 // Importar tests solo en desarrollo (disponibles en consola)
 if (import.meta.env.DEV) {
@@ -27,9 +25,6 @@ if (import.meta.env.DEV) {
   import('./lib/testExoticsScoring');
 }
 
-const PUZZLES_ES: Puzzle[] = puzzlesData as Puzzle[];
-const PUZZLES_EN: Puzzle[] = puzzlesEnData as Puzzle[];
-
 type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'settings';
 
 export default function App() {
@@ -37,11 +32,11 @@ export default function App() {
   const [selectedClassicPuzzle, setSelectedClassicPuzzle] = useState<Puzzle | null>(null);
   const [selectedDailyDateKey, setSelectedDailyDateKey] = useState<string | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryData | null>(null);
+  const [puzzles, setPuzzles] = useState<Puzzle[] | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
   const { updateAvailable, isUpdating, handleUpdate } = useUpdateChecker();
-  const { language } = useLanguage();
-  const puzzles = language === 'en' ? PUZZLES_EN : PUZZLES_ES;
+  const { language, t } = useLanguage();
 
   // Inicializar IndexedDB y migrar datos
   useEffect(() => {
@@ -141,6 +136,39 @@ export default function App() {
       });
   }, [language]);
 
+  // Cargar puzzles por idioma de forma lazy para reducir bundle inicial.
+  useEffect(() => {
+    let isCancelled = false;
+    setPuzzles(null);
+
+    async function loadPuzzlesByLanguage() {
+      try {
+        console.log(`[App] Cargando puzzles en idioma: ${language}`);
+        if (language === 'en') {
+          const module = await import('./data/puzzles_en.json');
+          if (!isCancelled) {
+            setPuzzles(module.default as Puzzle[]);
+          }
+          return;
+        }
+
+        const module = await import('./data/puzzles.json');
+        if (!isCancelled) {
+          setPuzzles(module.default as Puzzle[]);
+        }
+      } catch (error) {
+        console.error('[App] Error al cargar puzzles:', error);
+        alert('Error al cargar los puzzles. Por favor recarga la página.');
+      }
+    }
+
+    loadPuzzlesByLanguage();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [language]);
+
   const handleNavigate = (screen: Screen) => {
     setCurrentScreen(screen);
     setNavigationStack([...navigationStack, screen]);
@@ -214,7 +242,7 @@ export default function App() {
   };
 
   // Mostrar carga mientras se inicializa
-  if (!isHydrated || !dictionary) {
+  if (!isHydrated || !dictionary || !puzzles) {
     return (
       <>
         <UpdateBanner 
@@ -226,7 +254,11 @@ export default function App() {
           <header className="header">
             <h1>🌟 Palabrarium</h1>
             <p className="puzzle-title">
-              {!isHydrated ? 'Inicializando almacenamiento...' : 'Cargando diccionario...'}
+              {!isHydrated
+                ? t('common.initializing')
+                : !dictionary
+                  ? t('common.loading_dictionary')
+                  : t('common.loading_puzzles')}
             </p>
           </header>
         </div>

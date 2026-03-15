@@ -50,7 +50,10 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       return;
     }
     
-    const confirmMsg = `¿Terminar esta run?\n\nPuntos: ${run.scorePoints} P\nXP acumulada: ${run.xpEarned}\nPalabras: ${run.foundWords.length}\n\nEl XP se sumará a tu nivel global.`;
+    const confirmMsg = t('exotic.confirm_end_run')
+      .replace('{0}', String(run.scorePoints))
+      .replace('{1}', String(run.xpEarned))
+      .replace('{2}', String(run.foundWords.length));
     
     if (confirm(confirmMsg)) {
       // Sumar XP al playerState global
@@ -107,12 +110,12 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
           onStart(newRun.runId);
         } else {
           // No se pudo generar puzzle
-          alert('No se pudo generar un puzzle válido. Por favor intenta de nuevo.');
+          alert(t('exotic.alert_generate_invalid'));
           setIsGenerating(false);
         }
       } catch (error) {
         console.error('[ExoticsHome] Error al generar puzzle:', error);
-        alert('Error al generar puzzle. Por favor intenta de nuevo.');
+        alert(t('exotic.alert_generate_error'));
         setIsGenerating(false);
       }
     }
@@ -127,7 +130,7 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label="Volver" title="Volver">
+          <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
             ←
           </button>
         }
@@ -136,19 +139,19 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
       <div className="exotics-home-container">
         <div className="exotics-tutorial">
           <div className="exotics-tutorial-content">
-            <h3 className="exotics-tutorial-title">¿Cómo funcionan los heptagramas exóticos?</h3>
+            <h3 className="exotics-tutorial-title">{t('exotic.tutorial_title')}</h3>
             <div className="exotics-tutorial-list">
               <div className="tutorial-item">
                 <span className="tutorial-icon">💫</span>
-                <span className="tutorial-text">Gana puntos completando palabras</span>
+                <span className="tutorial-text">{t('exotic.tutorial_1')}</span>
               </div>
               <div className="tutorial-item">
                 <span className="tutorial-icon">🔑</span>
-                <span className="tutorial-text">Utiliza los puntos para desbloquear habilidades</span>
+                <span className="tutorial-text">{t('exotic.tutorial_2')}</span>
               </div>
               <div className="tutorial-item">
                 <span className="tutorial-icon">📈</span>
-                <span className="tutorial-text">Cuanto más progreses, más experiencia acumularás</span>
+                <span className="tutorial-text">{t('exotic.tutorial_3')}</span>
               </div>
             </div>
           </div>
@@ -161,43 +164,43 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         >
           {isGenerating ? (
             <>
-              <span className="spinner">⏳</span> Generando puzzle...
+              <span className="spinner">⏳</span> {t('exotic.generating')}
             </>
           ) : hasRun ? (
-            '▶️ Continuar Partida'
+            t('exotic.continue_run')
           ) : (
-            '🚀 Iniciar Nueva Partida'
+            t('exotic.new_run')
           )}
         </button>
 
         {hasRun && runInfo && (
           <div className="exotics-active-run">
-            <h3>🎮 Partida en progreso</h3>
+            <h3>{t('exotic.run_in_progress')}</h3>
             <div className="run-stats">
               <div className="run-stat">
-                <span className="run-stat-label">Palabras</span>
+                <span className="run-stat-label">{t('exotic.stats_words')}</span>
                 <span className="run-stat-value">{runInfo.foundWords}</span>
               </div>
               <div className="run-stat">
-                <span className="run-stat-label">Puntos</span>
+                <span className="run-stat-label">{t('exotic.stats_points')}</span>
                 <span className="run-stat-value">{runInfo.scorePoints}</span>
               </div>
               <div className="run-stat">
-                <span className="run-stat-label">Letras extra</span>
+                <span className="run-stat-label">{t('exotic.stats_extra_letters')}</span>
                 <span className="run-stat-value">{runInfo.extraLetters}</span>
               </div>
             </div>
             <button className="btn-end-run" onClick={handleEndRun}>
-              🛑 Terminar Partida
+              {t('exotic.end_run')}
             </button>
           </div>
         )}
 
         {isGenerating && (
           <div className="generation-info">
-            <p>Intentos: {generationProgress.attempts}</p>
-            <p>Última solución: {generationProgress.lastCount} palabras</p>
-            <p className="generation-hint">Buscando puzzle con 50-500 soluciones...</p>
+            <p>{t('exotic.attempts').replace('{0}', String(generationProgress.attempts))}</p>
+            <p>{t('exotic.last_solution_words').replace('{0}', String(generationProgress.lastCount))}</p>
+            <p className="generation-hint">{t('exotic.generation_hint')}</p>
           </div>
         )}
       </div>

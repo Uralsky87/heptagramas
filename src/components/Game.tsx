@@ -295,7 +295,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
-          <button className="top-bar-btn top-bar-btn-left" onClick={handleBackButton} aria-label="Volver" title="Volver">
+          <button className="top-bar-btn top-bar-btn-left" onClick={handleBackButton} aria-label={t('common.back')} title={t('common.back')}>
             ←
           </button>
         }

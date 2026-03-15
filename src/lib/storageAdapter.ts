@@ -8,6 +8,7 @@
 
 import type { PuzzleProgress, PlayerState } from '../types';
 import {
+  clearAllData as clearAllDataDB,
   setPlayerState as setPlayerStateDB,
   getClassicProgress,
   setClassicProgress,
@@ -320,8 +321,7 @@ export async function saveSettings(settings: { soundEnabled: boolean }): Promise
 // ========================================
 
 export async function clearAllData(): Promise<void> {
-  const { clearAllData: clearDB } = await import('../storage');
-  await clearDB();
+  await clearAllDataDB();
   activePuzzleIdCache = null;
   (window as any).__playerStateCache = null;
 }

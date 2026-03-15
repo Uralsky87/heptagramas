@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ExoticModeToggleProps {
   isActive: boolean;
@@ -13,6 +14,7 @@ export default function ExoticModeToggle({
   usedLetters,
   onToggle,
 }: ExoticModeToggleProps) {
+  const { t } = useLanguage();
   const [showSelector, setShowSelector] = useState(false);
 
   // Generar letras disponibles (a-z excepto las ya usadas)
@@ -46,14 +48,14 @@ export default function ExoticModeToggle({
         <button
           className={`btn-exotic ${isActive ? 'active' : ''}`}
           onClick={handleToggle}
-          title="Modo Exótico: añade 1 letra extra"
+          title={t('exotic.toggle_title')}
         >
-          ✨ Exótico
+          {t('exotic.toggle_button')}
           {isActive && currentLetter && <span className="exotic-letter-badge">{currentLetter.toUpperCase()}</span>}
         </button>
         {isActive && (
           <div className="exotic-warning">
-            ⚠️ Total de palabras aumentará considerablemente
+            {t('exotic.toggle_warning')}
           </div>
         )}
       </div>
@@ -61,10 +63,10 @@ export default function ExoticModeToggle({
       {showSelector && (
         <div className="exotic-selector-overlay" onClick={handleCancel}>
           <div className="exotic-selector-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Selecciona letra extra</h3>
+            <h3>{t('exotic.select_extra_letter')}</h3>
             <p className="exotic-selector-hint">
-              Añade una letra al conjunto permitido (8 letras total).
-              <br />La letra central sigue siendo obligatoria.
+              {t('exotic.selector_hint_line1')}
+              <br />{t('exotic.selector_hint_line2')}
             </p>
             
             <div className="exotic-letters-grid">
@@ -80,7 +82,7 @@ export default function ExoticModeToggle({
             </div>
 
             <button className="btn-secondary" onClick={handleCancel}>
-              Cancelar
+              {t('settings.cancel_btn')}
             </button>
           </div>
         </div>
