@@ -4,6 +4,7 @@ import { getLevelProgress } from '../lib/xpSystem';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import { useLanguage } from '../contexts/LanguageContext';
+import { APP_VERSION } from '../lib/appInfo';
 
 interface HomeProps {
   onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
@@ -35,6 +36,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
       <div className="home-screen">
         <TopBar 
           onSettingsClick={onNavigateToSettings || (() => {})}
+          titlePlate
         />
 
         <header className="home-header">
@@ -112,7 +114,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
         </div>
 
         <div className="app-version">
-          {t('home.version')} v0.6
+          {t('home.version')} v{APP_VERSION}
         </div>
       </div>
     </PageContainer>

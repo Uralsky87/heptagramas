@@ -4,6 +4,7 @@ import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import BackChevronIcon from './icons/BackChevronIcon';
 import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
@@ -1060,7 +1061,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
           showSettingsButton={false}
           leftButton={
             <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
-              ←
+              <BackChevronIcon />
             </button>
           }
         />
@@ -1094,7 +1095,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
         showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
-            ←
+            <BackChevronIcon />
           </button>
         }
       />

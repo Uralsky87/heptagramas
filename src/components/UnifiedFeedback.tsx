@@ -11,19 +11,19 @@ interface UnifiedFeedbackProps {
 
 const FEEDBACK_CONFIG = {
   'correct': {
-    color: '#22c55e',
+    color: 'var(--theme-feedback-success)',
     duration: 1500,
   },
   'incorrect': {
-    color: '#ef4444',
+    color: 'var(--theme-feedback-error)',
     duration: 1500,
   },
   'already-found': {
-    color: '#3b82f6',
+    color: 'var(--theme-feedback-info)',
     duration: 1500,
   },
   'missing-central': {
-    color: '#f97316',
+    color: 'var(--theme-feedback-warning)',
     duration: 2500,
   },
 } as const;

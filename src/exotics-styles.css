@@ -1,7 +1,7 @@
 /* Botón cambiar puzzle gratis */
 .btn-change-puzzle-free {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #c49a63 0%, #ad7b58 100%);
+  color: #fffaf2;
   border: none;
   border-radius: 8px;
   padding: 12px 20px;
@@ -11,12 +11,12 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-bottom: 8px;
-  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--theme-shadow-rgb), 0.24);
 }
 
 .btn-change-puzzle-free:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(67, 233, 123, 0.4);
+  box-shadow: 0 6px 16px rgba(var(--theme-shadow-rgb), 0.3);
 }
 
 .btn-change-puzzle-free:active {
@@ -25,7 +25,7 @@
 
 /* Indicador de cálculo de soluciones */
 .calculating-indicator {
-  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  background: linear-gradient(135deg, #e7d4b5 0%, #d3b082 100%);
   border-radius: 8px;
   padding: 12px;
   text-align: center;
@@ -44,7 +44,7 @@
   margin: 0;
   font-size: 12px;
   font-weight: 600;
-  color: #2d3436;
+  color: var(--theme-ui-text);
 }
 
 @keyframes pulse {
@@ -54,7 +54,7 @@
 
 /* Botón Habilidades */
 .btn-abilities {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #8f6347 0%, #b17b57 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -65,12 +65,12 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-bottom: 8px;
-  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--theme-shadow-rgb), 0.24);
 }
 
 .btn-abilities:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 6px 16px rgba(var(--theme-shadow-rgb), 0.3);
 }
 
 .btn-abilities:active {
@@ -104,13 +104,13 @@
 
 /* Panel de pistas de longitud */
 .length-hints-panel {
-  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  background: linear-gradient(135deg, #e8dbc6 0%, #dbc1a0 100%);
   border-radius: 12px;
   padding: 16px;
   margin-top: 16px;
   position: relative;
-  color: #2d3436;
-  box-shadow: 0 4px 12px rgba(253, 203, 110, 0.3);
+  color: var(--theme-ui-text);
+  box-shadow: 0 4px 12px rgba(var(--theme-shadow-rgb), 0.18);
 }
 
 .length-hints-panel h4 {
@@ -135,18 +135,18 @@
 
 .hint-count {
   font-weight: 700;
-  color: #e17055;
+  color: #9b6b4a;
 }
 
 /* Panel de letra inicial */
 .start-letter-panel {
-  background: linear-gradient(135deg, #a8e6cf 0%, #56d9cd 100%);
+  background: linear-gradient(135deg, #e9e0d0 0%, #d8c5a9 100%);
   border-radius: 12px;
   padding: 16px;
   margin-top: 16px;
   position: relative;
-  color: #2d3436;
-  box-shadow: 0 4px 12px rgba(86, 217, 205, 0.3);
+  color: var(--theme-ui-text);
+  box-shadow: 0 4px 12px rgba(var(--theme-shadow-rgb), 0.18);
 }
 
 .start-letter-list {
@@ -168,7 +168,7 @@
 .letter-label {
   font-weight: 700;
   min-width: 30px;
-  color: #2d3436;
+  color: var(--theme-ui-text);
 }
 
 .letter-stats {
@@ -178,7 +178,7 @@
 
 .pending-count {
   font-size: 12px;
-  color: #a56a52;
+  color: #8f6347;
   margin-left: 8px;
 }
 
@@ -833,13 +833,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(91, 74, 166, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--theme-shadow-rgb), 0.24);
   flex: 0 0 auto;
 }
 
 .btn-abilities-header:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(245, 87, 108, 0.5);
+  box-shadow: 0 6px 16px rgba(var(--theme-shadow-rgb), 0.32);
 }
 
 .btn-abilities-header:active {

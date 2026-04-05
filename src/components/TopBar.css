@@ -9,7 +9,7 @@
   padding: 12px 0;
   border-bottom: 1px solid var(--theme-ui-border);
   margin-bottom: 24px;
-  font-family: 'Source Code Pro', 'Courier New', monospace !important;
+  font-family: var(--app-font);
 }
 
 /* Botones de la barra superior */
@@ -27,7 +27,7 @@
   font-size: 8px;
   font-weight: 600;
   color: var(--theme-ui-text);
-  border-radius: 8px;
+  border-radius: 999px;
   transition: all 0.2s ease;
   touch-action: manipulation;
   max-width: 120px;
@@ -38,7 +38,8 @@
 
 .top-bar-btn:hover {
   background: var(--theme-ui-surface-alt);
-  border-color: var(--theme-ui-border);
+  border-color: var(--theme-ui-icon);
+  transform: translateY(-1px);
 }
 
 .top-bar-btn:active {
@@ -54,6 +55,18 @@
   height: 40px;
   padding: 0;
   font-size: 16px;
+}
+
+.top-bar-back-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: translateX(-0.5px);
 }
 
 /* Botón derecha - alineado a la derecha */
@@ -72,17 +85,34 @@
 .top-bar-title {
   margin: 0;
   padding: 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.7px;
   text-align: center;
-  font-family: 'Source Code Pro', 'Courier New', monospace !important;
+  font-family: var(--app-font);
   color: var(--theme-ui-text);
   /* Evitar overflow en pantallas pequeñas */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   /* El grid auto centra esto debido a grid-template-columns: 1fr auto 1fr */
+}
+
+.top-bar-title-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 10px 24px 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(120, 84, 53, 0.32);
+  background:
+    linear-gradient(180deg, rgba(252, 242, 224, 0.98) 0%, rgba(237, 218, 188, 0.98) 100%);
+  color: #4b3525;
+  box-shadow:
+    0 10px 24px rgba(var(--theme-shadow-rgb), 0.16),
+    inset 0 1px 0 rgba(255, 250, 241, 0.95);
+  text-shadow: 0 1px 0 rgba(255, 248, 238, 0.65);
 }
 
 @media (max-width: 768px) {
@@ -135,5 +165,11 @@
 
   .top-bar-title {
     font-size: 28px;
+  }
+
+  .top-bar-title-plate {
+    min-height: 58px;
+    padding: 12px 28px 14px;
+    border-radius: 20px;
   }
 }

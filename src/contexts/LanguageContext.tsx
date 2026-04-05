@@ -1,38 +1,25 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { clearProgressCache } from '../lib/storageAdapter';
+import InitialLoadingScreen from '../components/InitialLoadingScreen';
 
-export type Language = 'es' | 'en';
-export const ENABLE_ENGLISH = false;
+export type Language = 'es';
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: (lang: Language) => void;
+  setLanguage: (_lang: Language) => void;
   t: (key: string) => string;
 }
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Cargar traducciones
 const translations: Record<Language, Record<string, string>> = {
   es: {},
-  en: {}
 };
 
-// Cargar dinámicamente las traducciones
 const loadTranslations = async () => {
-  try {
-    const esResponse = await fetch('/heptagramas/i18n/es.json');
-    
-    translations.es = await esResponse.json();
-
-    // Mantener EN aparcado: se carga solo si se reactiva la feature flag.
-    if (ENABLE_ENGLISH) {
-      const enResponse = await fetch('/heptagramas/i18n/en.json');
-      translations.en = await enResponse.json();
-    }
-  } catch (err) {
-    console.error('[LanguageProvider] Error cargando traducciones:', err);
-  }
+  const baseUrl = import.meta.env.BASE_URL;
+  const esResponse = await fetch(`${baseUrl}i18n/es.json`);
+  translations.es = await esResponse.json();
 };
 
 interface LanguageProviderProps {
@@ -40,39 +27,33 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Cargar idioma guardado o usar español por defecto
-    const saved = localStorage.getItem('app-language') as Language | null;
-    if (saved === 'en' && !ENABLE_ENGLISH) {
-      return 'es';
-    }
-    return saved || 'es';
-  });
-
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    loadTranslations().then(() => setIsLoaded(true));
+    localStorage.setItem('app-language', 'es');
+    loadTranslations()
+      .then(() => setIsLoaded(true))
+      .catch((err) => {
+        console.error('[LanguageProvider] Error cargando traducciones:', err);
+        setIsLoaded(true);
+      });
   }, []);
 
-  const setLanguage = (lang: Language) => {
-    const nextLanguage: Language = ENABLE_ENGLISH ? lang : 'es';
-    setLanguageState(nextLanguage);
-    localStorage.setItem('app-language', nextLanguage);
-    // Limpiar caché de progreso para forzar recarga desde IndexedDB
+  const setLanguage = (_lang: Language) => {
+    localStorage.setItem('app-language', 'es');
     clearProgressCache();
   };
 
   const t = (key: string): string => {
-    return translations[language][key] || translations.es[key] || key;
+    return translations.es[key] || key;
   };
 
   if (!isLoaded) {
-    return <div className="app"><header className="header"><h1>Loading...</h1></header></div>;
+    return <InitialLoadingScreen message="Preparando biblioteca y textos..." />;
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language: 'es', setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

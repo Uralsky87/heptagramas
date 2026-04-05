@@ -33,7 +33,7 @@ export async function preloadDailySessions(): Promise<void> {
   }
 }
 
-function getSessionKey(language: 'es' | 'en', dateKey: string): string {
+function getSessionKey(language: 'es', dateKey: string): string {
   return `${language}-${dateKey}`;
 }
 
@@ -109,13 +109,31 @@ export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzl
 /**
  * Obtiene o crea la sesión diaria para una fecha
  */
-export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'es' | 'en' = 'es'): DailySession {
+export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'es' = 'es'): DailySession {
   const sessions = loadAllDailySessions();
   const sessionKey = getSessionKey(language, dateKey);
   
   // Si ya existe sesión para este día, retornarla
   if (sessions[sessionKey]) {
-    return sessions[sessionKey];
+    const existingSession = sessions[sessionKey];
+    const storedPuzzle = puzzles.find((puzzle) => puzzle.id === existingSession.puzzleId);
+    const fallbackPuzzle = storedPuzzle || getDailyPuzzleForDate(dateKey, puzzles);
+    const normalizedSession: DailySession = {
+      dateKey,
+      puzzleId: fallbackPuzzle.id,
+      progressId: existingSession.progressId || `daily-${language}-${dateKey}`,
+    };
+
+    if (
+      existingSession.dateKey !== normalizedSession.dateKey ||
+      existingSession.puzzleId !== normalizedSession.puzzleId ||
+      existingSession.progressId !== normalizedSession.progressId
+    ) {
+      sessions[sessionKey] = normalizedSession;
+      saveDailySessions(sessions);
+    }
+
+    return normalizedSession;
   }
   
   // Crear nueva sesión
@@ -131,6 +149,26 @@ export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'e
   saveDailySessions(sessions);
   
   return newSession;
+}
+
+/**
+ * Resuelve el puzzle real asociado a una sesion diaria.
+ * Prioriza el puzzleId guardado para mantener consistencia historica.
+ */
+export function getPuzzleForDailySession(session: Pick<DailySession, 'dateKey' | 'puzzleId'>, puzzles: Puzzle[]): Puzzle {
+  const storedPuzzle = puzzles.find((puzzle) => puzzle.id === session.puzzleId);
+  if (storedPuzzle) {
+    return storedPuzzle;
+  }
+
+  if (import.meta.env.DEV) {
+    console.warn(
+      `[DailySession] Puzzle "${session.puzzleId}" no encontrado para ${session.dateKey}. ` +
+      'Usando fallback por fecha.'
+    );
+  }
+
+  return getDailyPuzzleForDate(session.dateKey, puzzles);
 }
 
 /**

@@ -6,17 +6,23 @@
   display: flex;
   justify-content: center;   /* centra horizontal */
   align-items: flex-start;
-  background: var(--theme-ui-bg);
+  background: transparent;
 }
 
 .page-container-inner {
   width: 100%;               /* CRÍTICO: 100% para no shrink-wrap */
   max-width: 480px;
   padding: 16px;
-  margin: 0;                 /* NO usar margin:auto, el outer centra con flex */
+  margin: 18px 0 24px 0;                 /* NO usar margin:auto, el outer centra con flex */
   display: flex;
   flex-direction: column;
   font-family: var(--app-font);
+  background: linear-gradient(180deg, rgba(240, 223, 195, 0.96) 0%, rgba(231, 210, 177, 0.94) 100%);
+  border: 1px solid rgba(143, 109, 77, 0.8);
+  border-radius: 24px;
+  box-shadow:
+    0 22px 60px rgba(20, 28, 26, 0.32),
+    0 4px 18px rgba(92, 74, 55, 0.18);
   /* TEMPORAL: borde rojo para verificar centrado en móvil */
   /* border: 2px solid red; */
 }

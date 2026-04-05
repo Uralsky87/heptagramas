@@ -6,6 +6,7 @@ import PuzzleStats from './PuzzleStats';
 import PuzzleSelector from './PuzzleSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import BackChevronIcon from './icons/BackChevronIcon';
 import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
@@ -85,13 +86,8 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     }
   }, [currentPuzzle, dictionary]);
 
-  // Cargar progreso al iniciar o cambiar puzzle
-  useEffect(() => {
-    loadPuzzleProgressState(progressId);
-  }, [progressId]);
-
   // Cargar progreso de un puzzle
-  const loadPuzzleProgressState = async (progressIdToLoad: string) => {
+  async function loadPuzzleProgressState(progressIdToLoad: string) {
     // Precargar del IndexedDB al cache
     await preloadPuzzleProgress(progressIdToLoad);
 
@@ -112,7 +108,12 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setAchievements({ superHeptaWords: [] });
     }
     setClickedWord('');
-  };
+  }
+
+  // Cargar progreso al iniciar o cambiar puzzle
+  useEffect(() => {
+    loadPuzzleProgressState(progressId);
+  }, [progressId]);
 
   // Guardar progreso del puzzle actual
   const savePuzzleProgressState = () => {
@@ -296,7 +297,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={handleBackButton} aria-label={t('common.back')} title={t('common.back')}>
-            ←
+            <BackChevronIcon />
           </button>
         }
       />

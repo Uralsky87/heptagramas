@@ -11,7 +11,7 @@
 .missing-central-text {
   font-size: 28px;
   font-weight: 500;
-  color: #f97316;
+  color: var(--theme-feedback-warning);
   text-shadow: none;
   animation: fadeInOut 2.5s ease-in-out forwards;
   white-space: nowrap;

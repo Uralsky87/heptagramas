@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
-import { 
-  getDailyKey, 
-  getDailySession, 
-  getLastNDays, 
+import {
+  getDailyKey,
+  getDailySession,
+  getPuzzleForDailySession,
+  getLastNDays,
   formatDateKey,
-  getDailyPuzzleForDate 
 } from '../lib/dailySession';
-import { loadPuzzleProgress } from '../lib/storageAdapter';
+import { loadPuzzleProgress, preloadPuzzleProgress } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import BackChevronIcon from './icons/BackChevronIcon';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface DailyScreenProps {
@@ -36,59 +37,71 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
   const todayKey = getDailyKey();
 
   useEffect(() => {
-    // Obtener últimos 7 días
-    const last7Days = getLastNDays(7);
-    
-    // Crear info inicial
-    const initialInfo: DayInfo[] = last7Days.map(dateKey => {
-      const session = getDailySession(dateKey, puzzles, language);
-      const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
-      const progress = loadPuzzleProgress(session.progressId);
-      
-      return {
-        dateKey,
-        puzzleId: session.puzzleId,
-        progressId: session.progressId,
-        progress,
-        solutionCount: null,
-        puzzle,
-      };
-    });
-    
-    setDaysInfo(initialInfo);
-
-    // Calcular soluciones de forma asíncrona
+    let isCancelled = false;
     const timers: number[] = [];
-    last7Days.forEach((dateKey, index) => {
-      const timer = setTimeout(() => {
-        getDailySession(dateKey, puzzles, language); // Crear sesión si no existe
-        const puzzle = getDailyPuzzleForDate(dateKey, puzzles);
-        const minLen = puzzle.minLen || 3;
-        const allowEnye = puzzle.allowEnye ?? true;
-        const solutions = solvePuzzle(
-          puzzle.center,
-          puzzle.outer,
-          dictionary,
-          minLen,
-          allowEnye
-        );
 
-        setDaysInfo(prev => {
-          const updated = [...prev];
-          if (updated[index]) {
-            updated[index] = {
-              ...updated[index],
-              solutionCount: solutions.length,
-            };
-          }
-          return updated;
-        });
-      }, index * 10);
-      timers.push(timer);
+    async function loadDaysInfo() {
+      const last7Days = getLastNDays(7);
+      const sessions = last7Days.map((dateKey) => getDailySession(dateKey, puzzles, language));
+
+      await Promise.all(sessions.map((session) => preloadPuzzleProgress(session.progressId)));
+      if (isCancelled) {
+        return;
+      }
+
+      const initialInfo: DayInfo[] = last7Days.map((dateKey, index) => {
+        const session = sessions[index];
+        const puzzle = getPuzzleForDailySession(session, puzzles);
+        const progress = loadPuzzleProgress(session.progressId);
+
+        return {
+          dateKey,
+          puzzleId: session.puzzleId,
+          progressId: session.progressId,
+          progress,
+          solutionCount: null,
+          puzzle,
+        };
+      });
+
+      setDaysInfo(initialInfo);
+
+      last7Days.forEach((_, index) => {
+        const timer = window.setTimeout(() => {
+          const session = sessions[index];
+          const puzzle = getPuzzleForDailySession(session, puzzles);
+          const minLen = puzzle.minLen || 3;
+          const allowEnye = puzzle.allowEnye ?? true;
+          const solutions = solvePuzzle(
+            puzzle.center,
+            puzzle.outer,
+            dictionary,
+            minLen,
+            allowEnye
+          );
+
+          setDaysInfo((prev) => {
+            const updated = [...prev];
+            if (updated[index]) {
+              updated[index] = {
+                ...updated[index],
+                solutionCount: solutions.length,
+              };
+            }
+            return updated;
+          });
+        }, index * 10);
+        timers.push(timer);
+      });
+    }
+
+    loadDaysInfo().catch((error) => {
+      console.error('[DailyScreen] Error cargando sesiones diarias:', error);
     });
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      isCancelled = true;
+      timers.forEach((timer) => clearTimeout(timer));
     };
   }, [puzzles, dictionary, language]);
 
@@ -98,28 +111,27 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
 
   return (
     <PageContainer>
-      <TopBar 
-        onThemeClick={() => {}} 
+      <TopBar
+        onThemeClick={() => {}}
         onSettingsClick={() => {}}
         title={t('common.daily')}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
-            ←
+            <BackChevronIcon />
           </button>
         }
       />
 
       <div className="daily-content">
-        {/* Heptagrama de hoy - destacado */}
         {daysInfo.length > 0 && (
           <div className="today-card">
             <div className="today-card-header">
-              <h2>🌟 {t('daily.today_title')}</h2>
+              <h2>{t('daily.today_title')}</h2>
               <p className="today-date">{formatDateKey(todayKey)}</p>
             </div>
-            
+
             <div className="today-card-body">
               <div className="puzzle-preview">
                 <div className="puzzle-letters">
@@ -127,13 +139,13 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                     {daysInfo[0].puzzle.center.toUpperCase()}
                   </span>
                   <span className="outer-letters-big">
-                    {daysInfo[0].puzzle.outer.map(l => l.toUpperCase()).join(' ')}
+                    {daysInfo[0].puzzle.outer.map((letter) => letter.toUpperCase()).join(' ')}
                   </span>
                 </div>
-                
+
                 {daysInfo[0].solutionCount !== null && (
                   <p className="solution-count-big">
-                    📝 {daysInfo[0].solutionCount} {t('daily.words')}
+                    {daysInfo[0].solutionCount} {t('daily.words')}
                   </p>
                 )}
               </div>
@@ -142,10 +154,10 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                 <div className="today-progress">
                   <p className="progress-label">{t('daily.your_progress')}</p>
                   <div className="progress-bar-big">
-                    <div 
-                      className="progress-fill" 
-                      style={{ 
-                        width: `${Math.round((daysInfo[0].progress.foundWords.length / (daysInfo[0].solutionCount || 1)) * 100)}%` 
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${Math.round((daysInfo[0].progress.foundWords.length / (daysInfo[0].solutionCount || 1)) * 100)}%`,
                       }}
                     />
                   </div>
@@ -155,11 +167,11 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                 </div>
               )}
 
-              <button 
+              <button
                 className="btn-play-today"
                 onClick={() => handlePlayDaily(todayKey)}
               >
-                {daysInfo[0].progress && daysInfo[0].progress.foundWords.length > 0 
+                {daysInfo[0].progress && daysInfo[0].progress.foundWords.length > 0
                   ? t('daily.continue')
                   : t('daily.play_now')}
               </button>
@@ -167,7 +179,6 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
           </div>
         )}
 
-        {/* Lista de días anteriores */}
         <div className="previous-days">
           <h3 className="section-title">{t('daily.previous_days')}</h3>
           <p className="section-hint">{t('daily.check_results')}</p>
@@ -175,12 +186,12 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
             {daysInfo.slice(1).map((dayInfo) => {
               const hasProgress = dayInfo.progress && dayInfo.progress.foundWords.length > 0;
               const progressPercent = dayInfo.solutionCount
-                ? Math.round((dayInfo.progress?.foundWords.length || 0) / dayInfo.solutionCount * 100)
+                ? Math.round(((dayInfo.progress?.foundWords.length || 0) / dayInfo.solutionCount) * 100)
                 : 0;
 
               return (
-                <div 
-                  key={dayInfo.dateKey} 
+                <div
+                  key={dayInfo.dateKey}
                   className="day-card"
                   onClick={() => handlePlayDaily(dayInfo.dateKey)}
                 >
@@ -191,7 +202,7 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                         {dayInfo.puzzle.center.toUpperCase()}
                       </span>
                       <span className="outer-letters-small">
-                        {dayInfo.puzzle.outer.map(l => l.toUpperCase()).join(' ')}
+                        {dayInfo.puzzle.outer.map((letter) => letter.toUpperCase()).join(' ')}
                       </span>
                     </div>
                   </div>
@@ -204,8 +215,8 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
                         {hasProgress ? (
                           <div className="day-progress">
                             <div className="progress-bar-small">
-                              <div 
-                                className="progress-fill" 
+                              <div
+                                className="progress-fill"
                                 style={{ width: `${progressPercent}%` }}
                               />
                             </div>

@@ -8,14 +8,15 @@ import ExoticsHome from './components/ExoticsHome';
 import ExoticsPlay from './components/ExoticsPlay';
 import Settings from './components/Settings';
 import UpdateBanner from './components/UpdateBanner';
+import InitialLoadingScreen from './components/InitialLoadingScreen';
 import { useUpdateChecker } from './lib/useUpdateChecker';
 import { useLanguage } from './contexts/LanguageContext';
 import type { Puzzle } from './types';
 import { loadDictionary, type DictionaryData } from './lib/dictionary';
-import { getDailySession, getDailyPuzzleForDate, preloadDailySessions } from './lib/dailySession';
+import { getDailySession, getPuzzleForDailySession, preloadDailySessions } from './lib/dailySession';
 import { applyTheme, getThemeById } from './lib/themes';
 import { applyFont } from './lib/fonts';
-import { migrateFromLocalStorage, getPlayerState, openDatabase } from './storage';
+import { migrateFromLocalStorage, getPlayerState, openDatabase, setPlayerState } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
 
 // Importar tests solo en desarrollo (disponibles en consola)
@@ -27,112 +28,185 @@ if (import.meta.env.DEV) {
 
 type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'settings';
 
+interface AppHistoryState {
+  screen: Screen;
+  dailyDateKey?: string;
+  classicPuzzleId?: string;
+}
+
+const HOME_HISTORY_STATE: AppHistoryState = { screen: 'home' };
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedClassicPuzzle, setSelectedClassicPuzzle] = useState<Puzzle | null>(null);
   const [selectedDailyDateKey, setSelectedDailyDateKey] = useState<string | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryData | null>(null);
+  const [dictionaryLoadError, setDictionaryLoadError] = useState<string | null>(null);
   const [puzzles, setPuzzles] = useState<Puzzle[] | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
   const { updateAvailable, isUpdating, handleUpdate } = useUpdateChecker();
   const { language, t } = useLanguage();
 
+  const cleanupLocalDevCaches = async () => {
+    if (!import.meta.env.DEV) {
+      return;
+    }
+
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+      }
+
+      if ('caches' in window) {
+        const cacheKeys = await caches.keys();
+        await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+      }
+    } catch (error) {
+      console.warn('[App] No se pudieron limpiar caches locales de desarrollo:', error);
+    }
+  };
+
+  const updateScreenFromHistory = (historyState: AppHistoryState | null) => {
+    const nextScreen = historyState?.screen ?? 'home';
+
+    setCurrentScreen(nextScreen);
+
+    if (nextScreen === 'classic-game') {
+      const puzzle = puzzles?.find((item) => item.id === historyState?.classicPuzzleId) ?? null;
+      setSelectedClassicPuzzle(puzzle);
+      setSelectedDailyDateKey(null);
+      setNavigationStack(['home', 'classic', 'classic-game']);
+      return;
+    }
+
+    if (nextScreen === 'daily-game') {
+      setSelectedDailyDateKey(historyState?.dailyDateKey ?? null);
+      setSelectedClassicPuzzle(null);
+      setNavigationStack(['home', 'daily', 'daily-game']);
+      return;
+    }
+
+    setSelectedClassicPuzzle(null);
+    setSelectedDailyDateKey(null);
+
+    if (nextScreen === 'classic') {
+      setNavigationStack(['home', 'classic']);
+      return;
+    }
+
+    if (nextScreen === 'daily') {
+      setNavigationStack(['home', 'daily']);
+      return;
+    }
+
+    if (nextScreen === 'exotic-play') {
+      setNavigationStack(['home', 'exotic', 'exotic-play']);
+      return;
+    }
+
+    if (nextScreen === 'exotic') {
+      setNavigationStack(['home', 'exotic']);
+      return;
+    }
+
+    if (nextScreen === 'settings') {
+      setNavigationStack(['home', 'settings']);
+      return;
+    }
+
+    setNavigationStack(['home']);
+  };
+
+  const pushHistoryState = (state: AppHistoryState) => {
+    window.history.pushState(state, '');
+  };
+
+  const goBackOrFallback = (fallbackState: AppHistoryState) => {
+    if (window.history.state?.screen && navigationStack.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.history.replaceState(fallbackState, '');
+    updateScreenFromHistory(fallbackState);
+  };
+
   // Inicializar IndexedDB y migrar datos
   useEffect(() => {
     async function initialize() {
       try {
         console.log('[App] Inicializando almacenamiento...');
-        
+
         // Abrir base de datos
         await openDatabase();
-        
+
         // Migrar datos de localStorage si es necesario
         await migrateFromLocalStorage();
-        
+
         // Cargar playerState
         const playerState = await getPlayerState();
         if (playerState) {
+          await cleanupLocalDevCaches();
+
+          if (import.meta.env.DEV && playerState.settings.activeTheme !== 'default') {
+            playerState.settings.activeTheme = 'default';
+            await setPlayerState(playerState);
+          }
+
           // Guardar en cache para acceso síncrono
-          (window as any).__playerStateCache = playerState;
+          (window as { __playerStateCache?: unknown }).__playerStateCache = playerState;
           // Aplicar tema
           const theme = getThemeById(playerState.settings.activeTheme);
           applyTheme(theme);
-          applyFont('source-code-pro');
+          applyFont(playerState.settings.activeFont || 'classic');
         }
-        
+
         // Precargar sesiones diarias
         await preloadDailySessions();
-        
+
         // Precargar exotics run
         await preloadExoticsRun();
-        
+
         setIsHydrated(true);
-        console.log('[App] ✓ Almacenamiento inicializado');
+        console.log('[App] Almacenamiento inicializado');
       } catch (error) {
         console.error('[App] Error al inicializar:', error);
         alert('Error al inicializar la aplicación. Por favor recarga la página.');
       }
     }
-    
+
     initialize();
   }, []);
 
   // Manejar el botón "atrás" del navegador/móvil
   useEffect(() => {
-    // Agregar una entrada inicial al historial del navegador
     if (window.history.state === null) {
-      window.history.replaceState({ screen: 'home' }, '');
+      window.history.replaceState(HOME_HISTORY_STATE, '');
     }
 
-    const handlePopState = (_event: PopStateEvent) => {
-      // Si estamos en home, permitir salir de la app
-      if (currentScreen === 'home') {
-        return;
-      }
-      
-      // En cualquier otra pantalla, navegar hacia atrás dentro de la app
-      if (navigationStack.length > 1) {
-        const newStack = [...navigationStack];
-        newStack.pop(); // Eliminar pantalla actual
-        const previousScreen = newStack[newStack.length - 1];
-        
-        setNavigationStack(newStack);
-        setCurrentScreen(previousScreen);
-        
-        // Limpiar estados según la pantalla a la que volvemos
-        if (previousScreen === 'home') {
-          setSelectedDailyDateKey(null);
-          setSelectedClassicPuzzle(null);
-        } else if (previousScreen === 'classic') {
-          setSelectedClassicPuzzle(null);
-        } else if (previousScreen === 'daily') {
-          setSelectedDailyDateKey(null);
-        }
-      } else {
-        // Si solo queda home en el stack, ir a home
-        setCurrentScreen('home');
-        setSelectedDailyDateKey(null);
-        setSelectedClassicPuzzle(null);
-        setNavigationStack(['home']);
-      }
+    const handlePopState = (event: PopStateEvent) => {
+      updateScreenFromHistory((event.state as AppHistoryState | null) ?? null);
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentScreen, navigationStack]);
+  }, [puzzles]);
 
   // Cargar diccionario al iniciar o cambiar idioma
   useEffect(() => {
-    console.log(`[App] Cargando diccionario en idioma: ${language}`);
+    console.log('[App] Cargando diccionario en español');
+    setDictionary(null);
+    setDictionaryLoadError(null);
     loadDictionary(undefined, language)
-      .then(dict => {
+      .then((dict) => {
         console.log('Diccionario recibido:', dict.words.length, 'palabras');
         setDictionary(dict);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error al cargar diccionario:', err);
-        alert('Error al cargar el diccionario. Revisa la consola.');
+        setDictionaryLoadError(err instanceof Error ? err.message : 'Error desconocido');
       });
   }, [language]);
 
@@ -143,15 +217,7 @@ export default function App() {
 
     async function loadPuzzlesByLanguage() {
       try {
-        console.log(`[App] Cargando puzzles en idioma: ${language}`);
-        if (language === 'en') {
-          const module = await import('./data/puzzles_en.json');
-          if (!isCancelled) {
-            setPuzzles(module.default as Puzzle[]);
-          }
-          return;
-        }
-
+        console.log('[App] Cargando puzzles en español');
         const module = await import('./data/puzzles.json');
         if (!isCancelled) {
           setPuzzles(module.default as Puzzle[]);
@@ -169,83 +235,93 @@ export default function App() {
     };
   }, [language]);
 
+  if (dictionaryLoadError) {
+    return (
+      <>
+        <UpdateBanner
+          isVisible={updateAvailable}
+          isUpdating={isUpdating}
+          onUpdate={handleUpdate}
+        />
+        <div className="app">
+          <header className="header">
+            <h1>Palabrarium</h1>
+            <p className="puzzle-title">No se pudo cargar el diccionario.</p>
+            <p className="puzzle-title">{dictionaryLoadError}</p>
+          </header>
+        </div>
+      </>
+    );
+  }
+
   const handleNavigate = (screen: Screen) => {
     setCurrentScreen(screen);
-    setNavigationStack([...navigationStack, screen]);
-    window.history.pushState({ screen }, '');
+    setNavigationStack((prev) => [...prev, screen]);
+    pushHistoryState({ screen });
   };
 
   const handleBackToHome = () => {
-    setCurrentScreen('home');
-    setSelectedDailyDateKey(null);
-    setNavigationStack(['home']);
-    window.history.pushState({ screen: 'home' }, '');
+    goBackOrFallback(HOME_HISTORY_STATE);
   };
 
   const handleBackToExoticHome = () => {
-    setCurrentScreen('exotic');
-    // Mantener el stack hasta exotic
-    const exoticIndex = navigationStack.indexOf('exotic');
-    if (exoticIndex !== -1) {
-      setNavigationStack(navigationStack.slice(0, exoticIndex + 1));
-    } else {
-      setNavigationStack(['home', 'exotic']);
-    }
-    window.history.pushState({ screen: 'exotic' }, '');
+    goBackOrFallback({ screen: 'exotic' });
   };
 
   const handleNavigateToSettings = () => {
     setCurrentScreen('settings');
-    setNavigationStack([...navigationStack, 'settings']);
-    window.history.pushState({ screen: 'settings' }, '');
+    setNavigationStack((prev) => [...prev, 'settings']);
+    pushHistoryState({ screen: 'settings' });
   };
 
   const handleSelectClassicPuzzle = (puzzle: Puzzle) => {
     setSelectedClassicPuzzle(puzzle);
     setCurrentScreen('classic-game');
-    setNavigationStack([...navigationStack, 'classic-game']);
-    window.history.pushState({ screen: 'classic-game' }, '');
+    setNavigationStack((prev) => [...prev, 'classic-game']);
+    pushHistoryState({ screen: 'classic-game', classicPuzzleId: puzzle.id });
   };
 
   const handleBackToClassicList = () => {
-    setCurrentScreen('classic');
-    setSelectedClassicPuzzle(null);
-    // Mantener el stack hasta classic
-    const classicIndex = navigationStack.indexOf('classic');
-    if (classicIndex !== -1) {
-      setNavigationStack(navigationStack.slice(0, classicIndex + 1));
-    } else {
-      setNavigationStack(['home', 'classic']);
-    }
-    window.history.pushState({ screen: 'classic' }, '');
+    goBackOrFallback({ screen: 'classic' });
   };
 
   const handlePlayDaily = (dateKey: string) => {
     setSelectedDailyDateKey(dateKey);
     setCurrentScreen('daily-game');
-    setNavigationStack([...navigationStack, 'daily-game']);
-    window.history.pushState({ screen: 'daily-game' }, '');
+    setNavigationStack((prev) => [...prev, 'daily-game']);
+    pushHistoryState({ screen: 'daily-game', dailyDateKey: dateKey });
   };
 
   const handleBackToDailyList = () => {
-    setCurrentScreen('daily');
-    setSelectedDailyDateKey(null);
-    setSelectedClassicPuzzle(null);
-    // Mantener el stack hasta daily
-    const dailyIndex = navigationStack.indexOf('daily');
-    if (dailyIndex !== -1) {
-      setNavigationStack(navigationStack.slice(0, dailyIndex + 1));
-    } else {
-      setNavigationStack(['home', 'daily']);
-    }
-    window.history.pushState({ screen: 'daily' }, '');
+    goBackOrFallback({ screen: 'daily' });
   };
 
   // Mostrar carga mientras se inicializa
   if (!isHydrated || !dictionary || !puzzles) {
     return (
       <>
-        <UpdateBanner 
+        <UpdateBanner
+          isVisible={updateAvailable}
+          isUpdating={isUpdating}
+          onUpdate={handleUpdate}
+        />
+        <InitialLoadingScreen
+          message={
+            !isHydrated
+              ? t('common.initializing')
+              : !dictionary
+                ? t('common.loading_dictionary')
+                : t('common.loading_puzzles')
+          }
+        />
+      </>
+    );
+  }
+
+  if (false && (!isHydrated || !dictionary || !puzzles)) {
+    return (
+      <>
+        <UpdateBanner
           isVisible={updateAvailable}
           isUpdating={isUpdating}
           onUpdate={handleUpdate}
@@ -266,65 +342,48 @@ export default function App() {
     );
   }
 
-  // Preparar el contenido según la pantalla actual
   let screenContent: React.ReactNode;
 
-  // Pantalla Home
   if (currentScreen === 'home') {
     screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
-  }
-
-  // Pantalla Settings
-  else if (currentScreen === 'settings') {
+  } else if (currentScreen === 'settings') {
     screenContent = <Settings onBack={handleBackToHome} />;
-  }
-
-  // Pantalla DailyScreen (lista de diarios)
-  else if (currentScreen === 'daily') {
+  } else if (currentScreen === 'daily') {
     screenContent = (
-      <DailyScreen 
+      <DailyScreen
         puzzles={puzzles}
         dictionary={dictionary}
         onPlayDaily={handlePlayDaily}
         onBack={handleBackToHome}
       />
     );
-  }
-
-  // Juego Diario específico
-  else if (currentScreen === 'daily-game' && selectedDailyDateKey) {
+  } else if (currentScreen === 'daily-game' && selectedDailyDateKey) {
     const session = getDailySession(selectedDailyDateKey, puzzles, language);
-    const puzzle = getDailyPuzzleForDate(selectedDailyDateKey, puzzles);
-    
+    const puzzle = getPuzzleForDailySession(session, puzzles);
+
     screenContent = (
-      <Game 
+      <Game
         initialPuzzle={puzzle}
         dictionary={dictionary}
         allPuzzles={puzzles}
         onBack={handleBackToDailyList}
         mode="daily"
         dailyProgressId={session.progressId}
-          dailyDateKey={selectedDailyDateKey}
+        dailyDateKey={selectedDailyDateKey}
       />
     );
-  }
-
-  // Pantalla ClassicList
-  else if (currentScreen === 'classic') {
+  } else if (currentScreen === 'classic') {
     screenContent = (
-      <ClassicList 
+      <ClassicList
         puzzles={puzzles}
         dictionary={dictionary}
         onSelectPuzzle={handleSelectClassicPuzzle}
         onBack={handleBackToHome}
       />
     );
-  }
-
-  // Juego Clásico específico
-  else if (currentScreen === 'classic-game' && selectedClassicPuzzle) {
+  } else if (currentScreen === 'classic-game' && selectedClassicPuzzle) {
     screenContent = (
-      <Game 
+      <Game
         initialPuzzle={selectedClassicPuzzle}
         dictionary={dictionary}
         allPuzzles={puzzles}
@@ -332,43 +391,33 @@ export default function App() {
         mode="classic"
       />
     );
-  }
-
-  // Pantalla Exotic (nueva home de exóticos)
-  else if (currentScreen === 'exotic') {
+  } else if (currentScreen === 'exotic') {
     screenContent = (
-      <ExoticsHome 
+      <ExoticsHome
         onBack={handleBackToHome}
         onStart={(runId: string) => {
           console.log('[App] Iniciando run exótica:', runId);
           setCurrentScreen('exotic-play');
-          setNavigationStack([...navigationStack, 'exotic-play']);
-          window.history.pushState({ screen: 'exotic-play' }, '');
+          setNavigationStack((prev) => [...prev, 'exotic-play']);
+          pushHistoryState({ screen: 'exotic-play' });
         }}
         dictionary={dictionary}
       />
     );
-  }
-
-  // Pantalla Exotic Play (gameplay)
-  else if (currentScreen === 'exotic-play') {
+  } else if (currentScreen === 'exotic-play') {
     screenContent = (
-      <ExoticsPlay 
+      <ExoticsPlay
         onBack={handleBackToExoticHome}
         dictionary={dictionary}
       />
     );
-  }
-
-  // Por defecto, mostrar Home
-  else {
+  } else {
     screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
   }
 
-  // Retornar con UpdateBanner envolviendo todo
   return (
     <>
-      <UpdateBanner 
+      <UpdateBanner
         isVisible={updateAvailable}
         isUpdating={isUpdating}
         onUpdate={handleUpdate}

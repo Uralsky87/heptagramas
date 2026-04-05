@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import type { Puzzle } from '../types';
 import { isToday } from '../lib/dailyPuzzle';
-import { loadPuzzleProgress } from '../lib/storageAdapter';
+import { loadPuzzleProgress, preloadPuzzleProgress } from '../lib/storageAdapter';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface PuzzleSelectorProps {
@@ -11,6 +12,11 @@ interface PuzzleSelectorProps {
   onClose: () => void;
 }
 
+interface ProgressInfo {
+  wordsFound: number;
+  superHeptas: number;
+}
+
 export default function PuzzleSelector({
   puzzles,
   currentPuzzleId,
@@ -19,6 +25,41 @@ export default function PuzzleSelector({
   onClose,
 }: PuzzleSelectorProps) {
   const { t } = useLanguage();
+  const [progressByPuzzleId, setProgressByPuzzleId] = useState<Record<string, ProgressInfo | null>>({});
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadProgress() {
+      await Promise.all(puzzles.map((puzzle) => preloadPuzzleProgress(puzzle.id)));
+      if (isCancelled) {
+        return;
+      }
+
+      const nextProgress: Record<string, ProgressInfo | null> = {};
+      puzzles.forEach((puzzle) => {
+        const progress = loadPuzzleProgress(puzzle.id);
+        if (!progress || progress.foundWords.length === 0) {
+          nextProgress[puzzle.id] = null;
+          return;
+        }
+
+        nextProgress[puzzle.id] = {
+          wordsFound: progress.foundWords.length,
+          superHeptas: progress.superHeptaWords.length,
+        };
+      });
+      setProgressByPuzzleId(nextProgress);
+    }
+
+    loadProgress().catch((error) => {
+      console.error('[PuzzleSelector] Error cargando progreso:', error);
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [puzzles]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     onSelectPuzzle(puzzle);
@@ -30,43 +71,30 @@ export default function PuzzleSelector({
     onClose();
   };
 
-  const getProgressInfo = (puzzleId: string) => {
-    const progress = loadPuzzleProgress(puzzleId);
-    if (!progress || progress.foundWords.length === 0) {
-      return null;
-    }
-    return {
-      wordsFound: progress.foundWords.length,
-      superHeptas: progress.superHeptaWords.length,
-    };
-  };
-
   return (
     <div className="puzzle-selector-overlay" onClick={onClose}>
-      <div className="puzzle-selector-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="puzzle-selector-modal" onClick={(event) => event.stopPropagation()}>
         <header className="modal-header">
           <h2>{t('selector.title')}</h2>
           <button className="btn-close-modal" onClick={onClose}>
-            ✕
+            x
           </button>
         </header>
 
         <div className="modal-content">
-          {/* Botón Puzzle del Día */}
           <button className="btn-daily-puzzle" onClick={handleSelectDaily}>
-            <span className="daily-icon">📅</span>
+            <span className="daily-icon" aria-hidden="true">D</span>
             <div className="daily-text">
               <strong>{t('selector.daily_title')}</strong>
               <small>{t('selector.daily_subtitle')}</small>
             </div>
           </button>
 
-          {/* Lista de puzzles */}
           <div className="puzzles-list">
             <h3>{t('selector.all_puzzles')}</h3>
             <div className="puzzles-grid">
               {puzzles.map((puzzle) => {
-                const progress = getProgressInfo(puzzle.id);
+                const progress = progressByPuzzleId[puzzle.id] ?? null;
                 const isDailyPuzzle = isToday(puzzle.id, puzzles);
                 const isCurrent = puzzle.id === currentPuzzleId;
 
@@ -85,8 +113,8 @@ export default function PuzzleSelector({
                     <div className="puzzle-card-letters">
                       <span className="center-letter">{puzzle.center.toUpperCase()}</span>
                       <div className="outer-letters-mini">
-                        {puzzle.outer.slice(0, 6).map((letter, i) => (
-                          <span key={i}>{letter.toUpperCase()}</span>
+                        {puzzle.outer.slice(0, 6).map((letter, index) => (
+                          <span key={index}>{letter.toUpperCase()}</span>
                         ))}
                       </div>
                     </div>
@@ -94,7 +122,7 @@ export default function PuzzleSelector({
                       <div className="puzzle-card-progress">
                         <small>
                           {progress.wordsFound} {t('daily.words')}
-                          {progress.superHeptas > 0 && ` · ${progress.superHeptas}⭐`}
+                          {progress.superHeptas > 0 && ` · ${progress.superHeptas} super`}
                         </small>
                       </div>
                     )}

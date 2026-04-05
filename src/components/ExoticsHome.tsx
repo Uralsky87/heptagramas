@@ -6,6 +6,7 @@ import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import BackChevronIcon from './icons/BackChevronIcon';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface ExoticsHomeProps {
@@ -131,7 +132,7 @@ export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHome
         showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={onBack} aria-label={t('common.back')} title={t('common.back')}>
-            ←
+            <BackChevronIcon />
           </button>
         }
       />

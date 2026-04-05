@@ -5,6 +5,7 @@ interface TopBarProps {
   onThemeClick?: () => void;
   onSettingsClick: () => void;
   title?: string;
+  titlePlate?: boolean;
   showThemeButton?: boolean;
   showSettingsButton?: boolean;
   leftButton?: ReactNode;
@@ -29,6 +30,7 @@ export default function TopBar({
   onThemeClick,
   onSettingsClick,
   title = 'Palabrarium',
+  titlePlate = false,
   showThemeButton = false,
   showSettingsButton = true,
   leftButton,
@@ -53,7 +55,7 @@ export default function TopBar({
       )}
 
       {/* Columna centro */}
-      <h1 className="top-bar-title">{title}</h1>
+      <h1 className={`top-bar-title${titlePlate ? ' top-bar-title-plate' : ''}`}>{title}</h1>
 
       {/* Columna derecha */}
       {rightButton ? (

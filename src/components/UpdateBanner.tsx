@@ -1,4 +1,5 @@
 import '../styles/updateBanner.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface UpdateBannerProps {
   isVisible: boolean;
@@ -7,6 +8,8 @@ interface UpdateBannerProps {
 }
 
 export default function UpdateBanner({ isVisible, isUpdating, onUpdate }: UpdateBannerProps) {
+  const { t } = useLanguage();
+
   if (!isVisible) return null;
 
   return (
@@ -14,14 +17,14 @@ export default function UpdateBanner({ isVisible, isUpdating, onUpdate }: Update
       <div className="update-banner-content">
         <div className="update-banner-text">
           <span className="update-icon">↻</span>
-          <span>Actualización disponible</span>
+          <span>{t('update.available')}</span>
         </div>
         <button
           className="update-banner-button"
           onClick={onUpdate}
           disabled={isUpdating}
         >
-          {isUpdating ? 'Actualizando...' : 'Actualizar'}
+          {isUpdating ? t('update.updating') : t('update.update')}
         </button>
       </div>
     </div>

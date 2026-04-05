@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
-import { loadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
+import { loadPuzzleProgress, preloadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
 import { solvePuzzle } from '../lib/solvePuzzle';
 import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
+import BackChevronIcon from './icons/BackChevronIcon';
 import { useLanguage } from '../contexts/LanguageContext';
 import { CLASSIC_LONG_MIN_SOLUTIONS } from '../lib/puzzleRanges';
 
@@ -29,47 +30,58 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
   const [selectedSectionIndex, setSelectedSectionIndex] = useState<number | null>(null);
   const PUZZLES_PER_SECTION = 20;
 
-  // Filtrar solo puzzles clásicos
-  const classicPuzzles = useMemo(() => puzzles.filter(p => p.mode === 'classic'), [puzzles]);
+  const classicPuzzles = useMemo(() => puzzles.filter((puzzle) => puzzle.mode === 'classic'), [puzzles]);
 
   useEffect(() => {
-    // Inicializar con progreso y solutionCount null
-    const initial: PuzzleWithMeta[] = classicPuzzles.map(puzzle => ({
-      ...puzzle,
-      solutionCount: puzzle.solutionCount ?? null,
-      progress: loadPuzzleProgress(puzzle.id),
-    }));
-    setPuzzlesWithMeta(initial);
-
-    // Calcular soluciones de forma asíncrona
+    let isCancelled = false;
     const timers: number[] = [];
-    classicPuzzles.forEach((puzzle, index) => {
-      const timer = setTimeout(() => {
-        const minLen = puzzle.minLen || 3;
-        const allowEnye = puzzle.allowEnye ?? true;
-        const solutions = solvePuzzle(
-          puzzle.center, 
-          puzzle.outer, 
-          dictionary,
-          minLen,
-          allowEnye
-        );
-        setPuzzlesWithMeta(prev => {
-          const updated = [...prev];
-          if (updated[index]) {
-            updated[index] = {
-              ...updated[index],
-              solutionCount: solutions.length,
-            };
-          }
-          return updated;
-        });
-      }, index * 10); // Escalonar cálculos para no bloquear UI
-      timers.push(timer);
+
+    async function loadClassicPuzzles() {
+      await Promise.all(classicPuzzles.map((puzzle) => preloadPuzzleProgress(puzzle.id)));
+      if (isCancelled) {
+        return;
+      }
+
+      const initial: PuzzleWithMeta[] = classicPuzzles.map((puzzle) => ({
+        ...puzzle,
+        solutionCount: puzzle.solutionCount ?? null,
+        progress: loadPuzzleProgress(puzzle.id),
+      }));
+      setPuzzlesWithMeta(initial);
+
+      classicPuzzles.forEach((puzzle, index) => {
+        const timer = window.setTimeout(() => {
+          const minLen = puzzle.minLen || 3;
+          const allowEnye = puzzle.allowEnye ?? true;
+          const solutions = solvePuzzle(
+            puzzle.center,
+            puzzle.outer,
+            dictionary,
+            minLen,
+            allowEnye
+          );
+          setPuzzlesWithMeta((prev) => {
+            const updated = [...prev];
+            if (updated[index]) {
+              updated[index] = {
+                ...updated[index],
+                solutionCount: solutions.length,
+              };
+            }
+            return updated;
+          });
+        }, index * 10);
+        timers.push(timer);
+      });
+    }
+
+    loadClassicPuzzles().catch((error) => {
+      console.error('[ClassicList] Error cargando progreso:', error);
     });
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      isCancelled = true;
+      timers.forEach((timer) => clearTimeout(timer));
     };
   }, [classicPuzzles, dictionary]);
 
@@ -118,15 +130,15 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
   return (
     <PageContainer>
-      <TopBar 
-        onThemeClick={() => {}} 
+      <TopBar
+        onThemeClick={() => {}}
         onSettingsClick={() => {}}
         title={topBarTitle}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
           <button className="top-bar-btn top-bar-btn-left" onClick={handleBack} aria-label={t('common.back')} title={t('common.back')}>
-            ←
+            <BackChevronIcon />
           </button>
         }
       />
@@ -203,7 +215,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
               {selectedSection.map((puzzle) => {
                 const hasProgress = puzzle.progress && puzzle.progress.foundWords.length > 0;
                 const progressPercent = puzzle.solutionCount
-                  ? Math.round((puzzle.progress?.foundWords.length || 0) / puzzle.solutionCount * 100)
+                  ? Math.round(((puzzle.progress?.foundWords.length || 0) / puzzle.solutionCount) * 100)
                   : 0;
 
                 return (
@@ -217,7 +229,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
                       <div className="puzzle-card-letters">
                         <span className="center-letter">{puzzle.center.toUpperCase()}</span>
                         <span className="outer-letters">
-                          {puzzle.outer.map(l => l.toUpperCase()).join(' ')}
+                          {puzzle.outer.map((letter) => letter.toUpperCase()).join(' ')}
                         </span>
                       </div>
                     </div>
@@ -227,7 +239,7 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
                         {puzzle.solutionCount === null ? (
                           <span className="calculating">{t('classic.calculating')}</span>
                         ) : (
-                          <span>📝 {puzzle.solutionCount} {t('classic.words')}</span>
+                          <span>{puzzle.solutionCount} {t('classic.words')}</span>
                         )}
                       </div>
 
@@ -248,8 +260,8 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
                     <button
                       className={`btn-play ${hasProgress ? 'has-progress' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={(event) => {
+                        event.stopPropagation();
                         handleSelectPuzzle(puzzle as Puzzle);
                       }}
                     >

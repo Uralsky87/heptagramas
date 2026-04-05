@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
 import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
-import { ENABLE_ENGLISH, useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { APP_VERSION } from '../lib/appInfo';
 
 interface SettingsProps {
   onBack: () => void;
@@ -16,9 +17,8 @@ export default function Settings({ onBack }: SettingsProps) {
   const [soundEnabled, setSoundEnabled] = useState(() => loadPlayerState().settings.soundEnabled);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timeoutsRef = useRef<number[]>([]);
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const deleteKeyword = t('settings.delete_keyword');
-  // Eliminar cualquier lógica relacionada con la fuente
 
   const scheduleTimeout = (callback: () => void, delay: number) => {
     const id = window.setTimeout(callback, delay);
@@ -28,7 +28,7 @@ export default function Settings({ onBack }: SettingsProps) {
 
   useEffect(() => {
     return () => {
-      timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
+      timeoutsRef.current.forEach((timeoutId) => clearTimeout(timeoutId));
       timeoutsRef.current = [];
     };
   }, []);
@@ -62,11 +62,9 @@ export default function Settings({ onBack }: SettingsProps) {
     try {
       setIsProcessing(true);
       const result = await importFromJson(file, 'replace');
-      
+
       if (result.success) {
         showMessage('success', '✓ ' + result.message);
-        
-        // Recargar la página después de importar para refrescar el estado
         scheduleTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -78,7 +76,6 @@ export default function Settings({ onBack }: SettingsProps) {
       showMessage('error', `✗ ${t('settings.msg_import_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
-      // Reset input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -100,8 +97,6 @@ export default function Settings({ onBack }: SettingsProps) {
       setIsProcessing(true);
       await clearAllData();
       showMessage('success', `✓ ${t('settings.msg_delete_success')}`);
-      
-      // Recargar la página después de borrar
       scheduleTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -143,8 +138,8 @@ export default function Settings({ onBack }: SettingsProps) {
   return (
     <PageContainer>
       <header className="header">
-        <button 
-          className="btn-back" 
+        <button
+          className="btn-back"
           onClick={onBack}
           disabled={isProcessing}
         >
@@ -162,44 +157,17 @@ export default function Settings({ onBack }: SettingsProps) {
 
         <section className="settings-section">
           <h2>🌐 {t('settings.language')}</h2>
-          {ENABLE_ENGLISH ? (
-            <>
-              <p className="settings-description">
-                {t('settings.language_desc')}
-              </p>
-              <div className="settings-actions">
-                <button 
-                  className={`settings-btn ${language === 'es' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
-                  onClick={() => setLanguage('es')}
-                  disabled={isProcessing}
-                >
-                  🇪🇸 {t('settings.spanish')}
-                </button>
-                <button 
-                  className={`settings-btn ${language === 'en' ? 'settings-btn-primary' : 'settings-btn-secondary'}`}
-                  onClick={() => setLanguage('en')}
-                  disabled={isProcessing}
-                >
-                  🇬🇧 {t('settings.english')}
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="settings-description">
-                {t('settings.language_locked_desc')}
-              </p>
-              <div className="settings-actions">
-                <button
-                  className="settings-btn settings-btn-primary"
-                  onClick={() => setLanguage('es')}
-                  disabled={isProcessing}
-                >
-                  🇪🇸 {t('settings.spanish')}
-                </button>
-              </div>
-            </>
-          )}
+          <p className="settings-description">
+            {t('settings.language_locked_desc')}
+          </p>
+          <div className="settings-actions">
+            <button
+              className="settings-btn settings-btn-primary"
+              disabled
+            >
+              🇪🇸 {t('settings.spanish')}
+            </button>
+          </div>
         </section>
 
         <section className="settings-section">
@@ -230,7 +198,7 @@ export default function Settings({ onBack }: SettingsProps) {
           </p>
 
           <div className="settings-actions">
-            <button 
+            <button
               className="settings-btn settings-btn-primary"
               onClick={handleExport}
               disabled={isProcessing}
@@ -238,7 +206,7 @@ export default function Settings({ onBack }: SettingsProps) {
               📥 {t('settings.export_btn')}
             </button>
 
-            <button 
+            <button
               className="settings-btn settings-btn-primary"
               onClick={handleImportClick}
               disabled={isProcessing}
@@ -271,7 +239,7 @@ export default function Settings({ onBack }: SettingsProps) {
           </p>
 
           {!showDeleteConfirm ? (
-            <button 
+            <button
               className="settings-btn settings-btn-danger"
               onClick={handleDeleteRequest}
               disabled={isProcessing}
@@ -295,14 +263,14 @@ export default function Settings({ onBack }: SettingsProps) {
                 autoFocus
               />
               <div className="settings-confirm-actions">
-                <button 
+                <button
                   className="settings-btn settings-btn-danger"
                   onClick={handleDeleteConfirm}
                   disabled={isProcessing || deleteConfirmText.toLowerCase() !== deleteKeyword.toLowerCase()}
                 >
                   {t('settings.confirm_delete_btn')}
                 </button>
-                <button 
+                <button
                   className="settings-btn settings-btn-secondary"
                   onClick={handleDeleteCancel}
                   disabled={isProcessing}
@@ -320,7 +288,7 @@ export default function Settings({ onBack }: SettingsProps) {
             <strong>{t('settings.info_storage_label')}</strong> {t('settings.info_storage_value')}
           </p>
           <p className="settings-info-text">
-            <strong>{t('settings.info_version_label')}</strong> 1.0.0
+            <strong>{t('settings.info_version_label')}</strong> {APP_VERSION}
           </p>
         </section>
       </div>
