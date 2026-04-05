@@ -16,8 +16,8 @@ export default defineConfig({
         description: 'Juego de palabras con heptagramas de 7 letras. Encuentra todas las palabras posibles en modo clásico o desafíate en el modo exótico con letras extra.',
         start_url: '/heptagramas/',
         display: 'standalone',
-        theme_color: '#6366f1',
-        background_color: '#0f172a',
+        theme_color: '#243630',
+        background_color: '#243630',
         icons: [
           {
             src: '/heptagramas/icon-192.svg',

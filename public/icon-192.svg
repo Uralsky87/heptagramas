@@ -1,40 +1,37 @@
 <svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#3f574f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#243630;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e0bf;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dcc19a;stop-opacity:1" />
     </linearGradient>
     <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ed4b82;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#c9356a;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#ca8151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9f4f32;stop-opacity:1" />
     </linearGradient>
-    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.3" />
-      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0" />
+    <radialGradient id="glowGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#f0c178;stop-opacity:0.28" />
+      <stop offset="100%" style="stop-color:#f0c178;stop-opacity:0" />
     </radialGradient>
   </defs>
-  
-  <!-- Fondo con gradiente -->
-  <rect width="192" height="192" fill="url(#bgGrad)"/>
-  
+
+  <rect width="192" height="192" rx="42" fill="url(#bgGrad)"/>
+
   <g transform="translate(96, 96)">
-    <!-- Resplandor de fondo -->
-    <circle cx="0" cy="0" r="75" fill="url(#glowGrad)"/>
-    
-    <!-- Heptagrama exterior (7 puntas) -->
-    <path d="M 0,-70 L 14,-21 L 63,-42 L 21,0 L 63,42 L 14,21 L 0,70 L -14,21 L -63,42 L -21,0 L -63,-42 L -14,-21 Z" 
-          fill="none" stroke="#fbbf24" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"
-          opacity="0.6"/>
-    
-    <!-- Heptagrama medio -->
-    <path d="M 0,-60 L 12,-18 L 54,-36 L 18,0 L 54,36 L 12,18 L 0,60 L -12,18 L -54,36 L -18,0 L -54,-36 L -12,-18 Z" 
-          fill="none" stroke="#fbbf24" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-    
-    <!-- Heptagrama interior relleno -->
-    <path d="M 0,-45 L 9,-13.5 L 40.5,-27 L 13.5,0 L 40.5,27 L 9,13.5 L 0,45 L -9,13.5 L -40.5,27 L -13.5,0 L -40.5,-27 L -9,-13.5 Z" 
-          fill="#fbbf24" opacity="0.3" stroke="none"/>
-    
-    <!-- Círculo central con gradiente -->
-    <circle cx="0" cy="0" r="18" fill="url(#centerGrad)" stroke="#fbbf24" stroke-width="2"/>
+    <circle cx="0" cy="0" r="74" fill="url(#glowGrad)"/>
+
+    <rect x="-48" y="-48" width="96" height="96" rx="24" fill="url(#boardGrad)" opacity="0.96"/>
+    <rect x="-48" y="-48" width="96" height="96" rx="24" fill="none" stroke="#8f6d4d" stroke-width="2"/>
+
+    <path d="M 0,-36 L 7,-11 L 32,-21 L 11,0 L 32,21 L 7,11 L 0,36 L -7,11 L -32,21 L -11,0 L -32,-21 L -7,-11 Z"
+          fill="none" stroke="#b98b54" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <path d="M 0,-28 L 5.5,-8.5 L 24.5,-16 L 8.5,0 L 24.5,16 L 5.5,8.5 L 0,28 L -5.5,8.5 L -24.5,16 L -8.5,0 L -24.5,-16 L -5.5,-8.5 Z"
+          fill="#e7c78f" opacity="0.65"/>
+
+    <circle cx="0" cy="0" r="13.5" fill="url(#centerGrad)" stroke="#f6e6cd" stroke-width="2"/>
   </g>
 </svg>

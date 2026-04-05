@@ -37,6 +37,7 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
         <TopBar 
           onSettingsClick={onNavigateToSettings || (() => {})}
           titlePlate
+          showSettingsButton={false}
         />
 
         <header className="home-header">
@@ -110,6 +111,26 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
             </span>
             <span className="menu-btn-title">{t('home.exotic_title')}</span>
             <span className="menu-btn-desc">{t('home.exotic_desc')}</span>
+          </button>
+
+          <button
+            className="menu-btn menu-btn-settings menu-btn-compact"
+            onClick={() => onNavigateToSettings?.()}
+          >
+            <span className="menu-btn-icon" aria-hidden="true">
+              <svg className="home-icon" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="6" />
+                <path d="M24 8v5" />
+                <path d="M24 35v5" />
+                <path d="M8 24h5" />
+                <path d="M35 24h5" />
+                <path d="M12.7 12.7l3.6 3.6" />
+                <path d="M31.7 31.7l3.6 3.6" />
+                <path d="M35.3 12.7l-3.6 3.6" />
+                <path d="M16.3 31.7l-3.6 3.6" />
+              </svg>
+            </span>
+            <span className="menu-btn-title">{t('common.settings')}</span>
           </button>
         </div>
 

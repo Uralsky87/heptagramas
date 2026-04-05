@@ -1224,6 +1224,27 @@ svg g {
   background: var(--theme-ui-surface-alt-2);
 }
 
+.menu-btn-settings {
+  background: linear-gradient(180deg, rgba(232, 214, 186, 0.94) 0%, rgba(219, 194, 160, 0.94) 100%);
+}
+
+.menu-btn-compact {
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 20px;
+}
+
+.menu-btn-compact .menu-btn-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.menu-btn-compact .menu-btn-title {
+  font-size: 18px;
+  letter-spacing: 0.08em;
+}
+
 .exotic-info-card {
   background: linear-gradient(135deg, var(--theme-primary-start) 0%, #9f8160 100%);
   padding: 20px;
@@ -1398,6 +1419,10 @@ svg g {
 
   .menu-btn {
     padding: 28px 20px;
+  }
+
+  .menu-btn-compact {
+    padding: 16px 18px;
   }
 
   .menu-btn-icon {

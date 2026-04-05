@@ -156,21 +156,6 @@ export default function Settings({ onBack }: SettingsProps) {
         )}
 
         <section className="settings-section">
-          <h2>🌐 {t('settings.language')}</h2>
-          <p className="settings-description">
-            {t('settings.language_locked_desc')}
-          </p>
-          <div className="settings-actions">
-            <button
-              className="settings-btn settings-btn-primary"
-              disabled
-            >
-              🇪🇸 {t('settings.spanish')}
-            </button>
-          </div>
-        </section>
-
-        <section className="settings-section">
           <h2>🔊 {t('settings.sound')}</h2>
           <p className="settings-description">
             {t('settings.sound_desc')}
