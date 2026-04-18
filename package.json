@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "audit-puzzles": "tsx src/scripts/auditPuzzles.ts",
     "sync-puzzle-counts": "tsx src/scripts/syncPuzzleSolutionCounts.ts",
+    "repair-daily-range": "tsx src/scripts/repairOutOfRangeDaily.ts",
     "generate-puzzles": "tsx src/scripts/validateAndGeneratePuzzles.ts",
     "build-wordlist": "node scripts/buildWordlistNormalized.cjs",
     "test-femininos": "node scripts/buildWordlistNormalized.cjs"

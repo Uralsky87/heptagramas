@@ -18,7 +18,7 @@
   },
   {
     "id": "daily-002",
-    "title": "Diario #002: 127 palabras",
+    "title": "Diario #002: 120 palabras",
     "center": "o",
     "outer": [
       "m",
@@ -29,24 +29,24 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 127,
+    "solutionCount": 120,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-003",
-    "title": "Diario #003: 119 palabras",
-    "center": "d",
+    "title": "Diario #003: 252 palabras",
+    "center": "a",
     "outer": [
-      "s",
-      "a",
-      "n",
-      "l",
-      "o",
-      "ñ"
+      "c",
+      "p",
+      "f",
+      "b",
+      "r",
+      "i"
     ],
     "mode": "daily",
-    "solutionCount": 119,
+    "solutionCount": 252,
     "minLen": 3,
     "allowEnye": true
   },
@@ -137,24 +137,24 @@
   },
   {
     "id": "daily-009",
-    "title": "Diario #009: 111 palabras",
-    "center": "d",
+    "title": "Diario #009: 198 palabras",
+    "center": "r",
     "outer": [
-      "y",
-      "a",
-      "o",
-      "r",
+      "t",
       "ñ",
-      "g"
+      "a",
+      "j",
+      "h",
+      "e"
     ],
     "mode": "daily",
-    "solutionCount": 111,
+    "solutionCount": 198,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-010",
-    "title": "Diario #010: 142 palabras",
+    "title": "Diario #010: 122 palabras",
     "center": "n",
     "outer": [
       "i",
@@ -165,13 +165,13 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 142,
+    "solutionCount": 122,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-011",
-    "title": "Diario #011: 132 palabras",
+    "title": "Diario #011: 122 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -182,24 +182,24 @@
       "h"
     ],
     "mode": "daily",
-    "solutionCount": 132,
+    "solutionCount": 122,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-012",
-    "title": "Diario #012: 100 palabras",
+    "title": "Diario #012: 138 palabras",
     "center": "c",
     "outer": [
-      "t",
-      "u",
+      "v",
+      "r",
       "o",
-      "ñ",
-      "a",
-      "d"
+      "i",
+      "u",
+      "n"
     ],
     "mode": "daily",
-    "solutionCount": 100,
+    "solutionCount": 138,
     "minLen": 3,
     "allowEnye": true
   },
@@ -239,7 +239,7 @@
   },
   {
     "id": "daily-015",
-    "title": "Diario #015: 130 palabras",
+    "title": "Diario #015: 123 palabras",
     "center": "e",
     "outer": [
       "a",
@@ -250,7 +250,7 @@
       "h"
     ],
     "mode": "daily",
-    "solutionCount": 130,
+    "solutionCount": 123,
     "minLen": 3,
     "allowEnye": true
   },
@@ -273,7 +273,7 @@
   },
   {
     "id": "daily-017",
-    "title": "Diario #017: 131 palabras",
+    "title": "Diario #017: 124 palabras",
     "center": "r",
     "outer": [
       "b",
@@ -284,7 +284,7 @@
       "j"
     ],
     "mode": "daily",
-    "solutionCount": 131,
+    "solutionCount": 124,
     "minLen": 3,
     "allowEnye": true
   },
@@ -324,24 +324,24 @@
   },
   {
     "id": "daily-020",
-    "title": "Diario #020: 110 palabras",
+    "title": "Diario #020: 211 palabras",
     "center": "a",
     "outer": [
-      "g",
-      "l",
-      "p",
-      "s",
+      "n",
       "u",
-      "ñ"
+      "r",
+      "ñ",
+      "o",
+      "g"
     ],
     "mode": "daily",
-    "solutionCount": 110,
+    "solutionCount": 211,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-021",
-    "title": "Diario #021: 136 palabras",
+    "title": "Diario #021: 125 palabras",
     "center": "c",
     "outer": [
       "n",
@@ -352,13 +352,13 @@
       "s"
     ],
     "mode": "daily",
-    "solutionCount": 136,
+    "solutionCount": 125,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-022",
-    "title": "Diario #022: 138 palabras",
+    "title": "Diario #022: 125 palabras",
     "center": "r",
     "outer": [
       "x",
@@ -369,7 +369,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 138,
+    "solutionCount": 125,
     "minLen": 3,
     "allowEnye": true
   },
@@ -426,18 +426,18 @@
   },
   {
     "id": "daily-026",
-    "title": "Diario #026: 105 palabras",
-    "center": "a",
+    "title": "Diario #026: 252 palabras",
+    "center": "r",
     "outer": [
-      "s",
-      "m",
-      "h",
-      "u",
-      "r",
-      "ñ"
+      "p",
+      "c",
+      "e",
+      "y",
+      "v",
+      "a"
     ],
     "mode": "daily",
-    "solutionCount": 105,
+    "solutionCount": 252,
     "minLen": 3,
     "allowEnye": true
   },
@@ -477,7 +477,7 @@
   },
   {
     "id": "daily-029",
-    "title": "Diario #029: 135 palabras",
+    "title": "Diario #029: 128 palabras",
     "center": "n",
     "outer": [
       "a",
@@ -488,13 +488,13 @@
       "v"
     ],
     "mode": "daily",
-    "solutionCount": 135,
+    "solutionCount": 128,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-030",
-    "title": "Diario #030: 138 palabras",
+    "title": "Diario #030: 128 palabras",
     "center": "e",
     "outer": [
       "p",
@@ -505,7 +505,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 138,
+    "solutionCount": 128,
     "minLen": 3,
     "allowEnye": true
   },
@@ -596,7 +596,7 @@
   },
   {
     "id": "daily-036",
-    "title": "Diario #036: 139 palabras",
+    "title": "Diario #036: 129 palabras",
     "center": "n",
     "outer": [
       "i",
@@ -607,13 +607,13 @@
       "l"
     ],
     "mode": "daily",
-    "solutionCount": 139,
+    "solutionCount": 129,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-037",
-    "title": "Diario #037: 136 palabras",
+    "title": "Diario #037: 130 palabras",
     "center": "a",
     "outer": [
       "c",
@@ -624,7 +624,7 @@
       "l"
     ],
     "mode": "daily",
-    "solutionCount": 136,
+    "solutionCount": 130,
     "minLen": 3,
     "allowEnye": true
   },
@@ -664,7 +664,7 @@
   },
   {
     "id": "daily-040",
-    "title": "Diario #040: 142 palabras",
+    "title": "Diario #040: 130 palabras",
     "center": "o",
     "outer": [
       "a",
@@ -675,13 +675,13 @@
       "d"
     ],
     "mode": "daily",
-    "solutionCount": 142,
+    "solutionCount": 130,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-041",
-    "title": "Diario #041: 143 palabras",
+    "title": "Diario #041: 131 palabras",
     "center": "n",
     "outer": [
       "a",
@@ -692,13 +692,13 @@
       "h"
     ],
     "mode": "daily",
-    "solutionCount": 143,
+    "solutionCount": 131,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-042",
-    "title": "Diario #042: 141 palabras",
+    "title": "Diario #042: 131 palabras",
     "center": "c",
     "outer": [
       "g",
@@ -709,24 +709,24 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 141,
+    "solutionCount": 131,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-043",
-    "title": "Diario #043: 112 palabras",
-    "center": "r",
+    "title": "Diario #043: 231 palabras",
+    "center": "o",
     "outer": [
-      "u",
-      "ñ",
-      "m",
-      "i",
-      "f",
-      "a"
+      "n",
+      "d",
+      "t",
+      "r",
+      "l",
+      "i"
     ],
     "mode": "daily",
-    "solutionCount": 112,
+    "solutionCount": 231,
     "minLen": 3,
     "allowEnye": true
   },
@@ -749,7 +749,7 @@
   },
   {
     "id": "daily-045",
-    "title": "Diario #045: 138 palabras",
+    "title": "Diario #045: 135 palabras",
     "center": "o",
     "outer": [
       "h",
@@ -760,7 +760,7 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 138,
+    "solutionCount": 135,
     "minLen": 3,
     "allowEnye": true
   },
@@ -817,7 +817,7 @@
   },
   {
     "id": "daily-049",
-    "title": "Diario #049: 148 palabras",
+    "title": "Diario #049: 135 palabras",
     "center": "a",
     "outer": [
       "n",
@@ -828,13 +828,13 @@
       "o"
     ],
     "mode": "daily",
-    "solutionCount": 148,
+    "solutionCount": 135,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-050",
-    "title": "Diario #050: 150 palabras",
+    "title": "Diario #050: 136 palabras",
     "center": "n",
     "outer": [
       "d",
@@ -845,7 +845,7 @@
       "x"
     ],
     "mode": "daily",
-    "solutionCount": 150,
+    "solutionCount": 136,
     "minLen": 3,
     "allowEnye": true
   },
@@ -953,7 +953,7 @@
   },
   {
     "id": "daily-057",
-    "title": "Diario #057: 143 palabras",
+    "title": "Diario #057: 137 palabras",
     "center": "c",
     "outer": [
       "u",
@@ -964,13 +964,13 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 143,
+    "solutionCount": 137,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-058",
-    "title": "Diario #058: 145 palabras",
+    "title": "Diario #058: 138 palabras",
     "center": "p",
     "outer": [
       "g",
@@ -981,7 +981,7 @@
       "t"
     ],
     "mode": "daily",
-    "solutionCount": 145,
+    "solutionCount": 138,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1004,7 +1004,7 @@
   },
   {
     "id": "daily-060",
-    "title": "Diario #060: 143 palabras",
+    "title": "Diario #060: 138 palabras",
     "center": "t",
     "outer": [
       "c",
@@ -1015,13 +1015,13 @@
       "f"
     ],
     "mode": "daily",
-    "solutionCount": 143,
+    "solutionCount": 138,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-061",
-    "title": "Diario #061: 153 palabras",
+    "title": "Diario #061: 140 palabras",
     "center": "n",
     "outer": [
       "s",
@@ -1032,7 +1032,7 @@
       "i"
     ],
     "mode": "daily",
-    "solutionCount": 153,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1072,7 +1072,7 @@
   },
   {
     "id": "daily-064",
-    "title": "Diario #064: 148 palabras",
+    "title": "Diario #064: 140 palabras",
     "center": "o",
     "outer": [
       "v",
@@ -1083,13 +1083,13 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 148,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-065",
-    "title": "Diario #065: 159 palabras",
+    "title": "Diario #065: 140 palabras",
     "center": "n",
     "outer": [
       "l",
@@ -1100,13 +1100,13 @@
       "y"
     ],
     "mode": "daily",
-    "solutionCount": 159,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-066",
-    "title": "Diario #066: 123 palabras",
+    "title": "Diario #066: 141 palabras",
     "center": "r",
     "outer": [
       "c",
@@ -1117,13 +1117,13 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 123,
+    "solutionCount": 141,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-067",
-    "title": "Diario #067: 155 palabras",
+    "title": "Diario #067: 142 palabras",
     "center": "n",
     "outer": [
       "h",
@@ -1134,7 +1134,7 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 155,
+    "solutionCount": 142,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1157,7 +1157,7 @@
   },
   {
     "id": "daily-069",
-    "title": "Diario #069: 159 palabras",
+    "title": "Diario #069: 142 palabras",
     "center": "n",
     "outer": [
       "t",
@@ -1168,7 +1168,7 @@
       "b"
     ],
     "mode": "daily",
-    "solutionCount": 159,
+    "solutionCount": 142,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1191,7 +1191,7 @@
   },
   {
     "id": "daily-071",
-    "title": "Diario #071: 153 palabras",
+    "title": "Diario #071: 143 palabras",
     "center": "g",
     "outer": [
       "q",
@@ -1202,7 +1202,7 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 153,
+    "solutionCount": 143,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1259,7 +1259,7 @@
   },
   {
     "id": "daily-075",
-    "title": "Diario #075: 156 palabras",
+    "title": "Diario #075: 144 palabras",
     "center": "a",
     "outer": [
       "u",
@@ -1270,7 +1270,7 @@
       "q"
     ],
     "mode": "daily",
-    "solutionCount": 156,
+    "solutionCount": 144,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1395,7 +1395,7 @@
   },
   {
     "id": "daily-083",
-    "title": "Diario #083: 161 palabras",
+    "title": "Diario #083: 147 palabras",
     "center": "n",
     "outer": [
       "d",
@@ -1406,7 +1406,7 @@
       "s"
     ],
     "mode": "daily",
-    "solutionCount": 161,
+    "solutionCount": 147,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1463,7 +1463,7 @@
   },
   {
     "id": "daily-087",
-    "title": "Diario #087: 140 palabras",
+    "title": "Diario #087: 148 palabras",
     "center": "o",
     "outer": [
       "l",
@@ -1474,13 +1474,13 @@
       "ñ"
     ],
     "mode": "daily",
-    "solutionCount": 140,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-088",
-    "title": "Diario #088: 133 palabras",
+    "title": "Diario #088: 148 palabras",
     "center": "b",
     "outer": [
       "c",
@@ -1491,13 +1491,13 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 133,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-089",
-    "title": "Diario #089: 167 palabras",
+    "title": "Diario #089: 148 palabras",
     "center": "n",
     "outer": [
       "v",
@@ -1508,7 +1508,7 @@
       "d"
     ],
     "mode": "daily",
-    "solutionCount": 167,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1548,7 +1548,7 @@
   },
   {
     "id": "daily-092",
-    "title": "Diario #092: 157 palabras",
+    "title": "Diario #092: 149 palabras",
     "center": "e",
     "outer": [
       "n",
@@ -1559,7 +1559,7 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 157,
+    "solutionCount": 149,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1582,7 +1582,7 @@
   },
   {
     "id": "daily-094",
-    "title": "Diario #094: 161 palabras",
+    "title": "Diario #094: 150 palabras",
     "center": "n",
     "outer": [
       "o",
@@ -1593,7 +1593,7 @@
       "t"
     ],
     "mode": "daily",
-    "solutionCount": 161,
+    "solutionCount": 150,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1633,7 +1633,7 @@
   },
   {
     "id": "daily-097",
-    "title": "Diario #097: 129 palabras",
+    "title": "Diario #097: 151 palabras",
     "center": "r",
     "outer": [
       "ñ",
@@ -1644,7 +1644,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 129,
+    "solutionCount": 151,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1667,7 +1667,7 @@
   },
   {
     "id": "daily-099",
-    "title": "Diario #099: 174 palabras",
+    "title": "Diario #099: 152 palabras",
     "center": "n",
     "outer": [
       "q",
@@ -1678,13 +1678,13 @@
       "c"
     ],
     "mode": "daily",
-    "solutionCount": 174,
+    "solutionCount": 152,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-100",
-    "title": "Diario #100: 157 palabras",
+    "title": "Diario #100: 153 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -1695,7 +1695,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 157,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1718,7 +1718,7 @@
   },
   {
     "id": "daily-102",
-    "title": "Diario #102: 159 palabras",
+    "title": "Diario #102: 153 palabras",
     "center": "o",
     "outer": [
       "r",
@@ -1729,13 +1729,13 @@
       "l"
     ],
     "mode": "daily",
-    "solutionCount": 159,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-103",
-    "title": "Diario #103: 158 palabras",
+    "title": "Diario #103: 153 palabras",
     "center": "t",
     "outer": [
       "x",
@@ -1746,13 +1746,13 @@
       "g"
     ],
     "mode": "daily",
-    "solutionCount": 158,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-104",
-    "title": "Diario #104: 157 palabras",
+    "title": "Diario #104: 154 palabras",
     "center": "a",
     "outer": [
       "y",
@@ -1763,7 +1763,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 157,
+    "solutionCount": 154,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1820,7 +1820,7 @@
   },
   {
     "id": "daily-108",
-    "title": "Diario #108: 130 palabras",
+    "title": "Diario #108: 154 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -1831,7 +1831,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 130,
+    "solutionCount": 154,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1871,7 +1871,7 @@
   },
   {
     "id": "daily-111",
-    "title": "Diario #111: 140 palabras",
+    "title": "Diario #111: 156 palabras",
     "center": "b",
     "outer": [
       "ñ",
@@ -1882,13 +1882,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 140,
+    "solutionCount": 156,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-112",
-    "title": "Diario #112: 175 palabras",
+    "title": "Diario #112: 156 palabras",
     "center": "n",
     "outer": [
       "z",
@@ -1899,7 +1899,7 @@
       "t"
     ],
     "mode": "daily",
-    "solutionCount": 175,
+    "solutionCount": 156,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1939,7 +1939,7 @@
   },
   {
     "id": "daily-115",
-    "title": "Diario #115: 170 palabras",
+    "title": "Diario #115: 157 palabras",
     "center": "e",
     "outer": [
       "m",
@@ -1950,7 +1950,7 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 170,
+    "solutionCount": 157,
     "minLen": 3,
     "allowEnye": true
   },
@@ -1973,7 +1973,7 @@
   },
   {
     "id": "daily-117",
-    "title": "Diario #117: 163 palabras",
+    "title": "Diario #117: 158 palabras",
     "center": "l",
     "outer": [
       "v",
@@ -1984,7 +1984,7 @@
       "a"
     ],
     "mode": "daily",
-    "solutionCount": 163,
+    "solutionCount": 158,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2041,7 +2041,7 @@
   },
   {
     "id": "daily-121",
-    "title": "Diario #121: 172 palabras",
+    "title": "Diario #121: 160 palabras",
     "center": "l",
     "outer": [
       "o",
@@ -2052,7 +2052,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 172,
+    "solutionCount": 160,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2075,7 +2075,7 @@
   },
   {
     "id": "daily-123",
-    "title": "Diario #123: 170 palabras",
+    "title": "Diario #123: 161 palabras",
     "center": "a",
     "outer": [
       "b",
@@ -2086,7 +2086,7 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 170,
+    "solutionCount": 161,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2126,7 +2126,7 @@
   },
   {
     "id": "daily-126",
-    "title": "Diario #126: 170 palabras",
+    "title": "Diario #126: 162 palabras",
     "center": "i",
     "outer": [
       "s",
@@ -2137,13 +2137,13 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 170,
+    "solutionCount": 162,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-127",
-    "title": "Diario #127: 142 palabras",
+    "title": "Diario #127: 163 palabras",
     "center": "a",
     "outer": [
       "p",
@@ -2154,13 +2154,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 142,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-128",
-    "title": "Diario #128: 187 palabras",
+    "title": "Diario #128: 163 palabras",
     "center": "n",
     "outer": [
       "l",
@@ -2171,13 +2171,13 @@
       "a"
     ],
     "mode": "daily",
-    "solutionCount": 187,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-129",
-    "title": "Diario #129: 140 palabras",
+    "title": "Diario #129: 163 palabras",
     "center": "a",
     "outer": [
       "u",
@@ -2188,13 +2188,13 @@
       "y"
     ],
     "mode": "daily",
-    "solutionCount": 140,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-130",
-    "title": "Diario #130: 156 palabras",
+    "title": "Diario #130: 163 palabras",
     "center": "r",
     "outer": [
       "o",
@@ -2205,7 +2205,7 @@
       "ñ"
     ],
     "mode": "daily",
-    "solutionCount": 156,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2279,7 +2279,7 @@
   },
   {
     "id": "daily-135",
-    "title": "Diario #135: 175 palabras",
+    "title": "Diario #135: 168 palabras",
     "center": "a",
     "outer": [
       "f",
@@ -2290,13 +2290,13 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 175,
+    "solutionCount": 168,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-136",
-    "title": "Diario #136: 189 palabras",
+    "title": "Diario #136: 170 palabras",
     "center": "n",
     "outer": [
       "t",
@@ -2307,7 +2307,7 @@
       "s"
     ],
     "mode": "daily",
-    "solutionCount": 189,
+    "solutionCount": 170,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2330,7 +2330,7 @@
   },
   {
     "id": "daily-138",
-    "title": "Diario #138: 181 palabras",
+    "title": "Diario #138: 171 palabras",
     "center": "s",
     "outer": [
       "i",
@@ -2341,13 +2341,13 @@
       "l"
     ],
     "mode": "daily",
-    "solutionCount": 181,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-139",
-    "title": "Diario #139: 175 palabras",
+    "title": "Diario #139: 171 palabras",
     "center": "o",
     "outer": [
       "b",
@@ -2358,13 +2358,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 175,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-140",
-    "title": "Diario #140: 176 palabras",
+    "title": "Diario #140: 171 palabras",
     "center": "t",
     "outer": [
       "m",
@@ -2375,7 +2375,7 @@
       "v"
     ],
     "mode": "daily",
-    "solutionCount": 176,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2398,7 +2398,7 @@
   },
   {
     "id": "daily-142",
-    "title": "Diario #142: 188 palabras",
+    "title": "Diario #142: 172 palabras",
     "center": "c",
     "outer": [
       "l",
@@ -2409,7 +2409,7 @@
       "d"
     ],
     "mode": "daily",
-    "solutionCount": 188,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2449,7 +2449,7 @@
   },
   {
     "id": "daily-145",
-    "title": "Diario #145: 177 palabras",
+    "title": "Diario #145: 172 palabras",
     "center": "e",
     "outer": [
       "a",
@@ -2460,7 +2460,7 @@
       "v"
     ],
     "mode": "daily",
-    "solutionCount": 177,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2483,7 +2483,7 @@
   },
   {
     "id": "daily-147",
-    "title": "Diario #147: 188 palabras",
+    "title": "Diario #147: 172 palabras",
     "center": "a",
     "outer": [
       "z",
@@ -2494,7 +2494,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 188,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2517,7 +2517,7 @@
   },
   {
     "id": "daily-149",
-    "title": "Diario #149: 169 palabras",
+    "title": "Diario #149: 173 palabras",
     "center": "o",
     "outer": [
       "c",
@@ -2528,13 +2528,13 @@
       "i"
     ],
     "mode": "daily",
-    "solutionCount": 169,
+    "solutionCount": 173,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-150",
-    "title": "Diario #150: 191 palabras",
+    "title": "Diario #150: 173 palabras",
     "center": "c",
     "outer": [
       "f",
@@ -2545,7 +2545,7 @@
       "z"
     ],
     "mode": "daily",
-    "solutionCount": 191,
+    "solutionCount": 173,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2619,7 +2619,7 @@
   },
   {
     "id": "daily-155",
-    "title": "Diario #155: 183 palabras",
+    "title": "Diario #155: 175 palabras",
     "center": "o",
     "outer": [
       "r",
@@ -2630,7 +2630,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 183,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2653,7 +2653,7 @@
   },
   {
     "id": "daily-157",
-    "title": "Diario #157: 184 palabras",
+    "title": "Diario #157: 175 palabras",
     "center": "o",
     "outer": [
       "s",
@@ -2664,7 +2664,7 @@
       "i"
     ],
     "mode": "daily",
-    "solutionCount": 184,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2687,7 +2687,7 @@
   },
   {
     "id": "daily-159",
-    "title": "Diario #159: 198 palabras",
+    "title": "Diario #159: 175 palabras",
     "center": "n",
     "outer": [
       "y",
@@ -2698,7 +2698,7 @@
       "u"
     ],
     "mode": "daily",
-    "solutionCount": 198,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2772,7 +2772,7 @@
   },
   {
     "id": "daily-164",
-    "title": "Diario #164: 187 palabras",
+    "title": "Diario #164: 178 palabras",
     "center": "a",
     "outer": [
       "n",
@@ -2783,13 +2783,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 187,
+    "solutionCount": 178,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-165",
-    "title": "Diario #165: 173 palabras",
+    "title": "Diario #165: 179 palabras",
     "center": "a",
     "outer": [
       "l",
@@ -2800,13 +2800,13 @@
       "g"
     ],
     "mode": "daily",
-    "solutionCount": 173,
+    "solutionCount": 179,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-166",
-    "title": "Diario #166: 186 palabras",
+    "title": "Diario #166: 179 palabras",
     "center": "l",
     "outer": [
       "a",
@@ -2817,7 +2817,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 186,
+    "solutionCount": 179,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2857,7 +2857,7 @@
   },
   {
     "id": "daily-169",
-    "title": "Diario #169: 158 palabras",
+    "title": "Diario #169: 180 palabras",
     "center": "o",
     "outer": [
       "l",
@@ -2868,13 +2868,13 @@
       "ñ"
     ],
     "mode": "daily",
-    "solutionCount": 158,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-170",
-    "title": "Diario #170: 197 palabras",
+    "title": "Diario #170: 180 palabras",
     "center": "i",
     "outer": [
       "m",
@@ -2885,13 +2885,13 @@
       "y"
     ],
     "mode": "daily",
-    "solutionCount": 197,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-171",
-    "title": "Diario #171: 151 palabras",
+    "title": "Diario #171: 180 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -2902,7 +2902,7 @@
       "f"
     ],
     "mode": "daily",
-    "solutionCount": 151,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2942,7 +2942,7 @@
   },
   {
     "id": "daily-174",
-    "title": "Diario #174: 187 palabras",
+    "title": "Diario #174: 181 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -2953,7 +2953,7 @@
       "q"
     ],
     "mode": "daily",
-    "solutionCount": 187,
+    "solutionCount": 181,
     "minLen": 3,
     "allowEnye": true
   },
@@ -2993,7 +2993,7 @@
   },
   {
     "id": "daily-177",
-    "title": "Diario #177: 199 palabras",
+    "title": "Diario #177: 183 palabras",
     "center": "e",
     "outer": [
       "a",
@@ -3004,13 +3004,13 @@
       "g"
     ],
     "mode": "daily",
-    "solutionCount": 199,
+    "solutionCount": 183,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-178",
-    "title": "Diario #178: 172 palabras",
+    "title": "Diario #178: 183 palabras",
     "center": "o",
     "outer": [
       "ñ",
@@ -3021,7 +3021,7 @@
       "m"
     ],
     "mode": "daily",
-    "solutionCount": 172,
+    "solutionCount": 183,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3061,7 +3061,7 @@
   },
   {
     "id": "daily-181",
-    "title": "Diario #181: 192 palabras",
+    "title": "Diario #181: 185 palabras",
     "center": "a",
     "outer": [
       "c",
@@ -3072,13 +3072,13 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 192,
+    "solutionCount": 185,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-182",
-    "title": "Diario #182: 161 palabras",
+    "title": "Diario #182: 186 palabras",
     "center": "a",
     "outer": [
       "i",
@@ -3089,7 +3089,7 @@
       "p"
     ],
     "mode": "daily",
-    "solutionCount": 161,
+    "solutionCount": 186,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3112,7 +3112,7 @@
   },
   {
     "id": "daily-184",
-    "title": "Diario #184: 199 palabras",
+    "title": "Diario #184: 187 palabras",
     "center": "n",
     "outer": [
       "e",
@@ -3123,7 +3123,7 @@
       "a"
     ],
     "mode": "daily",
-    "solutionCount": 199,
+    "solutionCount": 187,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3180,7 +3180,7 @@
   },
   {
     "id": "daily-188",
-    "title": "Diario #188: 205 palabras",
+    "title": "Diario #188: 189 palabras",
     "center": "a",
     "outer": [
       "t",
@@ -3191,13 +3191,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 205,
+    "solutionCount": 189,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-189",
-    "title": "Diario #189: 180 palabras",
+    "title": "Diario #189: 189 palabras",
     "center": "a",
     "outer": [
       "h",
@@ -3208,13 +3208,13 @@
       "o"
     ],
     "mode": "daily",
-    "solutionCount": 180,
+    "solutionCount": 189,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-190",
-    "title": "Diario #190: 180 palabras",
+    "title": "Diario #190: 190 palabras",
     "center": "a",
     "outer": [
       "r",
@@ -3225,13 +3225,13 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 180,
+    "solutionCount": 190,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-191",
-    "title": "Diario #191: 166 palabras",
+    "title": "Diario #191: 190 palabras",
     "center": "r",
     "outer": [
       "ñ",
@@ -3242,7 +3242,7 @@
       "c"
     ],
     "mode": "daily",
-    "solutionCount": 166,
+    "solutionCount": 190,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3333,7 +3333,7 @@
   },
   {
     "id": "daily-197",
-    "title": "Diario #197: 208 palabras",
+    "title": "Diario #197: 193 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -3344,7 +3344,7 @@
       "o"
     ],
     "mode": "daily",
-    "solutionCount": 208,
+    "solutionCount": 193,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3367,7 +3367,7 @@
   },
   {
     "id": "daily-199",
-    "title": "Diario #199: 173 palabras",
+    "title": "Diario #199: 195 palabras",
     "center": "a",
     "outer": [
       "r",
@@ -3378,13 +3378,13 @@
       "v"
     ],
     "mode": "daily",
-    "solutionCount": 173,
+    "solutionCount": 195,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-200",
-    "title": "Diario #200: 188 palabras",
+    "title": "Diario #200: 196 palabras",
     "center": "a",
     "outer": [
       "c",
@@ -3395,7 +3395,7 @@
       "s"
     ],
     "mode": "daily",
-    "solutionCount": 188,
+    "solutionCount": 196,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3418,7 +3418,7 @@
   },
   {
     "id": "daily-202",
-    "title": "Diario #202: 212 palabras",
+    "title": "Diario #202: 197 palabras",
     "center": "c",
     "outer": [
       "i",
@@ -3429,7 +3429,7 @@
       "f"
     ],
     "mode": "daily",
-    "solutionCount": 212,
+    "solutionCount": 197,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3469,7 +3469,7 @@
   },
   {
     "id": "daily-205",
-    "title": "Diario #205: 205 palabras",
+    "title": "Diario #205: 199 palabras",
     "center": "l",
     "outer": [
       "a",
@@ -3480,13 +3480,13 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 205,
+    "solutionCount": 199,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-206",
-    "title": "Diario #206: 168 palabras",
+    "title": "Diario #206: 199 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -3497,7 +3497,7 @@
       "d"
     ],
     "mode": "daily",
-    "solutionCount": 168,
+    "solutionCount": 199,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3537,7 +3537,7 @@
   },
   {
     "id": "daily-209",
-    "title": "Diario #209: 195 palabras",
+    "title": "Diario #209: 206 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -3548,7 +3548,7 @@
       "ñ"
     ],
     "mode": "daily",
-    "solutionCount": 195,
+    "solutionCount": 206,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3571,7 +3571,7 @@
   },
   {
     "id": "daily-211",
-    "title": "Diario #211: 221 palabras",
+    "title": "Diario #211: 207 palabras",
     "center": "a",
     "outer": [
       "d",
@@ -3582,7 +3582,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 221,
+    "solutionCount": 207,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3639,7 +3639,7 @@
   },
   {
     "id": "daily-215",
-    "title": "Diario #215: 223 palabras",
+    "title": "Diario #215: 210 palabras",
     "center": "e",
     "outer": [
       "g",
@@ -3650,7 +3650,7 @@
       "t"
     ],
     "mode": "daily",
-    "solutionCount": 223,
+    "solutionCount": 210,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3792,7 +3792,7 @@
   },
   {
     "id": "daily-224",
-    "title": "Diario #224: 232 palabras",
+    "title": "Diario #224: 217 palabras",
     "center": "a",
     "outer": [
       "p",
@@ -3803,13 +3803,13 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 232,
+    "solutionCount": 217,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-225",
-    "title": "Diario #225: 227 palabras",
+    "title": "Diario #225: 217 palabras",
     "center": "a",
     "outer": [
       "d",
@@ -3820,7 +3820,7 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 227,
+    "solutionCount": 217,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3911,7 +3911,7 @@
   },
   {
     "id": "daily-231",
-    "title": "Diario #231: 254 palabras",
+    "title": "Diario #231: 233 palabras",
     "center": "e",
     "outer": [
       "r",
@@ -3922,7 +3922,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 254,
+    "solutionCount": 233,
     "minLen": 3,
     "allowEnye": true
   },
@@ -3962,7 +3962,7 @@
   },
   {
     "id": "daily-234",
-    "title": "Diario #234: 229 palabras",
+    "title": "Diario #234: 234 palabras",
     "center": "s",
     "outer": [
       "a",
@@ -3973,7 +3973,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 229,
+    "solutionCount": 234,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4064,7 +4064,7 @@
   },
   {
     "id": "daily-240",
-    "title": "Diario #240: 282 palabras",
+    "title": "Diario #240: 240 palabras",
     "center": "n",
     "outer": [
       "c",
@@ -4075,7 +4075,7 @@
       "v"
     ],
     "mode": "daily",
-    "solutionCount": 282,
+    "solutionCount": 240,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4132,7 +4132,7 @@
   },
   {
     "id": "daily-244",
-    "title": "Diario #244: 253 palabras",
+    "title": "Diario #244: 247 palabras",
     "center": "i",
     "outer": [
       "a",
@@ -4143,7 +4143,7 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 253,
+    "solutionCount": 247,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4166,7 +4166,7 @@
   },
   {
     "id": "daily-246",
-    "title": "Diario #246: 264 palabras",
+    "title": "Diario #246: 249 palabras",
     "center": "o",
     "outer": [
       "a",
@@ -4177,7 +4177,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 264,
+    "solutionCount": 249,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4200,7 +4200,7 @@
   },
   {
     "id": "daily-248",
-    "title": "Diario #248: 254 palabras",
+    "title": "Diario #248: 250 palabras",
     "center": "p",
     "outer": [
       "r",
@@ -4211,13 +4211,13 @@
       "e"
     ],
     "mode": "daily",
-    "solutionCount": 254,
+    "solutionCount": 250,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-249",
-    "title": "Diario #249: 263 palabras",
+    "title": "Diario #249: 251 palabras",
     "center": "o",
     "outer": [
       "g",
@@ -4228,13 +4228,13 @@
       "c"
     ],
     "mode": "daily",
-    "solutionCount": 263,
+    "solutionCount": 251,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-250",
-    "title": "Diario #250: 269 palabras",
+    "title": "Diario #250: 255 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -4245,7 +4245,7 @@
       "q"
     ],
     "mode": "daily",
-    "solutionCount": 269,
+    "solutionCount": 255,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4302,7 +4302,7 @@
   },
   {
     "id": "daily-254",
-    "title": "Diario #254: 281 palabras",
+    "title": "Diario #254: 263 palabras",
     "center": "r",
     "outer": [
       "d",
@@ -4313,7 +4313,7 @@
       "z"
     ],
     "mode": "daily",
-    "solutionCount": 281,
+    "solutionCount": 263,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4336,7 +4336,7 @@
   },
   {
     "id": "daily-256",
-    "title": "Diario #256: 289 palabras",
+    "title": "Diario #256: 272 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -4347,13 +4347,13 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 289,
+    "solutionCount": 272,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-257",
-    "title": "Diario #257: 287 palabras",
+    "title": "Diario #257: 277 palabras",
     "center": "s",
     "outer": [
       "n",
@@ -4364,7 +4364,7 @@
       "p"
     ],
     "mode": "daily",
-    "solutionCount": 287,
+    "solutionCount": 277,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4387,7 +4387,7 @@
   },
   {
     "id": "daily-259",
-    "title": "Diario #259: 309 palabras",
+    "title": "Diario #259: 286 palabras",
     "center": "o",
     "outer": [
       "n",
@@ -4398,13 +4398,13 @@
       "c"
     ],
     "mode": "daily",
-    "solutionCount": 309,
+    "solutionCount": 286,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "daily-260",
-    "title": "Diario #260: 303 palabras",
+    "title": "Diario #260: 291 palabras",
     "center": "s",
     "outer": [
       "l",
@@ -4415,7 +4415,7 @@
       "n"
     ],
     "mode": "daily",
-    "solutionCount": 303,
+    "solutionCount": 291,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4489,7 +4489,7 @@
   },
   {
     "id": "daily-265",
-    "title": "Diario #265: 329 palabras",
+    "title": "Diario #265: 313 palabras",
     "center": "a",
     "outer": [
       "y",
@@ -4500,7 +4500,7 @@
       "r"
     ],
     "mode": "daily",
-    "solutionCount": 329,
+    "solutionCount": 313,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4523,18 +4523,18 @@
   },
   {
     "id": "daily-267",
-    "title": "Diario #267: 353 palabras",
-    "center": "r",
+    "title": "Diario #267: 178 palabras",
+    "center": "a",
     "outer": [
-      "i",
-      "a",
-      "p",
+      "t",
+      "n",
+      "y",
+      "f",
       "o",
-      "l",
-      "n"
+      "l"
     ],
     "mode": "daily",
-    "solutionCount": 353,
+    "solutionCount": 178,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4625,7 +4625,7 @@
   },
   {
     "id": "classic-001",
-    "title": "Clásico #001: 153 palabras",
+    "title": "Clásico #001: 140 palabras",
     "center": "n",
     "outer": [
       "s",
@@ -4636,7 +4636,7 @@
       "i"
     ],
     "mode": "classic",
-    "solutionCount": 153,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4676,7 +4676,7 @@
   },
   {
     "id": "classic-004",
-    "title": "Clásico #004: 148 palabras",
+    "title": "Clásico #004: 140 palabras",
     "center": "o",
     "outer": [
       "v",
@@ -4687,13 +4687,13 @@
       "m"
     ],
     "mode": "classic",
-    "solutionCount": 148,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-005",
-    "title": "Clásico #005: 159 palabras",
+    "title": "Clásico #005: 140 palabras",
     "center": "n",
     "outer": [
       "l",
@@ -4704,13 +4704,13 @@
       "y"
     ],
     "mode": "classic",
-    "solutionCount": 159,
+    "solutionCount": 140,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-006",
-    "title": "Clásico #006: 123 palabras",
+    "title": "Clásico #006: 141 palabras",
     "center": "r",
     "outer": [
       "c",
@@ -4721,13 +4721,13 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 123,
+    "solutionCount": 141,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-007",
-    "title": "Clásico #007: 155 palabras",
+    "title": "Clásico #007: 142 palabras",
     "center": "n",
     "outer": [
       "h",
@@ -4738,7 +4738,7 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 155,
+    "solutionCount": 142,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4761,7 +4761,7 @@
   },
   {
     "id": "classic-009",
-    "title": "Clásico #009: 159 palabras",
+    "title": "Clásico #009: 142 palabras",
     "center": "n",
     "outer": [
       "t",
@@ -4772,7 +4772,7 @@
       "b"
     ],
     "mode": "classic",
-    "solutionCount": 159,
+    "solutionCount": 142,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4795,7 +4795,7 @@
   },
   {
     "id": "classic-011",
-    "title": "Clásico #011: 153 palabras",
+    "title": "Clásico #011: 143 palabras",
     "center": "g",
     "outer": [
       "q",
@@ -4806,7 +4806,7 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 153,
+    "solutionCount": 143,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4863,7 +4863,7 @@
   },
   {
     "id": "classic-015",
-    "title": "Clásico #015: 156 palabras",
+    "title": "Clásico #015: 144 palabras",
     "center": "a",
     "outer": [
       "u",
@@ -4874,7 +4874,7 @@
       "q"
     ],
     "mode": "classic",
-    "solutionCount": 156,
+    "solutionCount": 144,
     "minLen": 3,
     "allowEnye": true
   },
@@ -4999,7 +4999,7 @@
   },
   {
     "id": "classic-023",
-    "title": "Clásico #023: 161 palabras",
+    "title": "Clásico #023: 147 palabras",
     "center": "n",
     "outer": [
       "d",
@@ -5010,7 +5010,7 @@
       "s"
     ],
     "mode": "classic",
-    "solutionCount": 161,
+    "solutionCount": 147,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5067,7 +5067,7 @@
   },
   {
     "id": "classic-027",
-    "title": "Clásico #027: 140 palabras",
+    "title": "Clásico #027: 148 palabras",
     "center": "o",
     "outer": [
       "l",
@@ -5078,13 +5078,13 @@
       "ñ"
     ],
     "mode": "classic",
-    "solutionCount": 140,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-028",
-    "title": "Clásico #028: 133 palabras",
+    "title": "Clásico #028: 148 palabras",
     "center": "b",
     "outer": [
       "c",
@@ -5095,13 +5095,13 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 133,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-029",
-    "title": "Clásico #029: 167 palabras",
+    "title": "Clásico #029: 148 palabras",
     "center": "n",
     "outer": [
       "v",
@@ -5112,7 +5112,7 @@
       "d"
     ],
     "mode": "classic",
-    "solutionCount": 167,
+    "solutionCount": 148,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5152,7 +5152,7 @@
   },
   {
     "id": "classic-032",
-    "title": "Clásico #032: 157 palabras",
+    "title": "Clásico #032: 149 palabras",
     "center": "e",
     "outer": [
       "n",
@@ -5163,7 +5163,7 @@
       "m"
     ],
     "mode": "classic",
-    "solutionCount": 157,
+    "solutionCount": 149,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5186,7 +5186,7 @@
   },
   {
     "id": "classic-034",
-    "title": "Clásico #034: 161 palabras",
+    "title": "Clásico #034: 150 palabras",
     "center": "n",
     "outer": [
       "o",
@@ -5197,7 +5197,7 @@
       "t"
     ],
     "mode": "classic",
-    "solutionCount": 161,
+    "solutionCount": 150,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5237,7 +5237,7 @@
   },
   {
     "id": "classic-037",
-    "title": "Clásico #037: 129 palabras",
+    "title": "Clásico #037: 151 palabras",
     "center": "r",
     "outer": [
       "ñ",
@@ -5248,7 +5248,7 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 129,
+    "solutionCount": 151,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5271,7 +5271,7 @@
   },
   {
     "id": "classic-039",
-    "title": "Clásico #039: 174 palabras",
+    "title": "Clásico #039: 152 palabras",
     "center": "n",
     "outer": [
       "q",
@@ -5282,13 +5282,13 @@
       "c"
     ],
     "mode": "classic",
-    "solutionCount": 174,
+    "solutionCount": 152,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-040",
-    "title": "Clásico #040: 157 palabras",
+    "title": "Clásico #040: 153 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -5299,7 +5299,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 157,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5322,7 +5322,7 @@
   },
   {
     "id": "classic-042",
-    "title": "Clásico #042: 159 palabras",
+    "title": "Clásico #042: 153 palabras",
     "center": "o",
     "outer": [
       "r",
@@ -5333,13 +5333,13 @@
       "l"
     ],
     "mode": "classic",
-    "solutionCount": 159,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-043",
-    "title": "Clásico #043: 158 palabras",
+    "title": "Clásico #043: 153 palabras",
     "center": "t",
     "outer": [
       "x",
@@ -5350,13 +5350,13 @@
       "g"
     ],
     "mode": "classic",
-    "solutionCount": 158,
+    "solutionCount": 153,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-044",
-    "title": "Clásico #044: 157 palabras",
+    "title": "Clásico #044: 154 palabras",
     "center": "a",
     "outer": [
       "y",
@@ -5367,7 +5367,7 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 157,
+    "solutionCount": 154,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5424,7 +5424,7 @@
   },
   {
     "id": "classic-048",
-    "title": "Clásico #048: 130 palabras",
+    "title": "Clásico #048: 154 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -5435,7 +5435,7 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 130,
+    "solutionCount": 154,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5475,7 +5475,7 @@
   },
   {
     "id": "classic-051",
-    "title": "Clásico #051: 140 palabras",
+    "title": "Clásico #051: 156 palabras",
     "center": "b",
     "outer": [
       "ñ",
@@ -5486,13 +5486,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 140,
+    "solutionCount": 156,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-052",
-    "title": "Clásico #052: 175 palabras",
+    "title": "Clásico #052: 156 palabras",
     "center": "n",
     "outer": [
       "z",
@@ -5503,7 +5503,7 @@
       "t"
     ],
     "mode": "classic",
-    "solutionCount": 175,
+    "solutionCount": 156,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5543,7 +5543,7 @@
   },
   {
     "id": "classic-055",
-    "title": "Clásico #055: 170 palabras",
+    "title": "Clásico #055: 157 palabras",
     "center": "e",
     "outer": [
       "m",
@@ -5554,7 +5554,7 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 170,
+    "solutionCount": 157,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5577,7 +5577,7 @@
   },
   {
     "id": "classic-057",
-    "title": "Clásico #057: 163 palabras",
+    "title": "Clásico #057: 158 palabras",
     "center": "l",
     "outer": [
       "v",
@@ -5588,7 +5588,7 @@
       "a"
     ],
     "mode": "classic",
-    "solutionCount": 163,
+    "solutionCount": 158,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5645,7 +5645,7 @@
   },
   {
     "id": "classic-061",
-    "title": "Clásico #061: 172 palabras",
+    "title": "Clásico #061: 160 palabras",
     "center": "l",
     "outer": [
       "o",
@@ -5656,7 +5656,7 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 172,
+    "solutionCount": 160,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5679,7 +5679,7 @@
   },
   {
     "id": "classic-063",
-    "title": "Clásico #063: 170 palabras",
+    "title": "Clásico #063: 161 palabras",
     "center": "a",
     "outer": [
       "b",
@@ -5690,7 +5690,7 @@
       "m"
     ],
     "mode": "classic",
-    "solutionCount": 170,
+    "solutionCount": 161,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5730,7 +5730,7 @@
   },
   {
     "id": "classic-066",
-    "title": "Clásico #066: 170 palabras",
+    "title": "Clásico #066: 162 palabras",
     "center": "i",
     "outer": [
       "s",
@@ -5741,13 +5741,13 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 170,
+    "solutionCount": 162,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-067",
-    "title": "Clásico #067: 142 palabras",
+    "title": "Clásico #067: 163 palabras",
     "center": "a",
     "outer": [
       "p",
@@ -5758,13 +5758,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 142,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-068",
-    "title": "Clásico #068: 187 palabras",
+    "title": "Clásico #068: 163 palabras",
     "center": "n",
     "outer": [
       "l",
@@ -5775,13 +5775,13 @@
       "a"
     ],
     "mode": "classic",
-    "solutionCount": 187,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-069",
-    "title": "Clásico #069: 140 palabras",
+    "title": "Clásico #069: 163 palabras",
     "center": "a",
     "outer": [
       "u",
@@ -5792,13 +5792,13 @@
       "y"
     ],
     "mode": "classic",
-    "solutionCount": 140,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-070",
-    "title": "Clásico #070: 156 palabras",
+    "title": "Clásico #070: 163 palabras",
     "center": "r",
     "outer": [
       "o",
@@ -5809,7 +5809,7 @@
       "ñ"
     ],
     "mode": "classic",
-    "solutionCount": 156,
+    "solutionCount": 163,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5883,7 +5883,7 @@
   },
   {
     "id": "classic-075",
-    "title": "Clásico #075: 175 palabras",
+    "title": "Clásico #075: 168 palabras",
     "center": "a",
     "outer": [
       "f",
@@ -5894,13 +5894,13 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 175,
+    "solutionCount": 168,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-076",
-    "title": "Clásico #076: 189 palabras",
+    "title": "Clásico #076: 170 palabras",
     "center": "n",
     "outer": [
       "t",
@@ -5911,7 +5911,7 @@
       "s"
     ],
     "mode": "classic",
-    "solutionCount": 189,
+    "solutionCount": 170,
     "minLen": 3,
     "allowEnye": true
   },
@@ -5934,7 +5934,7 @@
   },
   {
     "id": "classic-078",
-    "title": "Clásico #078: 181 palabras",
+    "title": "Clásico #078: 171 palabras",
     "center": "s",
     "outer": [
       "i",
@@ -5945,13 +5945,13 @@
       "l"
     ],
     "mode": "classic",
-    "solutionCount": 181,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-079",
-    "title": "Clásico #079: 175 palabras",
+    "title": "Clásico #079: 171 palabras",
     "center": "o",
     "outer": [
       "b",
@@ -5962,13 +5962,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 175,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-080",
-    "title": "Clásico #080: 176 palabras",
+    "title": "Clásico #080: 171 palabras",
     "center": "t",
     "outer": [
       "m",
@@ -5979,7 +5979,7 @@
       "v"
     ],
     "mode": "classic",
-    "solutionCount": 176,
+    "solutionCount": 171,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6002,7 +6002,7 @@
   },
   {
     "id": "classic-082",
-    "title": "Clásico #082: 188 palabras",
+    "title": "Clásico #082: 172 palabras",
     "center": "c",
     "outer": [
       "l",
@@ -6013,7 +6013,7 @@
       "d"
     ],
     "mode": "classic",
-    "solutionCount": 188,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6053,7 +6053,7 @@
   },
   {
     "id": "classic-085",
-    "title": "Clásico #085: 177 palabras",
+    "title": "Clásico #085: 172 palabras",
     "center": "e",
     "outer": [
       "a",
@@ -6064,7 +6064,7 @@
       "v"
     ],
     "mode": "classic",
-    "solutionCount": 177,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6087,7 +6087,7 @@
   },
   {
     "id": "classic-087",
-    "title": "Clásico #087: 188 palabras",
+    "title": "Clásico #087: 172 palabras",
     "center": "a",
     "outer": [
       "z",
@@ -6098,7 +6098,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 188,
+    "solutionCount": 172,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6121,7 +6121,7 @@
   },
   {
     "id": "classic-089",
-    "title": "Clásico #089: 169 palabras",
+    "title": "Clásico #089: 173 palabras",
     "center": "o",
     "outer": [
       "c",
@@ -6132,13 +6132,13 @@
       "i"
     ],
     "mode": "classic",
-    "solutionCount": 169,
+    "solutionCount": 173,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-090",
-    "title": "Clásico #090: 191 palabras",
+    "title": "Clásico #090: 173 palabras",
     "center": "c",
     "outer": [
       "f",
@@ -6149,7 +6149,7 @@
       "z"
     ],
     "mode": "classic",
-    "solutionCount": 191,
+    "solutionCount": 173,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6223,7 +6223,7 @@
   },
   {
     "id": "classic-095",
-    "title": "Clásico #095: 183 palabras",
+    "title": "Clásico #095: 175 palabras",
     "center": "o",
     "outer": [
       "r",
@@ -6234,7 +6234,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 183,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6257,7 +6257,7 @@
   },
   {
     "id": "classic-097",
-    "title": "Clásico #097: 184 palabras",
+    "title": "Clásico #097: 175 palabras",
     "center": "o",
     "outer": [
       "s",
@@ -6268,7 +6268,7 @@
       "i"
     ],
     "mode": "classic",
-    "solutionCount": 184,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6291,7 +6291,7 @@
   },
   {
     "id": "classic-099",
-    "title": "Clásico #099: 198 palabras",
+    "title": "Clásico #099: 175 palabras",
     "center": "n",
     "outer": [
       "y",
@@ -6302,7 +6302,7 @@
       "u"
     ],
     "mode": "classic",
-    "solutionCount": 198,
+    "solutionCount": 175,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6376,7 +6376,7 @@
   },
   {
     "id": "classic-104",
-    "title": "Clásico #104: 187 palabras",
+    "title": "Clásico #104: 178 palabras",
     "center": "a",
     "outer": [
       "n",
@@ -6387,13 +6387,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 187,
+    "solutionCount": 178,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-105",
-    "title": "Clásico #105: 173 palabras",
+    "title": "Clásico #105: 179 palabras",
     "center": "a",
     "outer": [
       "l",
@@ -6404,13 +6404,13 @@
       "g"
     ],
     "mode": "classic",
-    "solutionCount": 173,
+    "solutionCount": 179,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-106",
-    "title": "Clásico #106: 186 palabras",
+    "title": "Clásico #106: 179 palabras",
     "center": "l",
     "outer": [
       "a",
@@ -6421,7 +6421,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 186,
+    "solutionCount": 179,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6461,7 +6461,7 @@
   },
   {
     "id": "classic-109",
-    "title": "Clásico #109: 158 palabras",
+    "title": "Clásico #109: 180 palabras",
     "center": "o",
     "outer": [
       "l",
@@ -6472,13 +6472,13 @@
       "ñ"
     ],
     "mode": "classic",
-    "solutionCount": 158,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-110",
-    "title": "Clásico #110: 197 palabras",
+    "title": "Clásico #110: 180 palabras",
     "center": "i",
     "outer": [
       "m",
@@ -6489,13 +6489,13 @@
       "y"
     ],
     "mode": "classic",
-    "solutionCount": 197,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-111",
-    "title": "Clásico #111: 151 palabras",
+    "title": "Clásico #111: 180 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -6506,7 +6506,7 @@
       "f"
     ],
     "mode": "classic",
-    "solutionCount": 151,
+    "solutionCount": 180,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6546,7 +6546,7 @@
   },
   {
     "id": "classic-114",
-    "title": "Clásico #114: 187 palabras",
+    "title": "Clásico #114: 181 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -6557,7 +6557,7 @@
       "q"
     ],
     "mode": "classic",
-    "solutionCount": 187,
+    "solutionCount": 181,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6597,7 +6597,7 @@
   },
   {
     "id": "classic-117",
-    "title": "Clásico #117: 199 palabras",
+    "title": "Clásico #117: 183 palabras",
     "center": "e",
     "outer": [
       "a",
@@ -6608,13 +6608,13 @@
       "g"
     ],
     "mode": "classic",
-    "solutionCount": 199,
+    "solutionCount": 183,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-118",
-    "title": "Clásico #118: 172 palabras",
+    "title": "Clásico #118: 183 palabras",
     "center": "o",
     "outer": [
       "ñ",
@@ -6625,7 +6625,7 @@
       "m"
     ],
     "mode": "classic",
-    "solutionCount": 172,
+    "solutionCount": 183,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6665,7 +6665,7 @@
   },
   {
     "id": "classic-121",
-    "title": "Clásico #121: 192 palabras",
+    "title": "Clásico #121: 185 palabras",
     "center": "a",
     "outer": [
       "c",
@@ -6676,13 +6676,13 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 192,
+    "solutionCount": 185,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-122",
-    "title": "Clásico #122: 161 palabras",
+    "title": "Clásico #122: 186 palabras",
     "center": "a",
     "outer": [
       "i",
@@ -6693,7 +6693,7 @@
       "p"
     ],
     "mode": "classic",
-    "solutionCount": 161,
+    "solutionCount": 186,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6716,7 +6716,7 @@
   },
   {
     "id": "classic-124",
-    "title": "Clásico #124: 199 palabras",
+    "title": "Clásico #124: 187 palabras",
     "center": "n",
     "outer": [
       "e",
@@ -6727,7 +6727,7 @@
       "a"
     ],
     "mode": "classic",
-    "solutionCount": 199,
+    "solutionCount": 187,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6784,7 +6784,7 @@
   },
   {
     "id": "classic-128",
-    "title": "Clásico #128: 205 palabras",
+    "title": "Clásico #128: 189 palabras",
     "center": "a",
     "outer": [
       "t",
@@ -6795,13 +6795,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 205,
+    "solutionCount": 189,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-129",
-    "title": "Clásico #129: 180 palabras",
+    "title": "Clásico #129: 189 palabras",
     "center": "a",
     "outer": [
       "h",
@@ -6812,13 +6812,13 @@
       "o"
     ],
     "mode": "classic",
-    "solutionCount": 180,
+    "solutionCount": 189,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-130",
-    "title": "Clásico #130: 180 palabras",
+    "title": "Clásico #130: 190 palabras",
     "center": "a",
     "outer": [
       "r",
@@ -6829,13 +6829,13 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 180,
+    "solutionCount": 190,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-131",
-    "title": "Clásico #131: 166 palabras",
+    "title": "Clásico #131: 190 palabras",
     "center": "r",
     "outer": [
       "ñ",
@@ -6846,7 +6846,7 @@
       "c"
     ],
     "mode": "classic",
-    "solutionCount": 166,
+    "solutionCount": 190,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6937,7 +6937,7 @@
   },
   {
     "id": "classic-137",
-    "title": "Clásico #137: 208 palabras",
+    "title": "Clásico #137: 193 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -6948,7 +6948,7 @@
       "o"
     ],
     "mode": "classic",
-    "solutionCount": 208,
+    "solutionCount": 193,
     "minLen": 3,
     "allowEnye": true
   },
@@ -6971,7 +6971,7 @@
   },
   {
     "id": "classic-139",
-    "title": "Clásico #139: 173 palabras",
+    "title": "Clásico #139: 195 palabras",
     "center": "a",
     "outer": [
       "r",
@@ -6982,13 +6982,13 @@
       "v"
     ],
     "mode": "classic",
-    "solutionCount": 173,
+    "solutionCount": 195,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-140",
-    "title": "Clásico #140: 188 palabras",
+    "title": "Clásico #140: 196 palabras",
     "center": "a",
     "outer": [
       "c",
@@ -6999,7 +6999,7 @@
       "s"
     ],
     "mode": "classic",
-    "solutionCount": 188,
+    "solutionCount": 196,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7022,7 +7022,7 @@
   },
   {
     "id": "classic-142",
-    "title": "Clásico #142: 212 palabras",
+    "title": "Clásico #142: 197 palabras",
     "center": "c",
     "outer": [
       "i",
@@ -7033,7 +7033,7 @@
       "f"
     ],
     "mode": "classic",
-    "solutionCount": 212,
+    "solutionCount": 197,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7073,7 +7073,7 @@
   },
   {
     "id": "classic-145",
-    "title": "Clásico #145: 205 palabras",
+    "title": "Clásico #145: 199 palabras",
     "center": "l",
     "outer": [
       "a",
@@ -7084,13 +7084,13 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 205,
+    "solutionCount": 199,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-146",
-    "title": "Clásico #146: 168 palabras",
+    "title": "Clásico #146: 199 palabras",
     "center": "a",
     "outer": [
       "o",
@@ -7101,7 +7101,7 @@
       "d"
     ],
     "mode": "classic",
-    "solutionCount": 168,
+    "solutionCount": 199,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7141,7 +7141,7 @@
   },
   {
     "id": "classic-149",
-    "title": "Clásico #149: 195 palabras",
+    "title": "Clásico #149: 206 palabras",
     "center": "a",
     "outer": [
       "g",
@@ -7152,7 +7152,7 @@
       "ñ"
     ],
     "mode": "classic",
-    "solutionCount": 195,
+    "solutionCount": 206,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7175,7 +7175,7 @@
   },
   {
     "id": "classic-151",
-    "title": "Clásico #151: 221 palabras",
+    "title": "Clásico #151: 207 palabras",
     "center": "a",
     "outer": [
       "d",
@@ -7186,7 +7186,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 221,
+    "solutionCount": 207,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7243,7 +7243,7 @@
   },
   {
     "id": "classic-155",
-    "title": "Clásico #155: 223 palabras",
+    "title": "Clásico #155: 210 palabras",
     "center": "e",
     "outer": [
       "g",
@@ -7254,7 +7254,7 @@
       "t"
     ],
     "mode": "classic",
-    "solutionCount": 223,
+    "solutionCount": 210,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7396,7 +7396,7 @@
   },
   {
     "id": "classic-164",
-    "title": "Clásico #164: 232 palabras",
+    "title": "Clásico #164: 217 palabras",
     "center": "a",
     "outer": [
       "p",
@@ -7407,13 +7407,13 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 232,
+    "solutionCount": 217,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-165",
-    "title": "Clásico #165: 227 palabras",
+    "title": "Clásico #165: 217 palabras",
     "center": "a",
     "outer": [
       "d",
@@ -7424,7 +7424,7 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 227,
+    "solutionCount": 217,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7515,7 +7515,7 @@
   },
   {
     "id": "classic-171",
-    "title": "Clásico #171: 254 palabras",
+    "title": "Clásico #171: 233 palabras",
     "center": "e",
     "outer": [
       "r",
@@ -7526,7 +7526,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 254,
+    "solutionCount": 233,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7566,7 +7566,7 @@
   },
   {
     "id": "classic-174",
-    "title": "Clásico #174: 229 palabras",
+    "title": "Clásico #174: 234 palabras",
     "center": "s",
     "outer": [
       "a",
@@ -7577,7 +7577,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 229,
+    "solutionCount": 234,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7668,7 +7668,7 @@
   },
   {
     "id": "classic-180",
-    "title": "Clásico #180: 282 palabras",
+    "title": "Clásico #180: 240 palabras",
     "center": "n",
     "outer": [
       "c",
@@ -7679,7 +7679,7 @@
       "v"
     ],
     "mode": "classic",
-    "solutionCount": 282,
+    "solutionCount": 240,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7736,7 +7736,7 @@
   },
   {
     "id": "classic-184",
-    "title": "Clásico #184: 253 palabras",
+    "title": "Clásico #184: 247 palabras",
     "center": "i",
     "outer": [
       "a",
@@ -7747,7 +7747,7 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 253,
+    "solutionCount": 247,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7770,7 +7770,7 @@
   },
   {
     "id": "classic-186",
-    "title": "Clásico #186: 264 palabras",
+    "title": "Clásico #186: 249 palabras",
     "center": "o",
     "outer": [
       "a",
@@ -7781,7 +7781,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 264,
+    "solutionCount": 249,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7804,7 +7804,7 @@
   },
   {
     "id": "classic-188",
-    "title": "Clásico #188: 254 palabras",
+    "title": "Clásico #188: 250 palabras",
     "center": "p",
     "outer": [
       "r",
@@ -7815,13 +7815,13 @@
       "e"
     ],
     "mode": "classic",
-    "solutionCount": 254,
+    "solutionCount": 250,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-189",
-    "title": "Clásico #189: 263 palabras",
+    "title": "Clásico #189: 251 palabras",
     "center": "o",
     "outer": [
       "g",
@@ -7832,13 +7832,13 @@
       "c"
     ],
     "mode": "classic",
-    "solutionCount": 263,
+    "solutionCount": 251,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-190",
-    "title": "Clásico #190: 269 palabras",
+    "title": "Clásico #190: 255 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -7849,7 +7849,7 @@
       "q"
     ],
     "mode": "classic",
-    "solutionCount": 269,
+    "solutionCount": 255,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7906,7 +7906,7 @@
   },
   {
     "id": "classic-194",
-    "title": "Clásico #194: 281 palabras",
+    "title": "Clásico #194: 263 palabras",
     "center": "r",
     "outer": [
       "d",
@@ -7917,7 +7917,7 @@
       "z"
     ],
     "mode": "classic",
-    "solutionCount": 281,
+    "solutionCount": 263,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7940,7 +7940,7 @@
   },
   {
     "id": "classic-196",
-    "title": "Clásico #196: 289 palabras",
+    "title": "Clásico #196: 272 palabras",
     "center": "a",
     "outer": [
       "m",
@@ -7951,13 +7951,13 @@
       "r"
     ],
     "mode": "classic",
-    "solutionCount": 289,
+    "solutionCount": 272,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-197",
-    "title": "Clásico #197: 287 palabras",
+    "title": "Clásico #197: 277 palabras",
     "center": "s",
     "outer": [
       "n",
@@ -7968,7 +7968,7 @@
       "p"
     ],
     "mode": "classic",
-    "solutionCount": 287,
+    "solutionCount": 277,
     "minLen": 3,
     "allowEnye": true
   },
@@ -7991,7 +7991,7 @@
   },
   {
     "id": "classic-199",
-    "title": "Clásico #199: 309 palabras",
+    "title": "Clásico #199: 286 palabras",
     "center": "o",
     "outer": [
       "n",
@@ -8002,13 +8002,13 @@
       "c"
     ],
     "mode": "classic",
-    "solutionCount": 309,
+    "solutionCount": 286,
     "minLen": 3,
     "allowEnye": true
   },
   {
     "id": "classic-200",
-    "title": "Clásico #200: 303 palabras",
+    "title": "Clásico #200: 291 palabras",
     "center": "s",
     "outer": [
       "l",
@@ -8019,7 +8019,7 @@
       "n"
     ],
     "mode": "classic",
-    "solutionCount": 303,
+    "solutionCount": 291,
     "minLen": 3,
     "allowEnye": true
   },

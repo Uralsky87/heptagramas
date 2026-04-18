@@ -61,7 +61,7 @@ export async function loadDictionary(
   const uniqueWords = new Set<string>();
 
   lines.forEach((line) => {
-    const normalized = normalizeString(line, false);
+    const normalized = normalizeString(line, true);
     if (normalized.length >= 3) {
       uniqueWords.add(normalized);
     }
