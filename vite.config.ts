@@ -34,9 +34,25 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt,woff2}'],
-        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // 20 MB
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
+          {
+            urlPattern: ({ url }) =>
+              url.pathname.endsWith('/wordlist_normalizado.txt') ||
+              url.pathname.endsWith('/definiciones_normalizado.txt'),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'game-text-assets',
+              expiration: {
+                maxEntries: 2,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',

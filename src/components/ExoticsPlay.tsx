@@ -16,7 +16,7 @@ import { solvePuzzle } from '../lib/solvePuzzle';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import { calculateLevel } from '../lib/xpSystem';
 import type { DictionaryData } from '../lib/dictionary';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 import '../exotics-styles.css';
 
 interface ExoticsPlayProps {
@@ -46,7 +46,7 @@ function shuffleArray(array: string[], seed: number): string[] {
 
 export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const { t } = useLanguage();
-  const [runState, setRunState] = useState<ExoticsRunState | null>(null);
+  const [runState, setRunState] = useState<ExoticsRunState | null>(() => loadExoticsRun());
   const [message, setMessage] = useState<string>('');
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
@@ -115,21 +115,18 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   }
   // ============================================
 
-  // Cargar run state al montar
+  // Validar que exista una run activa al entrar
   useEffect(() => {
-    const run = loadExoticsRun();
-    if (!run) {
+    if (!runState) {
       alert(t('exotic.no_active_run_returning'));
       onBack();
       return;
     }
-    
-    setRunState(run);
-    
+
     if (import.meta.env.DEV) {
-      console.log('[ExoticsPlay] Run cargada:', run.runId);
+      console.log('[ExoticsPlay] Run cargada:', runState.runId);
     }
-  }, [onBack]);
+  }, [runState, onBack, t]);
 
   // Calcular soluciones cuando cambia el run state o las letras extra (con caché)
   useEffect(() => {
@@ -190,14 +187,14 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }, 10); // Pequeño delay para permitir que se muestre el loading
     
     return () => clearTimeout(timer);
-  }, [runState?.puzzle, runState?.extraLetters, dictionary]);
+  }, [runState, dictionary]);
 
   // Guardar automáticamente cuando cambia el estado
   useEffect(() => {
     if (runState && runState.foundWords.length > 0) {
       saveExoticsRun(runState);
     }
-  }, [runState?.foundWords, runState?.scorePoints, runState?.xpEarned]);
+  }, [runState]);
 
   const handleLetterClick = (letter: string) => {
     setClickedWord(prev => prev + letter.toLowerCase());
@@ -920,7 +917,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       : 0;
     const reached50 = progressPercent >= 0.5;
     let bonus50Percent = 0;
-    let newMilestones = { ...runState.milestones };
+    const newMilestones = { ...runState.milestones };
     
     if (reached50 && !runState.milestones.reached50Percent && !runState.milestones.claimed50PercentBonus) {
       bonus50Percent = 250;

@@ -37,6 +37,35 @@ function getSessionKey(language: 'es', dateKey: string): string {
   return `${language}-${dateKey}`;
 }
 
+function getDailyPool(puzzles: Puzzle[]): Puzzle[] {
+  const dailyPuzzles = puzzles.filter((puzzle) => puzzle.mode === 'daily');
+  return dailyPuzzles.length > 0 ? dailyPuzzles : puzzles;
+}
+
+function getSelectableDailyPool(puzzles: Puzzle[]): Puzzle[] {
+  const dailyPool = getDailyPool(puzzles);
+
+  const optimalPuzzles = dailyPool.filter((puzzle) => {
+    const count = puzzle.solutionCount;
+    return count !== undefined && count >= DAILY_MIN_SOLUTIONS && count <= DAILY_MAX_SOLUTIONS;
+  });
+
+  if (optimalPuzzles.length > 0) {
+    return optimalPuzzles;
+  }
+
+  const fallbackPuzzles = dailyPool.filter((puzzle) => {
+    const count = puzzle.solutionCount;
+    return count !== undefined && count >= DAILY_FALLBACK_MIN_SOLUTIONS;
+  });
+
+  if (fallbackPuzzles.length > 0) {
+    return fallbackPuzzles;
+  }
+
+  return dailyPool;
+}
+
 /**
  * Obtiene la fecha actual en formato YYYY-MM-DD (hora local)
  */
@@ -61,38 +90,38 @@ function getDayIndex(dateKey: string): number {
  * Filtra puzzles por rango objetivo de soluciones 120-350.
  */
 export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzle {
-  if (puzzles.length === 0) {
+  const dailyPool = getDailyPool(puzzles);
+  const selectablePool = getSelectableDailyPool(puzzles);
+
+  if (dailyPool.length === 0) {
     throw new Error('No hay puzzles disponibles');
   }
   
   const dayIndex = getDayIndex(dateKey);
-  
-  // PREFERENCIA 1: Puzzles en rango objetivo 120-350 soluciones.
-  const optimalPuzzles = puzzles.filter(p => {
-    const count = p.solutionCount;
-    return count !== undefined && count >= DAILY_MIN_SOLUTIONS && count <= DAILY_MAX_SOLUTIONS;
-  });
-  
-  if (optimalPuzzles.length > 0) {
-    const index = dayIndex % optimalPuzzles.length;
-    return optimalPuzzles[index];
+
+  if (import.meta.env.DEV && selectablePool.length !== dailyPool.length) {
+    console.warn(
+      `[DailyPuzzle] Pool diario filtrado para ${dateKey}. ` +
+      `Usando ${selectablePool.length}/${dailyPool.length} puzzles aptos segun solutionCount.`
+    );
   }
-  
-  // FALLBACK 1: Mantener minimo alto y permitir techo abierto.
-  const fallbackPuzzles = puzzles.filter(p => {
-    const count = p.solutionCount;
-    return count !== undefined && count >= DAILY_FALLBACK_MIN_SOLUTIONS;
-  });
-  
-  if (fallbackPuzzles.length > 0) {
+
+  if (selectablePool.length > 0) {
     if (import.meta.env.DEV) {
-      console.warn(
-        `[DailyPuzzle] No hay puzzles en rango objetivo (${DAILY_MIN_SOLUTIONS}-${DAILY_MAX_SOLUTIONS}) para ${dateKey}. ` +
-        `Usando fallback >=${DAILY_FALLBACK_MIN_SOLUTIONS}. Puzzles disponibles: ${fallbackPuzzles.length}`
-      );
+      const hasOptimalPool = selectablePool.some((puzzle) => {
+        const count = puzzle.solutionCount;
+        return count !== undefined && count >= DAILY_MIN_SOLUTIONS && count <= DAILY_MAX_SOLUTIONS;
+      });
+
+      if (!hasOptimalPool) {
+        console.warn(
+          `[DailyPuzzle] No hay puzzles en rango objetivo (${DAILY_MIN_SOLUTIONS}-${DAILY_MAX_SOLUTIONS}) para ${dateKey}. ` +
+          `Usando fallback >=${DAILY_FALLBACK_MIN_SOLUTIONS}. Puzzles disponibles: ${selectablePool.length}`
+        );
+      }
     }
-    const index = dayIndex % fallbackPuzzles.length;
-    return fallbackPuzzles[index];
+    const index = dayIndex % selectablePool.length;
+    return selectablePool[index];
   }
   
   // FALLBACK 2: Cualquier puzzle (último recurso)
@@ -102,8 +131,8 @@ export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzl
       `Usando cualquier puzzle disponible.`
     );
   }
-  const index = dayIndex % puzzles.length;
-  return puzzles[index];
+  const index = dayIndex % dailyPool.length;
+  return dailyPool[index];
 }
 
 /**
@@ -112,11 +141,12 @@ export function getDailyPuzzleForDate(dateKey: string, puzzles: Puzzle[]): Puzzl
 export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'es' = 'es'): DailySession {
   const sessions = loadAllDailySessions();
   const sessionKey = getSessionKey(language, dateKey);
+  const allDailyPuzzles = getDailyPool(puzzles);
   
   // Si ya existe sesión para este día, retornarla
   if (sessions[sessionKey]) {
     const existingSession = sessions[sessionKey];
-    const storedPuzzle = puzzles.find((puzzle) => puzzle.id === existingSession.puzzleId);
+    const storedPuzzle = allDailyPuzzles.find((puzzle) => puzzle.id === existingSession.puzzleId);
     const fallbackPuzzle = storedPuzzle || getDailyPuzzleForDate(dateKey, puzzles);
     const normalizedSession: DailySession = {
       dateKey,
@@ -156,7 +186,8 @@ export function getDailySession(dateKey: string, puzzles: Puzzle[], language: 'e
  * Prioriza el puzzleId guardado para mantener consistencia historica.
  */
 export function getPuzzleForDailySession(session: Pick<DailySession, 'dateKey' | 'puzzleId'>, puzzles: Puzzle[]): Puzzle {
-  const storedPuzzle = puzzles.find((puzzle) => puzzle.id === session.puzzleId);
+  const allDailyPuzzles = getDailyPool(puzzles);
+  const storedPuzzle = allDailyPuzzles.find((puzzle) => puzzle.id === session.puzzleId);
   if (storedPuzzle) {
     return storedPuzzle;
   }

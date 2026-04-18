@@ -3,6 +3,9 @@ import type { DictionaryData } from './dictionary';
 import { normalizeChar } from './normalizeChar';
 import { isSuperHepta } from './validateWord';
 
+const FORBIDDEN_STATIC_ANYWHERE = new Set(['k', 'w']);
+const FORBIDDEN_STATIC_CENTER = new Set(['k', 'w', 'x', 'y', 'ñ', 'q']);
+
 /**
  * Genera el bitmask de letras permitidas para un puzzle
  */
@@ -89,6 +92,14 @@ function isValidPuzzle(
   minSolutions: number = 100,
   maxSolutions: number = 300
 ): { valid: boolean; solutions?: string[]; reason?: string } {
+  if (FORBIDDEN_STATIC_CENTER.has(center)) {
+    return { valid: false, reason: `center prohibido: ${center}` };
+  }
+
+  if (outer.some((letter) => FORBIDDEN_STATIC_ANYWHERE.has(letter))) {
+    return { valid: false, reason: 'outer contiene k/w, no permitido para puzzles estaticos' };
+  }
+
   // Validar que outer tenga 6 letras únicas
   const outerSet = new Set(outer);
   if (outerSet.size !== 6) {
@@ -157,8 +168,9 @@ export async function generateValidPuzzles(
   const puzzles: Puzzle[] = [];
   const usedCombinations = new Set<string>();
   
-  // Letras comunes en español (sin ñ para modo clásico)
-  const commonLetters = 'aeosrnidlctumpbgvyqhfjzxkw'.split('');
+  // Letras comunes candidatas para puzzles estaticos (sin k/w y sin ñ)
+  const commonLetters = 'aeosrnidlctumpbgvyqhfjzx'.split('');
+  const centerLetters = commonLetters.filter((letter) => !FORBIDDEN_STATIC_CENTER.has(letter));
   
   let attempts = 0;
 
@@ -166,8 +178,8 @@ export async function generateValidPuzzles(
     attempts++;
 
     // Elegir letra central (preferir letras comunes)
-    const centerIndex = Math.floor(Math.random() * Math.min(15, commonLetters.length));
-    const center = commonLetters[centerIndex];
+    const centerIndex = Math.floor(Math.random() * Math.min(15, centerLetters.length));
+    const center = centerLetters[centerIndex];
 
     // Elegir 6 letras exteriores únicas (que no incluyan center)
     const availableLetters = commonLetters.filter(l => l !== center);

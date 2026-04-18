@@ -1,17 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { loadPuzzleProgress, preloadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
-import { solvePuzzle } from '../lib/solvePuzzle';
-import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 import { CLASSIC_LONG_MIN_SOLUTIONS } from '../lib/puzzleRanges';
 
 interface ClassicListProps {
   puzzles: Puzzle[];
-  dictionary: DictionaryData;
   onSelectPuzzle: (puzzle: Puzzle) => void;
   onBack: () => void;
 }
@@ -23,7 +20,7 @@ interface PuzzleWithMeta extends Omit<Puzzle, 'solutionCount'> {
 
 type ClassicMenu = 'sections' | 'long';
 
-export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBack }: ClassicListProps) {
+export default function ClassicList({ puzzles, onSelectPuzzle, onBack }: ClassicListProps) {
   const { t } = useLanguage();
   const [puzzlesWithMeta, setPuzzlesWithMeta] = useState<PuzzleWithMeta[]>([]);
   const [activeMenu, setActiveMenu] = useState<ClassicMenu>('sections');
@@ -34,7 +31,6 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
   useEffect(() => {
     let isCancelled = false;
-    const timers: number[] = [];
 
     async function loadClassicPuzzles() {
       await Promise.all(classicPuzzles.map((puzzle) => preloadPuzzleProgress(puzzle.id)));
@@ -48,31 +44,6 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
         progress: loadPuzzleProgress(puzzle.id),
       }));
       setPuzzlesWithMeta(initial);
-
-      classicPuzzles.forEach((puzzle, index) => {
-        const timer = window.setTimeout(() => {
-          const minLen = puzzle.minLen || 3;
-          const allowEnye = puzzle.allowEnye ?? true;
-          const solutions = solvePuzzle(
-            puzzle.center,
-            puzzle.outer,
-            dictionary,
-            minLen,
-            allowEnye
-          );
-          setPuzzlesWithMeta((prev) => {
-            const updated = [...prev];
-            if (updated[index]) {
-              updated[index] = {
-                ...updated[index],
-                solutionCount: solutions.length,
-              };
-            }
-            return updated;
-          });
-        }, index * 10);
-        timers.push(timer);
-      });
     }
 
     loadClassicPuzzles().catch((error) => {
@@ -81,9 +52,8 @@ export default function ClassicList({ puzzles, dictionary, onSelectPuzzle, onBac
 
     return () => {
       isCancelled = true;
-      timers.forEach((timer) => clearTimeout(timer));
     };
-  }, [classicPuzzles, dictionary]);
+  }, [classicPuzzles]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     saveActivePuzzleId(puzzle.id);

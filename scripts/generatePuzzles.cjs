@@ -23,6 +23,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const FORBIDDEN_STATIC_ANYWHERE = new Set(['k', 'w']);
+const FORBIDDEN_STATIC_CENTER = new Set(['k', 'w', 'x', 'y', 'ñ', 'q']);
+
 // ============================================================================
 // CONFIGURACIÓN
 // ============================================================================
@@ -36,7 +39,7 @@ const DEFAULT_CONFIG = {
   minLen: 3,
   allowEnye: true,
   output: 'src/data/puzzles.json',
-  wordlistPath: 'public/wordlist.txt'
+  wordlistPath: 'public/wordlist_normalizado.txt'
 };
 
 // Parsear argumentos
@@ -192,16 +195,17 @@ function loadDictionary(wordlistPath) {
  * La ñ nunca puede ser letra central
  */
 function generateCandidate(allowEnye) {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz' + (allowEnye ? 'ñ' : '');
-  // ñ nunca puede ser letra central
-  const centerAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+  const alphabet = ('abcdefghijklmnopqrstuvwxyz' + (allowEnye ? 'ñ' : ''))
+    .split('')
+    .filter(letter => !FORBIDDEN_STATIC_ANYWHERE.has(letter));
+  const centerAlphabet = alphabet.filter(letter => !FORBIDDEN_STATIC_CENTER.has(letter));
   const letters = new Set();
   
-  // Elegir letra central (nunca ñ)
+  // Elegir letra central segun reglas estaticas
   const center = centerAlphabet[Math.floor(Math.random() * centerAlphabet.length)];
   letters.add(center);
   
-  // Generar 6 letras exteriores únicas (pueden incluir ñ si allowEnye es true)
+  // Generar 6 letras exteriores únicas
   while (letters.size < 7) {
     const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
     letters.add(randomLetter);
@@ -212,6 +216,18 @@ function generateCandidate(allowEnye) {
   const outer = lettersArray.filter(l => l !== center);
   
   return { center, outer };
+}
+
+function isAllowedStaticPuzzle(center, outer) {
+  if (FORBIDDEN_STATIC_CENTER.has(center)) {
+    return false;
+  }
+
+  if (outer.some(letter => FORBIDDEN_STATIC_ANYWHERE.has(letter))) {
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -294,6 +310,10 @@ function generatePuzzles(config) {
   
   for (let i = 0; i < config.candidates; i++) {
     const candidate = generateCandidate(config.allowEnye);
+    if (!isAllowedStaticPuzzle(candidate.center, candidate.outer)) {
+      continue;
+    }
+
     const { solutions, superHeptas } = solvePuzzle(
       candidate.center,
       candidate.outer,

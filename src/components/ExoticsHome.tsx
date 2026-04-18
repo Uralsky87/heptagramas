@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { loadExoticsRun, clearExoticsRun, hasActiveRun, createNewRun } from '../lib/exoticsStorage';
+import { useState } from 'react';
+import { loadExoticsRun, clearExoticsRun, createNewRun } from '../lib/exoticsStorage';
 import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { calculateLevel } from '../lib/xpSystem';
 import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
@@ -7,7 +7,7 @@ import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface ExoticsHomeProps {
   onBack: () => void;
@@ -15,32 +15,36 @@ interface ExoticsHomeProps {
   dictionary: DictionaryData;
 }
 
+function getInitialRunSnapshot() {
+  const run = loadExoticsRun();
+
+  if (!run) {
+    return {
+      hasRun: false,
+      runInfo: null,
+    };
+  }
+
+  return {
+    hasRun: true,
+    runInfo: {
+      foundWords: run.foundWords.length,
+      scorePoints: run.scorePoints,
+      extraLetters: run.extraLetters.length,
+    },
+  };
+}
+
 export default function ExoticsHome({ onBack, onStart, dictionary }: ExoticsHomeProps) {
   const { t } = useLanguage();
-  const [hasRun, setHasRun] = useState(false);
+  const [hasRun, setHasRun] = useState(() => getInitialRunSnapshot().hasRun);
   const [runInfo, setRunInfo] = useState<{
     foundWords: number;
     scorePoints: number;
     extraLetters: number;
-  } | null>(null);
+  } | null>(() => getInitialRunSnapshot().runInfo);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
-
-  useEffect(() => {
-    const active = hasActiveRun();
-    setHasRun(active);
-    
-    if (active) {
-      const run = loadExoticsRun();
-      if (run) {
-        setRunInfo({
-          foundWords: run.foundWords.length,
-          scorePoints: run.scorePoints,
-          extraLetters: run.extraLetters.length,
-        });
-      }
-    }
-  }, []);
 
   const handleEndRun = () => {
     const run = loadExoticsRun();

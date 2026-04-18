@@ -191,9 +191,13 @@ function testExoticsScoring() {
   console.log('\n✅ Tests completados\n');
 }
 
+type WindowWithExoticsScoringTest = Window & {
+  testExoticsScoring?: typeof testExoticsScoring;
+};
+
 // Exportar función al window para uso en consola
 if (typeof window !== 'undefined') {
-  (window as any).testExoticsScoring = testExoticsScoring;
+  (window as WindowWithExoticsScoringTest).testExoticsScoring = testExoticsScoring;
   console.log('📊 Test de puntuación disponible: testExoticsScoring()');
 }
 

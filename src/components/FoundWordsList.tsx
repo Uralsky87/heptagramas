@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DefinitionModal from './DefinitionModal';
 import { useDefinitions } from '../lib/useDefinitions';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface FoundWordsListProps {
   words: string[];

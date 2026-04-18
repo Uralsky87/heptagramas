@@ -5,44 +5,92 @@ export interface DefinitionsDict {
   [word: string]: string;
 }
 
+let definitionsCache: DefinitionsDict | null = null;
+let definitionsErrorCache: string | null = null;
+let definitionsPromise: Promise<DefinitionsDict> | null = null;
+
+async function fetchDefinitions(): Promise<DefinitionsDict> {
+  const response = await fetch(`${import.meta.env.BASE_URL}definiciones_normalizado.txt`);
+  if (!response.ok) {
+    throw new Error('No se pudo cargar el archivo de definiciones');
+  }
+
+  const text = await response.text();
+  const defs: DefinitionsDict = {};
+
+  const lines = text.split('\n');
+  for (const line of lines) {
+    if (line.trim()) {
+      const match = line.match(/^(\S+?)(?:\^[\d])?\s+(.+)$/);
+      if (match) {
+        const word = match[1];
+        const definition = match[2];
+        const normalized = normalizeString(word, true);
+        if (normalized) {
+          defs[normalized] = definition.trim();
+        }
+      }
+    }
+  }
+
+  return defs;
+}
+
+function loadDefinitionsShared(): Promise<DefinitionsDict> {
+  if (definitionsCache) {
+    return Promise.resolve(definitionsCache);
+  }
+
+  if (definitionsErrorCache) {
+    return Promise.reject(new Error(definitionsErrorCache));
+  }
+
+  if (!definitionsPromise) {
+    definitionsPromise = fetchDefinitions()
+      .then((definitions) => {
+        definitionsCache = definitions;
+        return definitions;
+      })
+      .catch((err: unknown) => {
+        definitionsErrorCache = err instanceof Error ? err.message : 'Error desconocido';
+        throw err;
+      });
+  }
+
+  return definitionsPromise;
+}
+
 export function useDefinitions() {
-  const [definitions, setDefinitions] = useState<DefinitionsDict>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [definitions, setDefinitions] = useState<DefinitionsDict>(definitionsCache ?? {});
+  const [loading, setLoading] = useState(definitionsCache === null && definitionsErrorCache === null);
+  const [error, setError] = useState<string | null>(definitionsErrorCache);
 
   useEffect(() => {
-    const loadDefinitions = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.BASE_URL}definiciones_normalizado.txt`);
-        if (!response.ok) throw new Error('No se pudo cargar el archivo de definiciones');
+    if (definitionsCache) {
+      return;
+    }
 
-        const text = await response.text();
-        const defs: DefinitionsDict = {};
+    let isCancelled = false;
 
-        const lines = text.split('\n');
-        for (const line of lines) {
-          if (line.trim()) {
-            const match = line.match(/^(\S+?)(?:\^[\d])?\s+(.+)$/);
-            if (match) {
-              const word = match[1];
-              const definition = match[2];
-              const normalized = normalizeString(word, true);
-              if (normalized) {
-                defs[normalized] = definition.trim();
-              }
-            }
-          }
+    loadDefinitionsShared()
+      .then((defs) => {
+        if (isCancelled) {
+          return;
         }
-
         setDefinitions(defs);
         setLoading(false);
-      } catch (err) {
+      })
+      .catch((err: unknown) => {
+        if (isCancelled) {
+          return;
+        }
         setError(err instanceof Error ? err.message : 'Error desconocido');
         setLoading(false);
-      }
-    };
+      });
 
-    loadDefinitions();
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   const getDefinition = (word: string): string | null => {

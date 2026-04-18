@@ -1,16 +1,7 @@
-import React, { createContext, useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { clearProgressCache } from '../lib/storageAdapter';
 import InitialLoadingScreen from '../components/InitialLoadingScreen';
-
-export type Language = 'es';
-
-interface LanguageContextType {
-  language: Language;
-  setLanguage: (_lang: Language) => void;
-  t: (key: string) => string;
-}
-
-export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+import { LanguageContext, type Language } from './languageContextStore';
 
 const translations: Record<Language, Record<string, string>> = {
   es: {},
@@ -23,7 +14,7 @@ const loadTranslations = async () => {
 };
 
 interface LanguageProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
@@ -39,7 +30,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
       });
   }, []);
 
-  const setLanguage = (_lang: Language) => {
+  const setLanguage = () => {
     localStorage.setItem('app-language', 'es');
     clearProgressCache();
   };
@@ -57,12 +48,4 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
       {children}
     </LanguageContext.Provider>
   );
-}
-
-export function useLanguage(): LanguageContextType {
-  const context = React.useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage debe usarse dentro de LanguageProvider');
-  }
-  return context;
 }

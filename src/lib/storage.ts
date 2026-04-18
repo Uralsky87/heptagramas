@@ -13,6 +13,13 @@ const STORAGE_KEYS = {
 
 export type ProgressByPuzzleId = Record<string, PuzzleProgress>;
 
+interface LegacyPuzzleProgress {
+  foundWords?: string[];
+  score?: number;
+  superHeptasFound?: string[];
+  lastPlayedAt?: string;
+}
+
 let migrationDone = false;
 
 // ========================================
@@ -26,17 +33,16 @@ function migrateOldData(): void {
     // Migrar progressByPuzzle -> progressByPuzzleId
     const oldProgress = localStorage.getItem(STORAGE_KEYS.LEGACY_PROGRESS);
     if (oldProgress && !localStorage.getItem(STORAGE_KEYS.PROGRESS_BY_PUZZLE_ID)) {
-      const parsed = JSON.parse(oldProgress);
+      const parsed = JSON.parse(oldProgress) as Record<string, LegacyPuzzleProgress>;
       const migrated: ProgressByPuzzleId = {};
       
       for (const [id, progress] of Object.entries(parsed)) {
-        const old = progress as any;
         migrated[id] = {
-          foundWords: old.foundWords || [],
-          score: old.score || 0,
-          superHeptaWords: old.superHeptasFound || [],
-          startedAt: old.lastPlayedAt || new Date().toISOString(),
-          lastPlayedAt: old.lastPlayedAt || new Date().toISOString(),
+          foundWords: progress.foundWords || [],
+          score: progress.score || 0,
+          superHeptaWords: progress.superHeptasFound || [],
+          startedAt: progress.lastPlayedAt || new Date().toISOString(),
+          lastPlayedAt: progress.lastPlayedAt || new Date().toISOString(),
         };
       }
       

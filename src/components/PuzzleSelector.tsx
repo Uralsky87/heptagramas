@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Puzzle } from '../types';
 import { isToday } from '../lib/dailyPuzzle';
 import { loadPuzzleProgress, preloadPuzzleProgress } from '../lib/storageAdapter';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface PuzzleSelectorProps {
   puzzles: Puzzle[];

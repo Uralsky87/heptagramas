@@ -2,7 +2,7 @@
  * Tipos de almacenamiento para IndexedDB
  */
 
-import type { PlayerState, ExoticsRunState } from '../types';
+import type { PlayerSettings, PlayerState, ExoticsRunState } from '../types';
 
 // Versión del schema de guardado (para migraciones futuras)
 export const SAVE_VERSION = 1;
@@ -13,7 +13,7 @@ export const SAVE_VERSION = 1;
 
 export interface KVEntry {
   key: string;
-  value: any;
+  value: unknown;
   updatedAt: number; // timestamp
 }
 
@@ -55,11 +55,23 @@ export interface ExportData {
   saveVersion: number;
   exportedAt: number;
   data: {
-    playerState: PlayerState & { saveVersion: number };
-    settings?: any;
+    playerState: PlayerStateWithVersion;
+    settings?: PlayerSettings;
     exoticsRunState: ExoticsRunState | null;
     daily: DailyProgress[];
     classic: ClassicProgress[];
-    dailySessions?: Record<string, any>; // Para compatibilidad con sistema actual
+    dailySessions?: DailySessionsMap; // Para compatibilidad con sistema actual
   };
 }
+
+export interface PlayerStateWithVersion extends PlayerState {
+  saveVersion: number;
+}
+
+export interface DailySessionEntry {
+  dateKey: string;
+  puzzleId: string;
+  progressId: string;
+}
+
+export type DailySessionsMap = Record<string, DailySessionEntry>;

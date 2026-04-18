@@ -1,12 +1,20 @@
 import type { ExoticsRunState } from '../types';
 import { getExoticsRunState, setExoticsRunState } from '../storage';
 
+type WindowWithExoticsCache = Window & {
+  __exoticsRunCache?: ExoticsRunState | null;
+};
+
+function getWindowWithExoticsCache(): WindowWithExoticsCache {
+  return window as WindowWithExoticsCache;
+}
+
 /**
  * Cargar el estado de la run activa de exóticos (si existe)
  */
 export function loadExoticsRun(): ExoticsRunState | null {
   // Usar cache sincrónico
-  const cached = (window as any).__exoticsRunCache;
+  const cached = getWindowWithExoticsCache().__exoticsRunCache;
   if (cached !== undefined) {
     return cached;
   }
@@ -21,7 +29,7 @@ export async function preloadExoticsRun(): Promise<void> {
     const state = await getExoticsRunState();
     
     if (!state) {
-      (window as any).__exoticsRunCache = null;
+      getWindowWithExoticsCache().__exoticsRunCache = null;
       return;
     }
     
@@ -29,7 +37,7 @@ export async function preloadExoticsRun(): Promise<void> {
     if (!state.runId || !state.puzzle || !Array.isArray(state.foundWords)) {
       console.warn('[ExoticsStorage] Estado corrupto, eliminando...');
       await clearExoticsRun();
-      (window as any).__exoticsRunCache = null;
+      getWindowWithExoticsCache().__exoticsRunCache = null;
       return;
     }
     
@@ -60,11 +68,11 @@ export async function preloadExoticsRun(): Promise<void> {
       state.foundWords = state.foundWordsAll;
     }
     
-    (window as any).__exoticsRunCache = state;
+    getWindowWithExoticsCache().__exoticsRunCache = state;
   } catch (error) {
     console.error('[ExoticsStorage] Error al cargar run:', error);
     await clearExoticsRun();
-    (window as any).__exoticsRunCache = null;
+    getWindowWithExoticsCache().__exoticsRunCache = null;
   }
 }
 
@@ -73,7 +81,7 @@ export async function preloadExoticsRun(): Promise<void> {
  */
 export function saveExoticsRun(state: ExoticsRunState): void {
   // Actualizar cache
-  (window as any).__exoticsRunCache = state;
+  getWindowWithExoticsCache().__exoticsRunCache = state;
   
   // Guardar async (fire and forget)
   setExoticsRunState(state).catch((error) => {
@@ -94,7 +102,7 @@ export function saveExoticsRun(state: ExoticsRunState): void {
  * Eliminar la run activa (terminar run)
  */
 export async function clearExoticsRun(): Promise<void> {
-  (window as any).__exoticsRunCache = null;
+  getWindowWithExoticsCache().__exoticsRunCache = null;
   
   try {
     await setExoticsRunState(null);

@@ -12,10 +12,21 @@ const NOTES = {
 
 let audioContext: AudioContext | null = null;
 
+type WindowWithWebkitAudioContext = Window & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
 // Inicializar contexto de audio (lazy)
 function getAudioContext(): AudioContext {
   if (!audioContext) {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioContextConstructor =
+      window.AudioContext || (window as WindowWithWebkitAudioContext).webkitAudioContext;
+
+    if (!audioContextConstructor) {
+      throw new Error('Web Audio API no disponible');
+    }
+
+    audioContext = new audioContextConstructor();
   }
   return audioContext;
 }

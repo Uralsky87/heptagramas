@@ -22,8 +22,28 @@ export type ProgressByPuzzleId = Record<string, PuzzleProgress>;
 
 // Cache en memoria
 const progressCache = new Map<string, PuzzleProgress>();
-let writeQueue: Array<() => Promise<void>> = [];
+const writeQueue: Array<() => Promise<void>> = [];
 let isProcessingQueue = false;
+
+type WindowWithStorageCaches = Window & {
+  __playerStateCache?: PlayerState | null;
+  __exoticsRunCache?: unknown;
+};
+
+function getWindowWithStorageCaches(): WindowWithStorageCaches {
+  return window as WindowWithStorageCaches;
+}
+
+export function clearRuntimeCaches(): void {
+  progressCache.clear();
+  writeQueue.length = 0;
+  isProcessingQueue = false;
+  activePuzzleIdCache = null;
+
+  const win = getWindowWithStorageCaches();
+  win.__playerStateCache = null;
+  win.__exoticsRunCache = null;
+}
 
 /**
  * Limpia el cache de progreso
@@ -62,6 +82,14 @@ async function processWriteQueue() {
 function enqueueWrite(writeFn: () => Promise<void>) {
   writeQueue.push(writeFn);
   processWriteQueue();
+}
+
+export async function flushPendingWrites(): Promise<void> {
+  await processWriteQueue();
+
+  while (isProcessingQueue || writeQueue.length > 0) {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
 }
 
 // ========================================
@@ -137,6 +165,8 @@ export function savePuzzleProgress(puzzleId: string, progress: PuzzleProgress): 
  */
 export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
   try {
+    progressCache.delete(puzzleId);
+
     // Detectar si es diario
     if (puzzleId.startsWith('daily-')) {
       const langDateMatch = puzzleId.match(/^daily-(es|en)-(\d{4}-\d{2}-\d{2})$/);
@@ -214,7 +244,7 @@ export async function loadAllProgress(): Promise<ProgressByPuzzleId> {
  */
 export function loadPlayerState(): PlayerState {
   // Esta función se llama de forma síncrona, por lo que necesitamos un cache
-  const cached = (window as any).__playerStateCache;
+  const cached = getWindowWithStorageCaches().__playerStateCache;
   if (cached) {
     return cached;
   }
@@ -227,10 +257,10 @@ export function loadPlayerState(): PlayerState {
  * Guarda el estado del jugador (ASYNC)
  */
 export async function savePlayerState(state: PlayerState): Promise<void> {
+  getWindowWithStorageCaches().__playerStateCache = state;
+
   try {
     await setPlayerStateDB(state);
-    // Actualizar cache
-    (window as any).__playerStateCache = state;
   } catch (err) {
     console.error('Error guardando estado del jugador:', err);
   }
@@ -322,6 +352,5 @@ export async function saveSettings(settings: { soundEnabled: boolean }): Promise
 
 export async function clearAllData(): Promise<void> {
   await clearAllDataDB();
-  activePuzzleIdCache = null;
-  (window as any).__playerStateCache = null;
+  clearRuntimeCaches();
 }

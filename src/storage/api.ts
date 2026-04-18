@@ -4,14 +4,14 @@
  */
 
 import { openDatabase } from './db';
-import type { KVEntry, DailyProgress, ClassicProgress } from './types';
-import type { PlayerState, ExoticsRunState } from '../types';
+import type { KVEntry, DailyProgress, ClassicProgress, DailySessionsMap, PlayerStateWithVersion } from './types';
+import type { PlayerSettings, PlayerState, ExoticsRunState } from '../types';
 
 // ========================================
 // KV Store (key-value genérico)
 // ========================================
 
-async function getKV<T = any>(key: string): Promise<T | null> {
+async function getKV<T>(key: string): Promise<T | null> {
   try {
     const db = await openDatabase();
     const entry = await db.get('kv', key);
@@ -22,7 +22,7 @@ async function getKV<T = any>(key: string): Promise<T | null> {
   }
 }
 
-async function setKV(key: string, value: any): Promise<void> {
+async function setKV<T>(key: string, value: T): Promise<void> {
   try {
     const db = await openDatabase();
     const entry: KVEntry = {
@@ -55,9 +55,9 @@ export async function getPlayerState(): Promise<PlayerState | null> {
 
 export async function setPlayerState(state: PlayerState): Promise<void> {
   // Asegurar que tenga saveVersion
-  const stateWithVersion = {
+  const stateWithVersion: PlayerStateWithVersion = {
     ...state,
-    saveVersion: (state as any).saveVersion || 1,
+    saveVersion: 'saveVersion' in state && typeof state.saveVersion === 'number' ? state.saveVersion : 1,
   };
   await setKV('playerState', stateWithVersion);
 }
@@ -66,11 +66,11 @@ export async function setPlayerState(state: PlayerState): Promise<void> {
 // Settings (genérico, si se necesita separado)
 // ========================================
 
-export async function getSettings(): Promise<any | null> {
-  return getKV('settings');
+export async function getSettings(): Promise<PlayerSettings | null> {
+  return getKV<PlayerSettings>('settings');
 }
 
-export async function setSettings(settings: any): Promise<void> {
+export async function setSettings(settings: PlayerSettings): Promise<void> {
   await setKV('settings', settings);
 }
 
@@ -94,11 +94,11 @@ export async function setExoticsRunState(run: ExoticsRunState | null): Promise<v
 // DailySessions (compatibilidad)
 // ========================================
 
-export async function getDailySessions(): Promise<Record<string, any> | null> {
-  return getKV('dailySessions');
+export async function getDailySessions(): Promise<DailySessionsMap | null> {
+  return getKV<DailySessionsMap>('dailySessions');
 }
 
-export async function setDailySessions(sessions: Record<string, any>): Promise<void> {
+export async function setDailySessions(sessions: DailySessionsMap): Promise<void> {
   await setKV('dailySessions', sessions);
 }
 

@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 interface WordInputProps {
   onSubmit: (word: string) => void;
   message: string;
@@ -10,32 +8,28 @@ interface WordInputProps {
   successAnimation?: boolean;
 }
 
-export default function WordInput({ onSubmit, message, clickedWord = '', onBackspace, onShuffle, onDeleteLetter, successAnimation }: WordInputProps) {
-  const [input, setInput] = useState('');
-
-  // Sincronizar input con palabra clickeada
-  useEffect(() => {
-    if (clickedWord) {
-      setInput(clickedWord);
-    }
-  }, [clickedWord]);
+export default function WordInput({
+  onSubmit,
+  message,
+  clickedWord = '',
+  onBackspace,
+  onShuffle,
+  onDeleteLetter,
+  successAnimation,
+}: WordInputProps) {
+  const inputValue = clickedWord;
 
   const handleSubmit = () => {
-    const wordToSubmit = input.trim();
+    const wordToSubmit = inputValue.trim();
     if (wordToSubmit) {
       onSubmit(wordToSubmit);
-      setInput('');
     }
   };
 
   const handleDeleteLetter = () => {
-    if (input.length > 0) {
-      // Borrar la última letra del input
-      setInput(input.slice(0, -1));
-      // También llamar al callback del padre para actualizar clickedWord
+    if (inputValue.length > 0) {
       onDeleteLetter?.();
     } else if (clickedWord.length > 0) {
-      // Si el input está vacío pero hay palabra clickeada, borrar de ahí
       onBackspace?.();
     }
   };
@@ -44,9 +38,7 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onBacks
     if (e.key === 'Enter') {
       handleSubmit();
     } else if (e.key === 'Backspace') {
-      // Si el input tiene contenido, dejar que funcione normalmente
-      // Si está vacío y hay palabra clickeada, borrar de la palabra clickeada
-      if (input.length === 0 && clickedWord.length > 0) {
+      if (inputValue.length === 0 && clickedWord.length > 0) {
         e.preventDefault();
         onBackspace?.();
       }
@@ -59,17 +51,16 @@ export default function WordInput({ onSubmit, message, clickedWord = '', onBacks
         <div className="input-with-delete">
           <input
             type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={inputValue}
             onKeyDown={handleKeyDown}
             placeholder="Haz clic en las letras..."
             className={`word-input ${successAnimation ? 'success-flash' : ''}`}
             readOnly
           />
-          <button 
+          <button
             onClick={handleDeleteLetter}
             className="btn-delete-letter"
-            title="Borrar última letra"
+            title="Borrar ultima letra"
           >
             ⌫
           </button>

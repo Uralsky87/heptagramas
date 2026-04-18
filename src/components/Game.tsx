@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import HeptagramBoardSvg, { type HeptagramBoardHandle } from './HeptagramBoardSvg';
 import WordInput from './WordInput';
 import FoundWordsList from './FoundWordsList';
@@ -25,7 +25,7 @@ import { calculateLevel } from '../lib/xpSystem';
 import { getDailyKey } from '../lib/dailySession';
 import DefinitionModal from './DefinitionModal';
 import { useDefinitions } from '../lib/useDefinitions';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface GameProps {
   initialPuzzle: Puzzle;
@@ -45,7 +45,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const [achievements, setAchievements] = useState({ superHeptaWords: [] as string[] });
   const [message, setMessage] = useState<string>('');
   const [clickedWord, setClickedWord] = useState('');
-  const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
   const [showPuzzleSelector, setShowPuzzleSelector] = useState(false);
   const [showSuccessAnim, setShowSuccessAnim] = useState(false);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
@@ -63,8 +62,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     latestProgressIdRef.current = progressId;
   }, [progressId]);
 
-  // Calcular soluciones cuando cambia el puzzle
-  useEffect(() => {
+  const puzzleSolutions = useMemo(() => {
     const minLen = currentPuzzle.minLen || 3;
     const allowEnye = currentPuzzle.allowEnye ?? true;
     const solutions = solvePuzzle(
@@ -74,9 +72,7 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       minLen,
       allowEnye
     );
-    setPuzzleSolutions(solutions);
-    
-    // Log en desarrollo
+
     if (import.meta.env.DEV) {
       console.log(
         `[Game] Soluciones cargadas para ${currentPuzzle.id}:`,
@@ -84,10 +80,12 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         'palabras'
       );
     }
+
+    return solutions;
   }, [currentPuzzle, dictionary]);
 
   // Cargar progreso de un puzzle
-  async function loadPuzzleProgressState(progressIdToLoad: string) {
+  const loadPuzzleProgressState = useCallback(async (progressIdToLoad: string) => {
     // Precargar del IndexedDB al cache
     await preloadPuzzleProgress(progressIdToLoad);
 
@@ -108,15 +106,19 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       setAchievements({ superHeptaWords: [] });
     }
     setClickedWord('');
-  }
+  }, []);
 
   // Cargar progreso al iniciar o cambiar puzzle
   useEffect(() => {
-    loadPuzzleProgressState(progressId);
-  }, [progressId]);
+    const timerId = window.setTimeout(() => {
+      void loadPuzzleProgressState(progressId);
+    }, 0);
+
+    return () => clearTimeout(timerId);
+  }, [progressId, loadPuzzleProgressState]);
 
   // Guardar progreso del puzzle actual
-  const savePuzzleProgressState = () => {
+  const savePuzzleProgressState = useCallback(() => {
     const now = new Date().toISOString();
     const progress: PuzzleProgress = {
       foundWords,
@@ -126,14 +128,14 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
       lastPlayedAt: now,
     };
     savePuzzleProgress(progressId, progress);
-  };
+  }, [achievements.superHeptaWords, foundWords, progressId, score]);
 
   // Guardar progreso automáticamente cuando cambia
   useEffect(() => {
     if (foundWords.length > 0 || score > 0) {
       savePuzzleProgressState();
     }
-  }, [foundWords, score, achievements, progressId]);
+  }, [foundWords, score, savePuzzleProgressState]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();

@@ -19,6 +19,7 @@ import {
   clearAllData,
 } from './api';
 import { SAVE_VERSION } from './types';
+import { flushPendingWrites } from '../lib/storageAdapter';
 
 // ========================================
 // Export
@@ -28,6 +29,8 @@ import { SAVE_VERSION } from './types';
  * Exporta todos los datos a un objeto JSON
  */
 export async function exportToJson(): Promise<ExportData> {
+  await flushPendingWrites();
+
   const playerState = await getPlayerState();
   const settings = await getSettings();
   const exoticsRunState = await getExoticsRunState();
@@ -103,24 +106,30 @@ export async function downloadExportJson(): Promise<void> {
 /**
  * Valida que el JSON tenga la estructura correcta
  */
-function validateImportData(data: any): data is ExportData {
+function validateImportData(data: unknown): data is ExportData {
   if (!data || typeof data !== 'object') {
     throw new Error('Datos inválidos: no es un objeto');
   }
 
-  if (data.schema !== 'heptagramas-save') {
-    throw new Error(`Schema inválido: esperado "heptagramas-save", recibido "${data.schema}"`);
+  const record = data as Record<string, unknown>;
+
+  if (record.schema !== 'heptagramas-save') {
+    throw new Error(`Schema inválido: esperado "heptagramas-save", recibido "${String(record.schema)}"`);
   }
 
-  if (typeof data.saveVersion !== 'number') {
+  if (typeof record.saveVersion !== 'number') {
     throw new Error('Falta saveVersion o no es un número');
   }
 
-  if (!data.data || typeof data.data !== 'object') {
+  const nestedData = record.data;
+
+  if (!nestedData || typeof nestedData !== 'object') {
     throw new Error('Falta campo "data"');
   }
 
-  if (!data.data.playerState || typeof data.data.playerState !== 'object') {
+  const dataRecord = nestedData as Record<string, unknown>;
+
+  if (!dataRecord.playerState || typeof dataRecord.playerState !== 'object') {
     throw new Error('Falta campo "data.playerState"');
   }
 
@@ -146,6 +155,7 @@ export async function importFromJson(
 
     // Modo replace: borrar todo y cargar nuevo
     if (mode === 'replace') {
+      await flushPendingWrites();
       console.log('[Import] Borrando datos existentes...');
       await clearAllData();
 

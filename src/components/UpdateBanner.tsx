@@ -1,5 +1,5 @@
 import '../styles/updateBanner.css';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface UpdateBannerProps {
   isVisible: boolean;

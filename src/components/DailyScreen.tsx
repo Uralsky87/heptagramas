@@ -8,16 +8,13 @@ import {
   formatDateKey,
 } from '../lib/dailySession';
 import { loadPuzzleProgress, preloadPuzzleProgress } from '../lib/storageAdapter';
-import { solvePuzzle } from '../lib/solvePuzzle';
-import type { DictionaryData } from '../lib/dictionary';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 interface DailyScreenProps {
   puzzles: Puzzle[];
-  dictionary: DictionaryData;
   onPlayDaily: (dateKey: string) => void;
   onBack: () => void;
 }
@@ -31,14 +28,13 @@ interface DayInfo {
   puzzle: Puzzle;
 }
 
-export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }: DailyScreenProps) {
+export default function DailyScreen({ puzzles, onPlayDaily, onBack }: DailyScreenProps) {
   const { t, language } = useLanguage();
   const [daysInfo, setDaysInfo] = useState<DayInfo[]>([]);
   const todayKey = getDailyKey();
 
   useEffect(() => {
     let isCancelled = false;
-    const timers: number[] = [];
 
     async function loadDaysInfo() {
       const last7Days = getLastNDays(7);
@@ -59,40 +55,12 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
           puzzleId: session.puzzleId,
           progressId: session.progressId,
           progress,
-          solutionCount: null,
+          solutionCount: puzzle.solutionCount ?? null,
           puzzle,
         };
       });
 
       setDaysInfo(initialInfo);
-
-      last7Days.forEach((_, index) => {
-        const timer = window.setTimeout(() => {
-          const session = sessions[index];
-          const puzzle = getPuzzleForDailySession(session, puzzles);
-          const minLen = puzzle.minLen || 3;
-          const allowEnye = puzzle.allowEnye ?? true;
-          const solutions = solvePuzzle(
-            puzzle.center,
-            puzzle.outer,
-            dictionary,
-            minLen,
-            allowEnye
-          );
-
-          setDaysInfo((prev) => {
-            const updated = [...prev];
-            if (updated[index]) {
-              updated[index] = {
-                ...updated[index],
-                solutionCount: solutions.length,
-              };
-            }
-            return updated;
-          });
-        }, index * 10);
-        timers.push(timer);
-      });
     }
 
     loadDaysInfo().catch((error) => {
@@ -101,9 +69,8 @@ export default function DailyScreen({ puzzles, dictionary, onPlayDaily, onBack }
 
     return () => {
       isCancelled = true;
-      timers.forEach((timer) => clearTimeout(timer));
     };
-  }, [puzzles, dictionary, language]);
+  }, [puzzles, language]);
 
   const handlePlayDaily = (dateKey: string) => {
     onPlayDaily(dateKey);

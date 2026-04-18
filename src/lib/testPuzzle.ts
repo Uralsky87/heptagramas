@@ -137,9 +137,13 @@ export async function testPuzzleInBrowser(puzzleId?: string): Promise<void> {
   }
 }
 
+type WindowWithPuzzleTest = Window & {
+  testPuzzle?: typeof testPuzzleInBrowser;
+};
+
 // Exportar para usar en consola del navegador
 if (typeof window !== 'undefined') {
-  (window as any).testPuzzle = testPuzzleInBrowser;
+  (window as WindowWithPuzzleTest).testPuzzle = testPuzzleInBrowser;
   console.log('💡 Función testPuzzle() disponible en consola');
   console.log('   Uso: testPuzzle("puzzle-001")');
 }

@@ -65,8 +65,12 @@ export function testExoticsStorage() {
   console.log('\n=== TEST COMPLETADO ===');
 }
 
+type WindowWithExoticsStorageTest = Window & {
+  testExoticsStorage?: typeof testExoticsStorage;
+};
+
 // Exponer en window para usar en consola
 if (typeof window !== 'undefined') {
-  (window as any).testExoticsStorage = testExoticsStorage;
+  (window as WindowWithExoticsStorageTest).testExoticsStorage = testExoticsStorage;
   console.log('💡 Ejecuta testExoticsStorage() en la consola para probar el sistema de storage');
 }

@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { loadPlayerState } from '../lib/storageAdapter';
 import { getLevelProgress } from '../lib/xpSystem';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 import { APP_VERSION } from '../lib/appInfo';
 
 interface HomeProps {
@@ -13,23 +12,19 @@ interface HomeProps {
 
 export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
   const { t } = useLanguage();
-  const [levelInfo, setLevelInfo] = useState<{
+  const playerState = loadPlayerState();
+  const progress = getLevelProgress(playerState.xpTotal);
+  const levelInfo: {
     level: number;
     progressPercentage: number;
     xpInLevel: number;
     xpNeeded: number;
-  } | null>(null);
-  useEffect(() => {
-    const playerState = loadPlayerState();
-    const progress = getLevelProgress(playerState.xpTotal);
-    
-    setLevelInfo({
-      level: progress.currentLevel,
-      progressPercentage: progress.progressPercentage,
-      xpInLevel: progress.xpInCurrentLevel,
-      xpNeeded: progress.xpNeededForNext,
-    });
-  }, []);
+  } = {
+    level: progress.currentLevel,
+    progressPercentage: progress.progressPercentage,
+    xpInLevel: progress.xpInCurrentLevel,
+    xpNeeded: progress.xpNeededForNext,
+  };
 
   return (
     <PageContainer>
@@ -41,22 +36,20 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
         />
 
         <header className="home-header">
-          {levelInfo && (
-            <div className="level-display">
-              <div className="level-header">
-                <span className="level-text">{t('home.level')} {levelInfo.level}</span>
-                <span className="level-xp">
-                  {levelInfo.xpInLevel} / {levelInfo.xpNeeded} XP
-                </span>
-              </div>
-              <div className="level-bar-container">
-                <div 
-                  className="level-bar-fill" 
-                  style={{ width: `${levelInfo.progressPercentage}%` }}
-                />
-              </div>
+          <div className="level-display">
+            <div className="level-header">
+              <span className="level-text">{t('home.level')} {levelInfo.level}</span>
+              <span className="level-xp">
+                {levelInfo.xpInLevel} / {levelInfo.xpNeeded} XP
+              </span>
             </div>
-          )}
+            <div className="level-bar-container">
+              <div 
+                className="level-bar-fill" 
+                style={{ width: `${levelInfo.progressPercentage}%` }}
+              />
+            </div>
+          </div>
         </header>
 
         <div className="home-menu">

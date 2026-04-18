@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import Home from './components/Home';
 import Game from './components/Game';
@@ -10,7 +10,7 @@ import Settings from './components/Settings';
 import UpdateBanner from './components/UpdateBanner';
 import InitialLoadingScreen from './components/InitialLoadingScreen';
 import { useUpdateChecker } from './lib/useUpdateChecker';
-import { useLanguage } from './contexts/LanguageContext';
+import { useLanguage } from './contexts/useLanguage';
 import type { Puzzle } from './types';
 import { loadDictionary, type DictionaryData } from './lib/dictionary';
 import { getDailySession, getPuzzleForDailySession, preloadDailySessions } from './lib/dailySession';
@@ -47,6 +47,13 @@ export default function App() {
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
   const { updateAvailable, isUpdating, handleUpdate } = useUpdateChecker();
   const { language, t } = useLanguage();
+  const screenNeedsDictionary =
+    currentScreen === 'daily' ||
+    currentScreen === 'daily-game' ||
+    currentScreen === 'classic' ||
+    currentScreen === 'classic-game' ||
+    currentScreen === 'exotic' ||
+    currentScreen === 'exotic-play';
 
   const cleanupLocalDevCaches = async () => {
     if (!import.meta.env.DEV) {
@@ -68,7 +75,7 @@ export default function App() {
     }
   };
 
-  const updateScreenFromHistory = (historyState: AppHistoryState | null) => {
+  const updateScreenFromHistory = useCallback((historyState: AppHistoryState | null) => {
     const nextScreen = historyState?.screen ?? 'home';
 
     setCurrentScreen(nextScreen);
@@ -117,7 +124,7 @@ export default function App() {
     }
 
     setNavigationStack(['home']);
-  };
+  }, [puzzles]);
 
   const pushHistoryState = (state: AppHistoryState) => {
     window.history.pushState(state, '');
@@ -192,12 +199,15 @@ export default function App() {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [puzzles]);
+  }, [updateScreenFromHistory]);
 
-  // Cargar diccionario al iniciar o cambiar idioma
+  // Cargar diccionario solo cuando una pantalla lo necesita
   useEffect(() => {
+    if (!screenNeedsDictionary || dictionary) {
+      return;
+    }
+
     console.log('[App] Cargando diccionario en español');
-    setDictionary(null);
     setDictionaryLoadError(null);
     loadDictionary(undefined, language)
       .then((dict) => {
@@ -208,7 +218,7 @@ export default function App() {
         console.error('Error al cargar diccionario:', err);
         setDictionaryLoadError(err instanceof Error ? err.message : 'Error desconocido');
       });
-  }, [language]);
+  }, [dictionary, language, screenNeedsDictionary]);
 
   // Cargar puzzles por idioma de forma lazy para reducir bundle inicial.
   useEffect(() => {
@@ -235,7 +245,7 @@ export default function App() {
     };
   }, [language]);
 
-  if (dictionaryLoadError) {
+  if (screenNeedsDictionary && dictionaryLoadError) {
     return (
       <>
         <UpdateBanner
@@ -297,7 +307,7 @@ export default function App() {
   };
 
   // Mostrar carga mientras se inicializa
-  if (!isHydrated || !dictionary || !puzzles) {
+  if (!isHydrated || !puzzles || (screenNeedsDictionary && !dictionary)) {
     return (
       <>
         <UpdateBanner
@@ -309,35 +319,11 @@ export default function App() {
           message={
             !isHydrated
               ? t('common.initializing')
-              : !dictionary
+              : screenNeedsDictionary && !dictionary
                 ? t('common.loading_dictionary')
                 : t('common.loading_puzzles')
           }
         />
-      </>
-    );
-  }
-
-  if (false && (!isHydrated || !dictionary || !puzzles)) {
-    return (
-      <>
-        <UpdateBanner
-          isVisible={updateAvailable}
-          isUpdating={isUpdating}
-          onUpdate={handleUpdate}
-        />
-        <div className="app">
-          <header className="header">
-            <h1>🌟 Palabrarium</h1>
-            <p className="puzzle-title">
-              {!isHydrated
-                ? t('common.initializing')
-                : !dictionary
-                  ? t('common.loading_dictionary')
-                  : t('common.loading_puzzles')}
-            </p>
-          </header>
-        </div>
       </>
     );
   }
@@ -352,7 +338,6 @@ export default function App() {
     screenContent = (
       <DailyScreen
         puzzles={puzzles}
-        dictionary={dictionary}
         onPlayDaily={handlePlayDaily}
         onBack={handleBackToHome}
       />
@@ -364,7 +349,7 @@ export default function App() {
     screenContent = (
       <Game
         initialPuzzle={puzzle}
-        dictionary={dictionary}
+        dictionary={dictionary!}
         allPuzzles={puzzles}
         onBack={handleBackToDailyList}
         mode="daily"
@@ -376,7 +361,6 @@ export default function App() {
     screenContent = (
       <ClassicList
         puzzles={puzzles}
-        dictionary={dictionary}
         onSelectPuzzle={handleSelectClassicPuzzle}
         onBack={handleBackToHome}
       />
@@ -385,7 +369,7 @@ export default function App() {
     screenContent = (
       <Game
         initialPuzzle={selectedClassicPuzzle}
-        dictionary={dictionary}
+        dictionary={dictionary!}
         allPuzzles={puzzles}
         onBack={handleBackToClassicList}
         mode="classic"
@@ -401,14 +385,14 @@ export default function App() {
           setNavigationStack((prev) => [...prev, 'exotic-play']);
           pushHistoryState({ screen: 'exotic-play' });
         }}
-        dictionary={dictionary}
+        dictionary={dictionary!}
       />
     );
   } else if (currentScreen === 'exotic-play') {
     screenContent = (
       <ExoticsPlay
         onBack={handleBackToExoticHome}
-        dictionary={dictionary}
+        dictionary={dictionary!}
       />
     );
   } else {

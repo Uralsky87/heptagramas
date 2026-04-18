@@ -3,6 +3,7 @@ import { normalizeChar } from './normalizeChar';
 
 // Caché de soluciones por puzzle
 const solutionCache = new Map<string, string[]>();
+const isDev = Boolean(import.meta.env?.DEV);
 
 /**
  * Calcula bitmask de un conjunto de letras (incluyendo ñ)
@@ -64,7 +65,7 @@ export function solvePuzzle(
   }
 
   // Log en desarrollo
-  if (import.meta.env.DEV) {
+  if (isDev) {
     console.log(
       `[solvePuzzle] Calculando soluciones:`,
       `\nCenter: "${normalizedCenter}"`,
@@ -106,7 +107,7 @@ export function solvePuzzle(
   }
   
   // Log en desarrollo
-  if (import.meta.env.DEV) {
+  if (isDev) {
     console.log(`[solvePuzzle] ✓ ${solutions.length} soluciones encontradas`);
   }
 

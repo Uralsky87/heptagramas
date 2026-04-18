@@ -40,7 +40,7 @@ async function main() {
     const puzzlesContent = fs.readFileSync(puzzlesPath, 'utf-8');
     existingPuzzles = JSON.parse(puzzlesContent);
     console.log(`✓ Cargados ${existingPuzzles.length} puzzles existentes\n`);
-  } catch (error) {
+  } catch {
     console.log('⚠ No se encontraron puzzles existentes, generando desde cero\n');
   }
 

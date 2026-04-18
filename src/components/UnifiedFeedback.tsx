@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../styles/unifiedFeedback.css';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/useLanguage';
 
 export type FeedbackType = 'correct' | 'incorrect' | 'already-found' | 'missing-central' | null;
 
@@ -32,10 +32,21 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
   const { t } = useLanguage();
   const [currentType, setCurrentType] = useState<FeedbackType>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const currentTypeRef = useRef<FeedbackType>(null);
+  const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const setDisplayedType = (nextType: FeedbackType) => {
+    currentTypeRef.current = nextType;
+    setCurrentType(nextType);
+  };
+
   const clearTimers = () => {
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current);
       hideTimerRef.current = null;
@@ -47,31 +58,38 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
   };
 
   useEffect(() => {
+    clearTimers();
+
     if (!type) {
-      if (!currentType) {
+      if (!currentTypeRef.current) {
         return;
       }
-      clearTimers();
-      setIsVisible(false);
-      clearTimerRef.current = setTimeout(() => {
-        setCurrentType(null);
-        onAnimationEnd?.();
-      }, 180);
+
+      hideTimerRef.current = setTimeout(() => {
+        setIsVisible(false);
+        clearTimerRef.current = setTimeout(() => {
+          setDisplayedType(null);
+          onAnimationEnd?.();
+        }, 180);
+      }, 0);
+
       return () => clearTimers();
     }
 
-    clearTimers();
-    setCurrentType(type);
-    setIsVisible(true);
+    currentTypeRef.current = type;
+    showTimerRef.current = setTimeout(() => {
+      setDisplayedType(type);
+      setIsVisible(true);
 
-    const config = FEEDBACK_CONFIG[type];
-    hideTimerRef.current = setTimeout(() => {
-      setIsVisible(false);
-      clearTimerRef.current = setTimeout(() => {
-        setCurrentType(null);
-        onAnimationEnd?.();
-      }, 180);
-    }, config.duration);
+      const config = FEEDBACK_CONFIG[type];
+      hideTimerRef.current = setTimeout(() => {
+        setIsVisible(false);
+        clearTimerRef.current = setTimeout(() => {
+          setDisplayedType(null);
+          onAnimationEnd?.();
+        }, 180);
+      }, config.duration);
+    }, 0);
 
     return () => clearTimers();
   }, [type, onAnimationEnd]);

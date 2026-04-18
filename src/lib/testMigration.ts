@@ -33,8 +33,12 @@ console.log('\n2. Datos guardados en localStorage');
 console.log('\n3. Recarga la página para ver la migración automática');
 console.log('   Luego ejecuta: testMigrationResult()');
 
+type WindowWithMigrationTest = Window & {
+  testMigrationResult?: () => void;
+};
+
 // Función para verificar resultado
-(window as any).testMigrationResult = function() {
+(window as WindowWithMigrationTest).testMigrationResult = function() {
   console.log('\n=== Resultado de Migración ===\n');
   
   const activePuzzleId = localStorage.getItem('heptagramas_activePuzzleId');

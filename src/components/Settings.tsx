@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import PageContainer from './layout/PageContainer';
 import { downloadExportJson, importFromJson, clearAllData } from '../storage';
-import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
-import { useLanguage } from '../contexts/LanguageContext';
+import { clearRuntimeCaches, flushPendingWrites, loadPlayerState, savePlayerState } from '../lib/storageAdapter';
+import { useLanguage } from '../contexts/useLanguage';
 import { APP_VERSION } from '../lib/appInfo';
 
 interface SettingsProps {
@@ -42,10 +42,10 @@ export default function Settings({ onBack }: SettingsProps) {
     try {
       setIsProcessing(true);
       await downloadExportJson();
-      showMessage('success', `✓ ${t('settings.msg_export_success')}`);
+      showMessage('success', `OK ${t('settings.msg_export_success')}`);
     } catch (error) {
       console.error('[Settings] Error al exportar:', error);
-      showMessage('error', `✗ ${t('settings.msg_export_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
+      showMessage('error', `Error ${t('settings.msg_export_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
     }
@@ -64,16 +64,17 @@ export default function Settings({ onBack }: SettingsProps) {
       const result = await importFromJson(file, 'replace');
 
       if (result.success) {
-        showMessage('success', '✓ ' + result.message);
+        clearRuntimeCaches();
+        showMessage('success', 'OK ' + result.message);
         scheduleTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        showMessage('error', '✗ ' + result.message);
+        showMessage('error', 'Error ' + result.message);
       }
     } catch (error) {
       console.error('[Settings] Error al importar:', error);
-      showMessage('error', `✗ ${t('settings.msg_import_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
+      showMessage('error', `Error ${t('settings.msg_import_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
       if (fileInputRef.current) {
@@ -95,14 +96,16 @@ export default function Settings({ onBack }: SettingsProps) {
 
     try {
       setIsProcessing(true);
+      await flushPendingWrites();
       await clearAllData();
-      showMessage('success', `✓ ${t('settings.msg_delete_success')}`);
+      clearRuntimeCaches();
+      showMessage('success', `OK ${t('settings.msg_delete_success')}`);
       scheduleTimeout(() => {
         window.location.reload();
       }, 2000);
     } catch (error) {
       console.error('[Settings] Error al borrar:', error);
-      showMessage('error', `✗ ${t('settings.msg_delete_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
+      showMessage('error', `Error ${t('settings.msg_delete_error')}: ` + (error instanceof Error ? error.message : t('settings.msg_unknown_error')));
     } finally {
       setIsProcessing(false);
       setShowDeleteConfirm(false);
@@ -131,7 +134,7 @@ export default function Settings({ onBack }: SettingsProps) {
     } catch (error) {
       console.error('[Settings] Error al guardar sonido:', error);
       setSoundEnabled(!newValue);
-      showMessage('error', `✗ ${t('settings.msg_sound_error')}`);
+      showMessage('error', `Error ${t('settings.msg_sound_error')}`);
     }
   };
 
@@ -145,7 +148,7 @@ export default function Settings({ onBack }: SettingsProps) {
         >
           {t('common.back')}
         </button>
-        <h1>⚙️ {t('settings.title')}</h1>
+        <h1>{t('settings.title')}</h1>
       </header>
 
       <div className="settings-container">
@@ -156,7 +159,7 @@ export default function Settings({ onBack }: SettingsProps) {
         )}
 
         <section className="settings-section">
-          <h2>🔊 {t('settings.sound')}</h2>
+          <h2>{t('settings.sound')}</h2>
           <p className="settings-description">
             {t('settings.sound_desc')}
           </p>
@@ -177,7 +180,7 @@ export default function Settings({ onBack }: SettingsProps) {
         </section>
 
         <section className="settings-section">
-          <h2>📦 {t('settings.data_title')}</h2>
+          <h2>{t('settings.data_title')}</h2>
           <p className="settings-description">
             {t('settings.data_desc')}
           </p>
@@ -188,7 +191,7 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleExport}
               disabled={isProcessing}
             >
-              📥 {t('settings.export_btn')}
+              {t('settings.export_btn')}
             </button>
 
             <button
@@ -196,7 +199,7 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleImportClick}
               disabled={isProcessing}
             >
-              📤 {t('settings.import_btn')}
+              {t('settings.import_btn')}
             </button>
             <input
               ref={fileInputRef}
@@ -218,7 +221,7 @@ export default function Settings({ onBack }: SettingsProps) {
         </section>
 
         <section className="settings-section settings-section-danger">
-          <h2>🗑️ {t('settings.danger_title')}</h2>
+          <h2>{t('settings.danger_title')}</h2>
           <p className="settings-description">
             {t('settings.danger_desc')}
           </p>
@@ -229,12 +232,12 @@ export default function Settings({ onBack }: SettingsProps) {
               onClick={handleDeleteRequest}
               disabled={isProcessing}
             >
-              🗑️ {t('settings.delete_local_btn')}
+              {t('settings.delete_local_btn')}
             </button>
           ) : (
             <div className="settings-confirm">
               <p className="settings-confirm-text">
-                ⚠️ <strong>{t('settings.confirm_sure')}</strong> {t('settings.confirm_irreversible')}
+                <strong>{t('settings.confirm_sure')}</strong> {t('settings.confirm_irreversible')}
               </p>
               <p className="settings-confirm-text">
                 {t('settings.confirm_type_delete')} <strong>"{deleteKeyword}"</strong>:
@@ -268,7 +271,7 @@ export default function Settings({ onBack }: SettingsProps) {
         </section>
 
         <section className="settings-section">
-          <h2>ℹ️ {t('settings.info_title')}</h2>
+          <h2>{t('settings.info_title')}</h2>
           <p className="settings-info-text">
             <strong>{t('settings.info_storage_label')}</strong> {t('settings.info_storage_value')}
           </p>
