@@ -4,10 +4,16 @@ import { useLanguage } from '../contexts/useLanguage';
 interface UpdateBannerProps {
   isVisible: boolean;
   isUpdating: boolean;
+  showPersistentMessage?: boolean;
   onUpdate: () => void;
 }
 
-export default function UpdateBanner({ isVisible, isUpdating, onUpdate }: UpdateBannerProps) {
+export default function UpdateBanner({
+  isVisible,
+  isUpdating,
+  showPersistentMessage = false,
+  onUpdate,
+}: UpdateBannerProps) {
   const { t } = useLanguage();
 
   if (!isVisible) return null;
@@ -17,7 +23,7 @@ export default function UpdateBanner({ isVisible, isUpdating, onUpdate }: Update
       <div className="update-banner-content">
         <div className="update-banner-text">
           <span className="update-icon">↻</span>
-          <span>{t('update.available')}</span>
+          <span>{showPersistentMessage ? t('update.ready_to_apply') : t('update.available')}</span>
         </div>
         <button
           className="update-banner-button"

@@ -45,7 +45,7 @@ export default function App() {
   const [puzzles, setPuzzles] = useState<Puzzle[] | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
-  const { updateAvailable, isUpdating, handleUpdate } = useUpdateChecker();
+  const { updateAvailable, isUpdating, handleUpdate, showPersistentMessage } = useUpdateChecker();
   const { language, t } = useLanguage();
   const screenNeedsDictionary =
     currentScreen === 'daily' ||
@@ -251,6 +251,7 @@ export default function App() {
         <UpdateBanner
           isVisible={updateAvailable}
           isUpdating={isUpdating}
+          showPersistentMessage={showPersistentMessage}
           onUpdate={handleUpdate}
         />
         <div className="app">
@@ -313,6 +314,7 @@ export default function App() {
         <UpdateBanner
           isVisible={updateAvailable}
           isUpdating={isUpdating}
+          showPersistentMessage={showPersistentMessage}
           onUpdate={handleUpdate}
         />
         <InitialLoadingScreen
@@ -404,6 +406,7 @@ export default function App() {
       <UpdateBanner
         isVisible={updateAvailable}
         isUpdating={isUpdating}
+        showPersistentMessage={showPersistentMessage}
         onUpdate={handleUpdate}
       />
       {screenContent}
