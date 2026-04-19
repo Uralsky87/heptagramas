@@ -113,3 +113,31 @@ export function playSuperHeptaSound(): void {
     console.debug('Error reproduciendo sonido Super Hepta:', error);
   }
 }
+
+/**
+ * Reproduce un sonido corto de error, suave para no saturar.
+ */
+export function playErrorSound(): void {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(392, now);
+    oscillator.frequency.exponentialRampToValueAtTime(246.94, now + 0.12);
+
+    gainNode.gain.setValueAtTime(0.08, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + 0.16);
+  } catch (error) {
+    console.debug('Error reproduciendo sonido de error:', error);
+  }
+}

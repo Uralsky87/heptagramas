@@ -7,11 +7,10 @@ import PuzzleSelector from './PuzzleSelector';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
-import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
+import UnifiedFeedback from './UnifiedFeedback';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { validateWord, isSuperHepta } from '../lib/validateWord';
 import { normalizeWord } from '../lib/normalizeWord';
-import { playSuccessSound, playSuperHeptaSound } from '../lib/soundEffects';
 import {
   loadPuzzleProgress,
   savePuzzleProgress,
@@ -26,6 +25,9 @@ import { getDailyKey } from '../lib/dailySession';
 import DefinitionModal from './DefinitionModal';
 import { useDefinitions } from '../lib/useDefinitions';
 import { useLanguage } from '../contexts/useLanguage';
+import type { FeedbackTone } from '../lib/feedback';
+import { buildSuccessFeedbackIntent, buildValidationFeedbackIntent } from '../lib/feedback';
+import useSubmissionFeedback from '../lib/useSubmissionFeedback';
 
 interface GameProps {
   initialPuzzle: Puzzle;
@@ -33,28 +35,44 @@ interface GameProps {
   allPuzzles: Puzzle[];
   onBack: () => void;
   mode: 'daily' | 'classic';
-  dailyProgressId?: string; // Para modo diario: "daily-YYYY-MM-DD"
-  dailyDateKey?: string; // Para modo diario: "YYYY-MM-DD"
+  dailyProgressId?: string;
+  dailyDateKey?: string;
 }
 
-export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mode, dailyProgressId, dailyDateKey }: GameProps) {
+export default function Game({
+  initialPuzzle,
+  dictionary,
+  allPuzzles,
+  onBack,
+  mode,
+  dailyProgressId,
+  dailyDateKey,
+}: GameProps) {
   const { t } = useLanguage();
   const [currentPuzzle, setCurrentPuzzle] = useState<Puzzle>(initialPuzzle);
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [score, setScore] = useState<number>(0);
   const [achievements, setAchievements] = useState({ superHeptaWords: [] as string[] });
   const [message, setMessage] = useState<string>('');
+  const [messageTone, setMessageTone] = useState<FeedbackTone>('neutral');
   const [clickedWord, setClickedWord] = useState('');
   const [showPuzzleSelector, setShowPuzzleSelector] = useState(false);
-  const [showSuccessAnim, setShowSuccessAnim] = useState(false);
-  const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const [showAnswers, setShowAnswers] = useState(false);
   const [selectedAnswerWord, setSelectedAnswerWord] = useState<string | null>(null);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const { getDefinition } = useDefinitions();
+  const {
+    banner,
+    dismissBanner,
+    errorAnimation,
+    feedbackTone,
+    resetFeedbackTone,
+    submitPulseTone,
+    successAnimation,
+    triggerFeedback,
+  } = useSubmissionFeedback();
 
-  // Determinar ID de progreso: usar dailyProgressId si está en modo diario, sino puzzleId
   const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
   const latestProgressIdRef = useRef(progressId);
 
@@ -65,36 +83,22 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   const puzzleSolutions = useMemo(() => {
     const minLen = currentPuzzle.minLen || 3;
     const allowEnye = currentPuzzle.allowEnye ?? true;
-    const solutions = solvePuzzle(
-      currentPuzzle.center, 
-      currentPuzzle.outer, 
-      dictionary,
-      minLen,
-      allowEnye
-    );
+    const solutions = solvePuzzle(currentPuzzle.center, currentPuzzle.outer, dictionary, minLen, allowEnye);
 
     if (import.meta.env.DEV) {
-      console.log(
-        `[Game] Soluciones cargadas para ${currentPuzzle.id}:`,
-        solutions.length,
-        'palabras'
-      );
+      console.log(`[Game] Soluciones cargadas para ${currentPuzzle.id}:`, solutions.length, 'palabras');
     }
 
     return solutions;
   }, [currentPuzzle, dictionary]);
 
-  // Cargar progreso de un puzzle
   const loadPuzzleProgressState = useCallback(async (progressIdToLoad: string) => {
-    // Precargar del IndexedDB al cache
     await preloadPuzzleProgress(progressIdToLoad);
 
-    // Evitar race condition si el puzzle cambió durante la carga
     if (progressIdToLoad !== latestProgressIdRef.current) {
       return;
     }
-    
-    // Ahora leer del cache (sync)
+
     const progress = loadPuzzleProgress(progressIdToLoad);
     if (progress) {
       setFoundWords(progress.foundWords);
@@ -108,16 +112,14 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setClickedWord('');
   }, []);
 
-  // Cargar progreso al iniciar o cambiar puzzle
   useEffect(() => {
     const timerId = window.setTimeout(() => {
       void loadPuzzleProgressState(progressId);
     }, 0);
 
     return () => clearTimeout(timerId);
-  }, [progressId, loadPuzzleProgressState]);
+  }, [loadPuzzleProgressState, progressId]);
 
-  // Guardar progreso del puzzle actual
   const savePuzzleProgressState = useCallback(() => {
     const now = new Date().toISOString();
     const progress: PuzzleProgress = {
@@ -130,18 +132,16 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     savePuzzleProgress(progressId, progress);
   }, [achievements.superHeptaWords, foundWords, progressId, score]);
 
-  // Guardar progreso automáticamente cuando cambia
   useEffect(() => {
     if (foundWords.length > 0 || score > 0) {
       savePuzzleProgressState();
     }
-  }, [foundWords, score, savePuzzleProgressState]);
+  }, [foundWords, savePuzzleProgressState, score]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
     setCurrentPuzzle(puzzle);
   };
-
 
   const handleBackButton = () => {
     savePuzzleProgressState();
@@ -189,49 +189,46 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
   };
 
   const handleLetterClick = (letter: string) => {
-    setFeedbackType(null);
-    setClickedWord(prev => prev + letter.toLowerCase());
+    dismissBanner();
+    setClickedWord((prev) => prev + letter.toLowerCase());
   };
 
   const handleBackspace = () => {
-    setFeedbackType(null);
-    setClickedWord(prev => prev.slice(0, -1));
+    dismissBanner();
+    setClickedWord((prev) => prev.slice(0, -1));
   };
 
   const handleDeleteLetter = () => {
-    setFeedbackType(null);
-    setClickedWord(prev => prev.slice(0, -1));
+    dismissBanner();
+    setClickedWord((prev) => prev.slice(0, -1));
   };
 
-  // Limpiar mensaje después de 3 segundos (evitar memory leak)
   useEffect(() => {
-    if (!message) return;
-    
+    if (!message) {
+      setMessageTone('neutral');
+      resetFeedbackTone();
+      return;
+    }
+
     const timer = setTimeout(() => setMessage(''), 3000);
     return () => clearTimeout(timer);
-  }, [message]);
+  }, [message, resetFeedbackTone]);
 
   const handleSubmit = (word: string) => {
     const result = validateWord(word, currentPuzzle, foundWords, puzzleSolutions);
+    const playerState = loadPlayerState();
 
     if (!result.ok) {
+      const feedbackIntent = buildValidationFeedbackIntent(result, t);
       setMessage(result.reason || 'Error desconocido');
+      setMessageTone(feedbackIntent.detailTone);
+      triggerFeedback(feedbackIntent, { soundEnabled: playerState.settings.soundEnabled });
       setClickedWord('');
 
-      // Mostrar feedback específico
-      if (result.reason === 'Ya la encontraste.') {
-        setFeedbackType('already-found');
-      } else if (result.reason?.includes('Debe contener la letra central')) {
-        setFeedbackType('missing-central');
-      } else {
-        setFeedbackType('incorrect');
-      }
-      
-      // Log en desarrollo para debugging
       if (import.meta.env.DEV) {
         console.log(
           `[Game] Palabra rechazada: "${word}"`,
-          `\nRazón: ${result.reason}`,
+          `\nRazon: ${result.reason}`,
           `\nNormalizada: ${word.toLowerCase()}`,
           `\nSoluciones disponibles: ${puzzleSolutions.length}`
         );
@@ -243,31 +240,15 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     setFoundWords((prev) => [...prev, normalized].sort());
     setClickedWord('');
 
-    // XP por palabra: 1 XP por letra (diario y clasico)
     const wordXP = normalized.length;
-    const playerState = loadPlayerState();
     const oldXP = playerState.xpTotal;
     const newXP = oldXP + wordXP;
     playerState.xpTotal = newXP;
     playerState.level = calculateLevel(newXP);
     savePlayerState(playerState);
-    
-    
+
     const isSH = isSuperHepta(normalized, currentPuzzle);
-    
-    // Reproducir sonido si está habilitado
-    if (playerState.settings.soundEnabled) {
-      if (isSH) {
-        playSuperHeptaSound();
-      } else {
-        playSuccessSound();
-      }
-    }
-    
-    // Mostrar animación de éxito
-    setShowSuccessAnim(true);
-    setFeedbackType('correct');
-    
+
     if (isSH) {
       setAchievements((prev) => {
         if (!prev.superHeptaWords.includes(normalized)) {
@@ -279,20 +260,16 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
     } else {
       setMessage('¡Bien! ✓');
     }
-  };
 
-  // Limpiar animación de éxito
-  useEffect(() => {
-    if (!showSuccessAnim) return;
-    
-    const timer = setTimeout(() => setShowSuccessAnim(false), 600);
-    return () => clearTimeout(timer);
-  }, [showSuccessAnim]);
+    const successIntent = buildSuccessFeedbackIntent(isSH ? 'superhepta' : 'correct');
+    setMessageTone(successIntent.detailTone);
+    triggerFeedback(successIntent, { soundEnabled: playerState.settings.soundEnabled });
+  };
 
   return (
     <PageContainer>
-      <TopBar 
-        onThemeClick={() => {}} 
+      <TopBar
+        onThemeClick={() => {}}
         onSettingsClick={() => {}}
         title={mode === 'daily' ? t('common.daily') : t('home.classic_title')}
         showThemeButton={false}
@@ -304,54 +281,44 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         }
       />
 
-      <header className="header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+      <header className="header game-header">
+        <div className="game-header-row">
           <p className="puzzle-title">{currentPuzzle.title}</p>
           {mode === 'classic' && (
-            <button 
-              className="btn-change-puzzle"
-              onClick={() => setShowPuzzleSelector(true)}
-            >
+            <button className="btn-change-puzzle" onClick={() => setShowPuzzleSelector(true)}>
               📋 Cambiar
             </button>
           )}
         </div>
       </header>
 
-      {/* Notificación de XP */}
-      {/* Mensajes de feedback encima del heptagrama */}
-      <UnifiedFeedback 
-        type={feedbackType}
-        onAnimationEnd={() => {
-          setFeedbackType(null);
-        }}
-      />
+      <UnifiedFeedback signal={banner} onAnimationEnd={dismissBanner} />
 
-      <HeptagramBoardSvg 
+      <HeptagramBoardSvg
         ref={heptagramRef}
-        center={currentPuzzle.center} 
+        center={currentPuzzle.center}
         outer={shuffledOuter}
         onLetterClick={handleLetterClick}
-        successAnimation={showSuccessAnim}
+        successAnimation={successAnimation}
         onShuffleOuter={setShuffledOuter}
       />
 
-      <WordInput 
-        onSubmit={handleSubmit} 
+      <WordInput
+        onSubmit={handleSubmit}
         message={message}
+        messageTone={messageTone === 'neutral' ? feedbackTone : messageTone}
         clickedWord={clickedWord}
         onBackspace={handleBackspace}
         onDeleteLetter={handleDeleteLetter}
         onShuffle={() => heptagramRef.current?.shuffle()}
-        successAnimation={showSuccessAnim}
+        successAnimation={successAnimation}
+        errorAnimation={errorAnimation}
+        submitPulseTone={submitPulseTone}
       />
 
       {isPastDaily && (
         <div className="answers-section">
-          <button
-            className="btn-action btn-answers"
-            onClick={() => setShowAnswers((prev) => !prev)}
-          >
+          <button className="btn-action btn-answers" onClick={() => setShowAnswers((prev) => !prev)}>
             {showAnswers ? 'Ocultar respuestas' : 'Ver respuestas'}
           </button>
 
@@ -388,13 +355,13 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
         />
       )}
 
-      <FoundWordsList 
-        words={foundWords} 
+      <FoundWordsList
+        words={foundWords}
         total={puzzleSolutions.length}
         superHeptaWords={achievements.superHeptaWords}
       />
 
-      <PuzzleStats 
+      <PuzzleStats
         letters={[...currentPuzzle.outer, currentPuzzle.center]}
         solutions={puzzleSolutions}
         foundWords={foundWords}
@@ -409,7 +376,6 @@ export default function Game({ initialPuzzle, dictionary, allPuzzles, onBack, mo
           onClose={() => setShowPuzzleSelector(false)}
         />
       )}
-
     </PageContainer>
   );
 }

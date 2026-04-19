@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 temp-devserver.*
+temp-puzzle-audit.json
 
 # Editor directories and files
 .vscode/*

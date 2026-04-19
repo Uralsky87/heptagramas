@@ -82,6 +82,24 @@ body, html {
   border-bottom: 2px solid var(--theme-ui-border);
 }
 
+.game-header {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+.top-bar + .game-header {
+  margin-top: -14px;
+}
+
+.game-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 0;
+  min-height: 32px;
+}
+
 .header h1 {
   margin: 0 0 8px 0;
   font-size: 28px;
@@ -107,6 +125,7 @@ h2, h3, h4, h5, h6 {
   color: var(--theme-ui-muted);
   font-weight: 500;
   font-family: var(--app-font);
+  line-height: 1.15;
 }
 
 /* XP Notification */
@@ -495,12 +514,38 @@ svg g {
 .message {
   margin: 0;
   padding: 12px 16px;
-  border-radius: 8px;
-  background: var(--theme-ui-surface-alt);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(244, 231, 205, 0.96) 0%, rgba(233, 213, 180, 0.96) 100%);
   color: var(--theme-ui-text);
   font-size: 14px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  border: 1px solid rgba(143, 109, 77, 0.4);
+  box-shadow: 0 6px 18px rgba(var(--theme-shadow-rgb), 0.12);
+}
+
+.message-success {
+  background: linear-gradient(180deg, rgba(227, 244, 220, 0.98) 0%, rgba(204, 232, 194, 0.98) 100%);
+  color: #2e5b36;
+  border-color: rgba(91, 136, 88, 0.34);
+}
+
+.message-error {
+  background: linear-gradient(180deg, rgba(252, 228, 224, 0.98) 0%, rgba(246, 206, 198, 0.98) 100%);
+  color: #8b3b33;
+  border-color: rgba(184, 106, 90, 0.4);
+}
+
+.message-warning {
+  background: linear-gradient(180deg, rgba(252, 242, 214, 0.98) 0%, rgba(242, 224, 179, 0.98) 100%);
+  color: #8a622f;
+  border-color: rgba(182, 133, 88, 0.4);
+}
+
+.message-info {
+  background: linear-gradient(180deg, rgba(235, 231, 221, 0.98) 0%, rgba(221, 213, 198, 0.98) 100%);
+  color: #5e5345;
+  border-color: rgba(143, 123, 98, 0.34);
 }
 
 /* Found Words Section */
@@ -908,6 +953,22 @@ svg g {
 .btn-change-puzzle:hover {
   background: var(--theme-ui-icon);
   color: white;
+}
+
+@media (max-width: 480px) {
+  .top-bar + .game-header {
+    margin-top: -10px;
+  }
+
+  .game-header {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+
+  .game-header-row {
+    min-height: 28px;
+    gap: 10px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -2533,6 +2594,10 @@ svg g {
   animation: successFlash 0.6s ease;
 }
 
+.word-input.error-flash {
+  animation: errorFlash 0.52s ease;
+}
+
 @keyframes successFlash {
   0% {
     border-color: #e0e0e0;
@@ -2555,9 +2620,32 @@ svg g {
   }
 }
 
+@keyframes errorFlash {
+  0% {
+    border-color: var(--theme-ui-border);
+    box-shadow: none;
+  }
+  25% {
+    border-color: #cf6653;
+    box-shadow: 0 0 0 4px rgba(207, 102, 83, 0.18);
+  }
+  50% {
+    border-color: #b5483c;
+    box-shadow: 0 0 0 6px rgba(207, 102, 83, 0.12);
+  }
+  100% {
+    border-color: var(--theme-ui-border);
+    box-shadow: none;
+  }
+}
+
 /* Animación de éxito en el contenedor del input */
 .input-container.success-pulse {
   animation: successPulse 0.6s ease;
+}
+
+.input-container.error-pulse {
+  animation: errorShake 0.52s ease;
 }
 
 @keyframes successPulse {
@@ -2575,6 +2663,25 @@ svg g {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
   }
 }
 
@@ -2604,11 +2711,49 @@ svg g {
   }
 }
 
+.btn-submit.submit-success-pop {
+  animation: submitSuccessPop 0.38s ease;
+}
+
+.btn-submit.submit-error-pop {
+  animation: submitErrorPop 0.38s ease;
+}
+
+@keyframes submitSuccessPop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.06);
+    box-shadow: 0 10px 20px rgba(81, 142, 98, 0.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes submitErrorPop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.96);
+    box-shadow: 0 10px 20px rgba(184, 106, 90, 0.22);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /* Optimización para rendimiento móvil */
 @media (prefers-reduced-motion: reduce) {
   .word-input.success-flash,
+  .word-input.error-flash,
   .input-container.success-pulse,
-  .svg-container.success-bounce {
+  .input-container.error-pulse,
+  .svg-container.success-bounce,
+  .btn-submit.submit-success-pop,
+  .btn-submit.submit-error-pop {
     animation: none;
   }
 }

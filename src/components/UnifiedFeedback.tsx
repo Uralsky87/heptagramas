@@ -1,46 +1,65 @@
-import { useEffect, useRef, useState } from 'react';
-import '../styles/unifiedFeedback.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { FeedbackBannerKind, FeedbackSignal } from '../lib/feedback';
 import { useLanguage } from '../contexts/useLanguage';
+import '../styles/unifiedFeedback.css';
 
-export type FeedbackType = 'correct' | 'incorrect' | 'already-found' | 'missing-central' | null;
+export type FeedbackType =
+  | 'correct'
+  | 'superhepta'
+  | 'incorrect'
+  | 'already-found'
+  | 'missing-central'
+  | null;
 
 interface UnifiedFeedbackProps {
-  type: FeedbackType;
+  signal?: FeedbackSignal | null;
+  type?: FeedbackType;
   onAnimationEnd?: () => void;
 }
 
-const FEEDBACK_CONFIG = {
-  'correct': {
-    color: 'var(--theme-feedback-success)',
-    duration: 1500,
-  },
-  'incorrect': {
-    color: 'var(--theme-feedback-error)',
-    duration: 1500,
-  },
-  'already-found': {
-    color: 'var(--theme-feedback-info)',
-    duration: 1500,
-  },
-  'missing-central': {
-    color: 'var(--theme-feedback-warning)',
-    duration: 2500,
-  },
-} as const;
+const FEEDBACK_CONFIG: Record<FeedbackBannerKind, { duration: number }> = {
+  correct: { duration: 1700 },
+  superhepta: { duration: 2200 },
+  incorrect: { duration: 1650 },
+  'already-found': { duration: 1800 },
+  'missing-central': { duration: 2300 },
+};
 
-export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbackProps) {
+export default function UnifiedFeedback({ signal, type, onAnimationEnd }: UnifiedFeedbackProps) {
   const { t } = useLanguage();
-  const [currentType, setCurrentType] = useState<FeedbackType>(null);
+  const [currentSignal, setCurrentSignal] = useState<FeedbackSignal | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const currentTypeRef = useRef<FeedbackType>(null);
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nextLegacyIdRef = useRef(0);
 
-  const setDisplayedType = (nextType: FeedbackType) => {
-    currentTypeRef.current = nextType;
-    setCurrentType(nextType);
-  };
+  const legacySignal = useMemo<FeedbackSignal | null>(() => {
+    if (!type) {
+      return null;
+    }
+
+    nextLegacyIdRef.current += 1;
+
+    const text =
+      type === 'superhepta'
+        ? t('feedback.superhepta')
+        : type === 'correct'
+          ? t('feedback.correct')
+          : type === 'already-found'
+            ? t('feedback.already_found')
+            : type === 'missing-central'
+              ? t('feedback.missing_central')
+              : t('feedback.try_again');
+
+    return {
+      id: nextLegacyIdRef.current,
+      kind: type,
+      text,
+    };
+  }, [t, type]);
+
+  const activeSignal = signal ?? legacySignal;
 
   const clearTimers = () => {
     if (showTimerRef.current) {
@@ -60,61 +79,47 @@ export default function UnifiedFeedback({ type, onAnimationEnd }: UnifiedFeedbac
   useEffect(() => {
     clearTimers();
 
-    if (!type) {
-      if (!currentTypeRef.current) {
-        return;
+    if (!activeSignal) {
+      if (!currentSignal) {
+        return () => clearTimers();
       }
 
-      hideTimerRef.current = setTimeout(() => {
-        setIsVisible(false);
-        clearTimerRef.current = setTimeout(() => {
-          setDisplayedType(null);
-          onAnimationEnd?.();
-        }, 180);
-      }, 0);
+      setIsVisible(false);
+      clearTimerRef.current = setTimeout(() => {
+        setCurrentSignal(null);
+        onAnimationEnd?.();
+      }, 220);
 
       return () => clearTimers();
     }
 
-    currentTypeRef.current = type;
+    setIsVisible(false);
     showTimerRef.current = setTimeout(() => {
-      setDisplayedType(type);
+      setCurrentSignal(activeSignal);
       setIsVisible(true);
 
-      const config = FEEDBACK_CONFIG[type];
       hideTimerRef.current = setTimeout(() => {
         setIsVisible(false);
         clearTimerRef.current = setTimeout(() => {
-          setDisplayedType(null);
+          setCurrentSignal((active) => (active?.id === activeSignal.id ? null : active));
           onAnimationEnd?.();
-        }, 180);
-      }, config.duration);
-    }, 0);
+        }, 220);
+      }, FEEDBACK_CONFIG[activeSignal.kind].duration);
+    }, 24);
 
     return () => clearTimers();
-  }, [type, onAnimationEnd]);
-
-  if (!currentType) {
-    // Siempre renderizar el contenedor para reservar espacio
-    return <div className="unified-feedback" />;
-  }
-
-  const config = FEEDBACK_CONFIG[currentType];
-  const feedbackTextMap = {
-    'correct': t('feedback.correct'),
-    'incorrect': t('feedback.try_again'),
-    'already-found': t('feedback.already_found'),
-    'missing-central': t('feedback.missing_central'),
-  } as const;
+  }, [activeSignal, currentSignal, onAnimationEnd]);
 
   return (
-    <div className="unified-feedback">
-      <span 
-        className={`unified-feedback-text${isVisible ? ' visible' : ''}`}
-        style={{ color: config.color }}
+    <div className="unified-feedback" aria-live="polite" aria-atomic="true">
+      <div
+        className={`unified-feedback-badge${
+          currentSignal ? ` is-${currentSignal.kind}` : ''
+        }${isVisible ? ' visible' : ''}`}
       >
-        {feedbackTextMap[currentType]}
-      </span>
+        <span className="unified-feedback-glow" aria-hidden="true" />
+        <span className="unified-feedback-text">{currentSignal?.text ?? ''}</span>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import type { Puzzle, ValidationResult } from '../types';
-import { normalizeString, normalizeChar } from './normalizeChar';
+import { normalizeChar, normalizeString } from './normalizeChar';
 
 /**
  * Detecta si una palabra usa TODAS las letras del puzzle
@@ -8,26 +8,25 @@ import { normalizeString, normalizeChar } from './normalizeChar';
 export function isSuperHepta(word: string, puzzle: Puzzle): boolean {
   const allowEnye = puzzle.allowEnye ?? true;
   const normalized = normalizeString(word, allowEnye);
-  
-  // Normalizar letras del puzzle
+
   const normalizedCenter = normalizeChar(puzzle.center, allowEnye);
-  const normalizedOuter = puzzle.outer.map(l => normalizeChar(l, allowEnye));
+  const normalizedOuter = puzzle.outer.map((letter) => normalizeChar(letter, allowEnye));
   const allLetters = [normalizedCenter, ...normalizedOuter];
-  
+
   for (const letter of allLetters) {
     if (!normalized.includes(letter)) {
       return false;
     }
   }
-  
+
   return true;
 }
 
 /**
  * Valida si una palabra es correcta para el puzzle dado
- * y no está ya encontrada.
- * @param solutions - Array de soluciones válidas (debe venir de solvePuzzle)
- * @param exoticLetter - Letra extra opcional para modo exótico (NO USAR en Diario/Clásicos)
+ * y no esta ya encontrada.
+ * @param solutions - Array de soluciones validas (debe venir de solvePuzzle)
+ * @param exoticLetter - Letra extra opcional para modo exotico (NO USAR en Diario/Clasicos)
  */
 export function validateWord(
   word: string,
@@ -39,10 +38,9 @@ export function validateWord(
   const allowEnye = puzzle.allowEnye ?? true;
   const normalized = normalizeString(word, allowEnye);
 
-  // Log en desarrollo
   if (import.meta.env.DEV) {
     console.log(
-      `[validateWord] Validando:`,
+      '[validateWord] Validando:',
       `\nOriginal: "${word}"`,
       `\nNormalizada: "${normalized}"`,
       `\nAllowEnye: ${allowEnye}`,
@@ -50,72 +48,67 @@ export function validateWord(
     );
   }
 
-  // 1. Longitud mínima
   const minLen = puzzle.minLen || 3;
   if (normalized.length < minLen) {
-    return { ok: false, reason: `Mínimo ${minLen} letras.` };
+    return { ok: false, code: 'too-short', reason: `Minimo ${minLen} letras.` };
   }
 
-  // 2. Normalizar letras del puzzle para comparación consistente
   const normalizedCenter = normalizeChar(puzzle.center, allowEnye);
-  const normalizedOuter = puzzle.outer.map(l => normalizeChar(l, allowEnye));
+  const normalizedOuter = puzzle.outer.map((letter) => normalizeChar(letter, allowEnye));
   const normalizedExotic = exoticLetter ? normalizeChar(exoticLetter, allowEnye) : null;
 
-  // 3. Debe contener la letra central
   if (!normalized.includes(normalizedCenter)) {
     return {
       ok: false,
+      code: 'missing-central',
       reason: `Debe contener la letra central: "${normalizedCenter.toUpperCase()}".`,
     };
   }
 
-  // 4. Solo puede usar letras permitidas (centro + exteriores + exótica)
   const allowedSet = new Set([normalizedCenter, ...normalizedOuter]);
   if (normalizedExotic) {
     allowedSet.add(normalizedExotic);
   }
-  
-  for (let i = 0; i < normalized.length; i++) {
+
+  for (let i = 0; i < normalized.length; i += 1) {
     const ch = normalized[i];
     if (!allowedSet.has(ch)) {
-      // Log detallado en desarrollo para debugging
       if (import.meta.env.DEV) {
         console.warn(
-          `[validateWord] ❌ Letra NO permitida detectada:`,
-          `\nCarácter: "${ch}"`,
-          `\nCódigo Unicode: ${ch.charCodeAt(0)}`,
-          `\nPosición: ${i}`,
+          '[validateWord] Letra NO permitida detectada:',
+          `\nCaracter: "${ch}"`,
+          `\nCodigo Unicode: ${ch.charCodeAt(0)}`,
+          `\nPosicion: ${i}`,
           `\nPalabra completa: "${normalized}"`,
           `\nPalabra original: "${word}"`,
-          `\nLetras permitidas:`, Array.from(allowedSet),
+          '\nLetras permitidas:',
+          Array.from(allowedSet),
           `\nAllowEnye: ${allowEnye}`
         );
       }
-      return { ok: false, reason: 'Solo puedes usar las letras del heptagrama.' };
+      return { ok: false, code: 'invalid-letters', reason: 'Solo puedes usar las letras del heptagrama.' };
     }
   }
 
-  // 5. Debe existir en las soluciones del puzzle (usando Set para O(1))
   const validSolutions = solutions || [];
   const solutionsSet = new Set(validSolutions);
-  
+
   if (!solutionsSet.has(normalized)) {
     if (import.meta.env.DEV) {
       console.log(
-        `[validateWord] Palabra no en diccionario:`,
-        `\n"${normalized}" no está en las ${validSolutions.length} soluciones`
+        '[validateWord] Palabra no en diccionario:',
+        `\n"${normalized}" no esta en las ${validSolutions.length} soluciones`
       );
     }
-    return { ok: false, reason: 'No está en el diccionario de este puzzle.' };
+    return { ok: false, code: 'not-in-puzzle-dict', reason: 'No esta en el diccionario de este puzzle.' };
   }
 
-  // 6. No puede estar repetida
   if (foundWords.includes(normalized)) {
-    return { ok: false, reason: 'Ya la encontraste.' };
+    return { ok: false, code: 'already-found', reason: 'Ya la encontraste.' };
   }
 
   if (import.meta.env.DEV) {
-    console.log(`[validateWord] ✓ Palabra válida: "${normalized}"`);
+    console.log(`[validateWord] Palabra valida: "${normalized}"`);
   }
 
   return { ok: true };

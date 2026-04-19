@@ -32,9 +32,17 @@ export interface PlayerSettings {
   activeFont: string; // ID de la fuente activa
 }
 
+export type ValidationCode =
+  | 'too-short'
+  | 'missing-central'
+  | 'invalid-letters'
+  | 'not-in-puzzle-dict'
+  | 'already-found';
+
 export interface ValidationResult {
   ok: boolean;
   reason?: string;
+  code?: ValidationCode;
 }
 
 // ========================================

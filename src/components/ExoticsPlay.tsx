@@ -5,11 +5,10 @@ import FoundWordsList from './FoundWordsList';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
-import UnifiedFeedback, { type FeedbackType } from './UnifiedFeedback';
+import UnifiedFeedback from './UnifiedFeedback';
 import type { ValidationResult, ExoticsRunState } from '../types';
 import { normalizeWord } from '../lib/normalizeWord';
 import { normalizeChar } from '../lib/normalizeChar';
-import { playSuccessSound, playSuperHeptaSound } from '../lib/soundEffects';
 import { loadPlayerState, savePlayerState } from '../lib/storageAdapter';
 import { loadExoticsRun, saveExoticsRun, clearExoticsRun } from '../lib/exoticsStorage';
 import { solvePuzzle } from '../lib/solvePuzzle';
@@ -17,6 +16,9 @@ import { generateExoticPuzzle } from '../lib/generateExoticPuzzle';
 import { calculateLevel } from '../lib/xpSystem';
 import type { DictionaryData } from '../lib/dictionary';
 import { useLanguage } from '../contexts/useLanguage';
+import type { FeedbackTone } from '../lib/feedback';
+import { buildSuccessFeedbackIntent, buildValidationFeedbackIntent } from '../lib/feedback';
+import useSubmissionFeedback from '../lib/useSubmissionFeedback';
 import '../exotics-styles.css';
 
 interface ExoticsPlayProps {
@@ -48,11 +50,9 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const { t } = useLanguage();
   const [runState, setRunState] = useState<ExoticsRunState | null>(() => loadExoticsRun());
   const [message, setMessage] = useState<string>('');
+  const [messageTone, setMessageTone] = useState<FeedbackTone>('neutral');
   const [clickedWord, setClickedWord] = useState('');
   const [puzzleSolutions, setPuzzleSolutions] = useState<string[]>([]);
-  const [showSuccessAnim, setShowSuccessAnim] = useState(false);
-  const [feedbackType, setFeedbackType] = useState<FeedbackType>(null);
-  const [isFeedbackActive, setIsFeedbackActive] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0); // Solo guardamos un seed para shuffle
   const [, setIsGeneratingNewPuzzle] = useState(false);
   const [, setGenerationProgress] = useState({ attempts: 0, lastCount: 0 });
@@ -67,6 +67,16 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const solutionsCacheRef = useRef<Map<string, string[]>>(new Map());
   const timeoutsRef = useRef<number[]>([]);
+  const {
+    banner,
+    dismissBanner,
+    errorAnimation,
+    feedbackTone,
+    resetFeedbackTone,
+    submitPulseTone,
+    successAnimation,
+    triggerFeedback,
+  } = useSubmissionFeedback();
 
   const scheduleTimeout = (callback: () => void, delay: number) => {
     const id = window.setTimeout(callback, delay);
@@ -80,6 +90,16 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
       timeoutsRef.current = [];
     };
   }, []);
+
+  const showTimedMessage = (text: string, tone: FeedbackTone, delay: number) => {
+    setMessage(text);
+    setMessageTone(tone);
+    scheduleTimeout(() => {
+      setMessage('');
+      setMessageTone('neutral');
+      resetFeedbackTone();
+    }, delay);
+  };
 
   // ============================================
   // TABLERO DINÁMICO: combinar outer + extraLetters
@@ -197,14 +217,17 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
   }, [runState]);
 
   const handleLetterClick = (letter: string) => {
+    dismissBanner();
     setClickedWord(prev => prev + letter.toLowerCase());
   };
 
   const handleBackspace = () => {
+    dismissBanner();
     setClickedWord(prev => prev.slice(0, -1));
   };
 
   const handleDeleteLetter = () => {
+    dismissBanner();
     setClickedWord(prev => prev.slice(0, -1));
   };
 
@@ -258,7 +281,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     
     // 1. Longitud mínima
     if (normalized.length < 3) {
-      return { ok: false, reason: t('game.min_letters').replace('{0}', '3') };
+      return { ok: false, code: 'too-short', reason: t('game.min_letters').replace('{0}', '3') };
     }
     
     // 2. Debe contener la letra central
@@ -266,6 +289,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (!normalized.includes(normalizedCenter)) {
       return {
         ok: false,
+        code: 'missing-central',
         reason: t('game.must_contain').replace('{0}', normalizedCenter.toUpperCase()),
       };
     }
@@ -290,19 +314,19 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
             `\n  Extra: [${runState.extraLetters.join(', ')}] → [${normalizedExtra.join(', ')}]`
           );
         }
-        return { ok: false, reason: t('exotic.only_available_letters') };
+        return { ok: false, code: 'invalid-letters', reason: t('exotic.only_available_letters') };
       }
     }
     
     // 4. Debe existir en las soluciones
     if (!puzzleSolutions.includes(normalized)) {
-      return { ok: false, reason: t('exotic.invalid_word') };
+      return { ok: false, code: 'not-in-puzzle-dict', reason: t('exotic.invalid_word') };
     }
     
     // 5. No debe estar ya encontrada (verificar contra foundWordsAll normalizado)
     const foundSet = getFoundWordsNormalizedSet();
     if (foundSet.has(normalized)) {
-      return { ok: false, reason: t('game.already_found_word') };
+      return { ok: false, code: 'already-found', reason: t('game.already_found_word') };
     }
     
     return { ok: true };
@@ -843,24 +867,13 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (!runState) return;
     
     const result = validateWordExotic(word);
+    const playerState = loadPlayerState();
     
     if (!result.ok) {
-      setMessage(result.reason || t('settings.msg_unknown_error'));
-      scheduleTimeout(() => setMessage(''), 3000);
+      const feedbackIntent = buildValidationFeedbackIntent(result, t);
+      showTimedMessage(result.reason || t('settings.msg_unknown_error'), feedbackIntent.detailTone, 3000);
+      triggerFeedback(feedbackIntent, { soundEnabled: playerState.settings.soundEnabled });
       setClickedWord('');
-      
-      // Solo mostrar nuevo feedback si no hay uno activo
-      if (!isFeedbackActive) {
-        setIsFeedbackActive(true);
-        // Mostrar feedback específico
-        if (result.reason === t('game.already_found_word') || result.reason?.includes(t('game.already_found_word'))) {
-          setFeedbackType('already-found');
-        } else if (result.reason?.includes(t('game.must_contain').split('{0}')[0])) {
-          setFeedbackType('missing-central');
-        } else {
-          setFeedbackType('incorrect');
-        }
-      }
       
       if (import.meta.env.DEV) {
         console.log(
@@ -872,9 +885,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     }
     
     const normalized = normalizeWord(word);
-    
-    // Mostrar feedback de correcto
-    setShowSuccessAnim(true);
     const newFoundWordsAll = [...runState.foundWordsAll, normalized].sort();
     
     // Calcular foundWordsValid DESPUÉS de añadir la nueva palabra
@@ -957,7 +967,7 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     // Actualizar estado
     const updatedRun: ExoticsRunState = {
       ...runState,
-      foundWords: newFoundWordsAll, // Mantener compatibilidad - ahora es igual a foundWordsAll
+      foundWords: newFoundWordsAll,
       foundWordsAll: newFoundWordsAll,
       scorePoints: newScore,
       xpEarned: newXP,
@@ -969,22 +979,6 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     setRunState(updatedRun);
     saveExoticsRun(updatedRun);
     setClickedWord('');
-    
-    // Reproducir sonido
-    const playerState = loadPlayerState();
-    
-    if (playerState.settings.soundEnabled) {
-      if (isSH) {
-        playSuperHeptaSound();
-      } else {
-        playSuccessSound();
-      }
-    }
-    
-    // Mostrar animación de éxito
-    setShowSuccessAnim(true);
-    setFeedbackType('correct');
-    scheduleTimeout(() => setShowSuccessAnim(false), 600);
     
     // Mensaje de feedback
     let feedbackMessage = '';
@@ -1004,9 +998,14 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
     if (newDoublePoints > 0) {
       feedbackMessage += ` (⚡${newDoublePoints} restantes)`;
     }
-    
-    setMessage(feedbackMessage);
-    scheduleTimeout(() => setMessage(''), bonus50Percent > 0 ? 6000 : (milestoneBonus > 0 ? 5000 : 3000));
+
+    const successIntent = buildSuccessFeedbackIntent(isSH ? 'superhepta' : 'correct');
+    triggerFeedback(successIntent, { soundEnabled: playerState.settings.soundEnabled });
+    showTimedMessage(
+      feedbackMessage,
+      successIntent.detailTone,
+      bonus50Percent > 0 ? 6000 : (milestoneBonus > 0 ? 5000 : 3000)
+    );
   };
 
   const handleEndRun = () => {
@@ -1137,26 +1136,26 @@ export default function ExoticsPlay({ onBack, dictionary }: ExoticsPlayProps) {
               outer={shuffledOuter}
               onLetterClick={handleLetterClick}
               onShuffleOuter={() => setShuffleSeed(prev => prev + 1)}
-              successAnimation={showSuccessAnim}
+              successAnimation={successAnimation}
               extraLetterIndices={extraLetterIndices}
             />
           </div>
 
           <UnifiedFeedback 
-            type={feedbackType}
-            onAnimationEnd={() => {
-              setFeedbackType(null);
-              setIsFeedbackActive(false);
-            }}
+            signal={banner}
+            onAnimationEnd={dismissBanner}
           />
 
           <WordInput
             clickedWord={clickedWord}
             message={message}
+            messageTone={messageTone === 'neutral' ? feedbackTone : messageTone}
             onSubmit={handleSubmit}
             onBackspace={handleBackspace}
             onDeleteLetter={handleDeleteLetter}
-            successAnimation={showSuccessAnim}
+            successAnimation={successAnimation}
+            errorAnimation={errorAnimation}
+            submitPulseTone={submitPulseTone}
           />
         </div>
 
