@@ -25,6 +25,14 @@ const FEEDBACK_CONFIG: Record<FeedbackBannerKind, { duration: number }> = {
   'missing-central': { duration: 2300 },
 };
 
+const LEGACY_FEEDBACK_IDS: Record<Exclude<FeedbackType, null>, number> = {
+  correct: 1,
+  superhepta: 2,
+  incorrect: 3,
+  'already-found': 4,
+  'missing-central': 5,
+};
+
 export default function UnifiedFeedback({ signal, type, onAnimationEnd }: UnifiedFeedbackProps) {
   const { t } = useLanguage();
   const [currentSignal, setCurrentSignal] = useState<FeedbackSignal | null>(null);
@@ -32,14 +40,11 @@ export default function UnifiedFeedback({ signal, type, onAnimationEnd }: Unifie
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const nextLegacyIdRef = useRef(0);
 
   const legacySignal = useMemo<FeedbackSignal | null>(() => {
     if (!type) {
       return null;
     }
-
-    nextLegacyIdRef.current += 1;
 
     const text =
       type === 'superhepta'
@@ -53,7 +58,7 @@ export default function UnifiedFeedback({ signal, type, onAnimationEnd }: Unifie
               : t('feedback.try_again');
 
     return {
-      id: nextLegacyIdRef.current,
+      id: LEGACY_FEEDBACK_IDS[type],
       kind: type,
       text,
     };
@@ -84,28 +89,33 @@ export default function UnifiedFeedback({ signal, type, onAnimationEnd }: Unifie
         return () => clearTimers();
       }
 
-      setIsVisible(false);
-      clearTimerRef.current = setTimeout(() => {
-        setCurrentSignal(null);
-        onAnimationEnd?.();
-      }, 220);
+      hideTimerRef.current = setTimeout(() => {
+        setIsVisible(false);
+        clearTimerRef.current = setTimeout(() => {
+          setCurrentSignal(null);
+          onAnimationEnd?.();
+        }, 220);
+      }, 0);
 
       return () => clearTimers();
     }
 
-    setIsVisible(false);
     showTimerRef.current = setTimeout(() => {
-      setCurrentSignal(activeSignal);
-      setIsVisible(true);
+      setIsVisible(false);
 
-      hideTimerRef.current = setTimeout(() => {
-        setIsVisible(false);
-        clearTimerRef.current = setTimeout(() => {
-          setCurrentSignal((active) => (active?.id === activeSignal.id ? null : active));
-          onAnimationEnd?.();
-        }, 220);
-      }, FEEDBACK_CONFIG[activeSignal.kind].duration);
-    }, 24);
+      clearTimerRef.current = setTimeout(() => {
+        setCurrentSignal(activeSignal);
+        setIsVisible(true);
+
+        hideTimerRef.current = setTimeout(() => {
+          setIsVisible(false);
+          clearTimerRef.current = setTimeout(() => {
+            setCurrentSignal((active) => (active?.id === activeSignal.id ? null : active));
+            onAnimationEnd?.();
+          }, 220);
+        }, FEEDBACK_CONFIG[activeSignal.kind].duration);
+      }, 24);
+    }, 0);
 
     return () => clearTimers();
   }, [activeSignal, currentSignal, onAnimationEnd]);

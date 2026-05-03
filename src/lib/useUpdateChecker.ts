@@ -47,6 +47,7 @@ export function useUpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState<boolean>(() => readPersistedUpdateFlag());
   const [isUpdating, setIsUpdating] = useState(false);
   const [pendingSince, setPendingSince] = useState<number | null>(() => readPendingSince());
+  const [showPersistentMessage, setShowPersistentMessage] = useState(false);
   const updateServiceWorkerRef = useRef<((reloadPage?: boolean) => Promise<void>) | null>(null);
 
   useEffect(() => {
@@ -116,6 +117,7 @@ export function useUpdateChecker() {
     setIsUpdating(true);
     persistUpdateFlag(false);
     setPendingSince(null);
+    setShowPersistentMessage(false);
 
     try {
       await updateServiceWorkerRef.current?.(true);
@@ -128,10 +130,18 @@ export function useUpdateChecker() {
     }
   };
 
-  const showPersistentMessage =
-    updateAvailable &&
-    pendingSince !== null &&
-    Date.now() - pendingSince >= STALE_UPDATE_MS;
+  useEffect(() => {
+    if (!updateAvailable || pendingSince === null) {
+      return;
+    }
+
+    const delay = Math.max(STALE_UPDATE_MS - (Date.now() - pendingSince), 0);
+    const timeoutId = window.setTimeout(() => {
+      setShowPersistentMessage(true);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [pendingSince, updateAvailable]);
 
   return { updateAvailable, isUpdating, handleUpdate, showPersistentMessage };
 }
