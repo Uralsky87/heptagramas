@@ -3,17 +3,14 @@ import './PageContainer.css';
 
 interface PageContainerProps {
   children: ReactNode;
-  wide?: boolean; // Para ExoticsPlay que necesita más ancho en desktop
+  wide?: boolean;
+  className?: string;
 }
 
-/**
- * Contenedor de página que centra el contenido en todas las pantallas.
- * Uso obligatorio en: Home, DailyScreen, ClassicList, ExoticsHome, ExoticsPlay, Game
- */
-export default function PageContainer({ children, wide = false }: PageContainerProps) {
+export default function PageContainer({ children, wide = false, className = '' }: PageContainerProps) {
   return (
     <div className="page-container-outer">
-      <div className={`page-container-inner ${wide ? 'wide' : ''}`}>
+      <div className={`page-container-inner ${wide ? 'wide' : ''} ${className}`.trim()}>
         {children}
       </div>
     </div>

@@ -1,6 +1,12 @@
 import type { Puzzle, ValidationResult } from '../types';
 import { normalizeChar, normalizeString } from './normalizeChar';
 
+const isDev = Boolean(import.meta.env?.DEV);
+
+interface ValidateWordOptions {
+  allowMissingCenterWords?: string[];
+}
+
 /**
  * Detecta si una palabra usa TODAS las letras del puzzle
  * (center + outer) al menos una vez cada una.
@@ -33,12 +39,16 @@ export function validateWord(
   puzzle: Puzzle,
   foundWords: string[],
   solutions?: string[],
-  exoticLetter?: string | null
+  exoticLetter?: string | null,
+  options: ValidateWordOptions = {}
 ): ValidationResult {
   const allowEnye = puzzle.allowEnye ?? true;
   const normalized = normalizeString(word, allowEnye);
+  const allowMissingCenterSet = new Set(
+    (options.allowMissingCenterWords ?? []).map((item) => normalizeString(item, allowEnye))
+  );
 
-  if (import.meta.env.DEV) {
+  if (isDev) {
     console.log(
       '[validateWord] Validando:',
       `\nOriginal: "${word}"`,
@@ -57,7 +67,7 @@ export function validateWord(
   const normalizedOuter = puzzle.outer.map((letter) => normalizeChar(letter, allowEnye));
   const normalizedExotic = exoticLetter ? normalizeChar(exoticLetter, allowEnye) : null;
 
-  if (!normalized.includes(normalizedCenter)) {
+  if (!normalized.includes(normalizedCenter) && !allowMissingCenterSet.has(normalized)) {
     return {
       ok: false,
       code: 'missing-central',
@@ -73,7 +83,7 @@ export function validateWord(
   for (let i = 0; i < normalized.length; i += 1) {
     const ch = normalized[i];
     if (!allowedSet.has(ch)) {
-      if (import.meta.env.DEV) {
+      if (isDev) {
         console.warn(
           '[validateWord] Letra NO permitida detectada:',
           `\nCaracter: "${ch}"`,
@@ -94,7 +104,7 @@ export function validateWord(
   const solutionsSet = new Set(validSolutions);
 
   if (!solutionsSet.has(normalized)) {
-    if (import.meta.env.DEV) {
+    if (isDev) {
       console.log(
         '[validateWord] Palabra no en diccionario:',
         `\n"${normalized}" no esta en las ${validSolutions.length} soluciones`
@@ -107,7 +117,7 @@ export function validateWord(
     return { ok: false, code: 'already-found', reason: 'Ya la encontraste.' };
   }
 
-  if (import.meta.env.DEV) {
+  if (isDev) {
     console.log(`[validateWord] Palabra valida: "${normalized}"`);
   }
 

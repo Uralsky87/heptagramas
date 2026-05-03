@@ -2,12 +2,15 @@ import { useState } from 'react';
 import DefinitionModal from './DefinitionModal';
 import { useDefinitions } from '../lib/useDefinitions';
 import { useLanguage } from '../contexts/useLanguage';
+import { normalizeString } from '../lib/normalizeChar';
 
 interface FoundWordsListProps {
   words: string[];
   total: number;
   superHeptaWords: string[];
-  invalidWords?: string[]; // Palabras que ya no son válidas con el set actual de letras
+  invalidWords?: string[];
+  customDefinitions?: Record<string, string>;
+  highlightedWords?: string[];
 }
 
 function getProgressLevel(percentage: number): string {
@@ -17,7 +20,14 @@ function getProgressLevel(percentage: number): string {
   return 'game.expert';
 }
 
-export default function FoundWordsList({ words, total, superHeptaWords, invalidWords = [] }: FoundWordsListProps) {
+export default function FoundWordsList({
+  words,
+  total,
+  superHeptaWords,
+  invalidWords = [],
+  customDefinitions = {},
+  highlightedWords = [],
+}: FoundWordsListProps) {
   const { t } = useLanguage();
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const { getDefinition } = useDefinitions();
@@ -25,15 +35,21 @@ export default function FoundWordsList({ words, total, superHeptaWords, invalidW
   const level = t(getProgressLevel(percentage));
   const superHeptaSet = new Set(superHeptaWords);
   const invalidSet = new Set(invalidWords);
+  const highlightedSet = new Set(highlightedWords.map((word) => normalizeString(word, true)));
+
+  const getWordDefinition = (word: string): string | null => {
+    const normalized = normalizeString(word, true);
+    return customDefinitions[normalized] || getDefinition(word);
+  };
 
   const handleWordClick = (word: string) => {
-    const definition = getDefinition(word);
+    const definition = getWordDefinition(word);
     if (definition) {
       setSelectedWord(word);
     }
   };
 
-  const selectedDefinition = selectedWord ? getDefinition(selectedWord) : null;
+  const selectedDefinition = selectedWord ? getWordDefinition(selectedWord) : null;
 
   return (
     <section className="found-section">
@@ -60,15 +76,17 @@ export default function FoundWordsList({ words, total, superHeptaWords, invalidW
           {words.map((word) => {
             const isInvalid = invalidSet.has(word);
             const isSuper = superHeptaSet.has(word);
-            const hasDefinition = getDefinition(word);
+            const isHighlighted = highlightedSet.has(normalizeString(word, true));
+            const hasDefinition = getWordDefinition(word);
             let className = '';
             if (isSuper) className = 'superhepta';
+            if (isHighlighted) className += ' special-word';
             if (isInvalid) className += ' invalid-word';
             if (hasDefinition) className += ' has-definition';
-            
+
             return (
-              <li 
-                key={word} 
+              <li
+                key={word}
                 className={className.trim()}
                 onClick={() => handleWordClick(word)}
                 title={hasDefinition ? t('game.hint_click_definition') : ''}

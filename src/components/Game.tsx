@@ -28,13 +28,20 @@ import { useLanguage } from '../contexts/useLanguage';
 import type { FeedbackTone } from '../lib/feedback';
 import { buildSuccessFeedbackIntent, buildValidationFeedbackIntent } from '../lib/feedback';
 import useSubmissionFeedback from '../lib/useSubmissionFeedback';
+import {
+  MOTHERS_DAY_ALLOW_MISSING_CENTER,
+  MOTHERS_DAY_DEFINITIONS,
+  MOTHERS_DAY_EXTRA_SOLUTIONS,
+  MOTHERS_DAY_HIGHLIGHT_WORDS,
+  MOTHERS_DAY_PROGRESS_ID,
+} from '../lib/specialPuzzles';
 
 interface GameProps {
   initialPuzzle: Puzzle;
   dictionary: DictionaryData;
   allPuzzles: Puzzle[];
   onBack: () => void;
-  mode: 'daily' | 'classic';
+  mode: 'daily' | 'classic' | 'special';
   dailyProgressId?: string;
   dailyDateKey?: string;
 }
@@ -73,8 +80,9 @@ export default function Game({
     triggerFeedback,
   } = useSubmissionFeedback();
 
-  const progressId = mode === 'daily' && dailyProgressId ? dailyProgressId : currentPuzzle.id;
+  const progressId = dailyProgressId ?? currentPuzzle.id;
   const latestProgressIdRef = useRef(progressId);
+  const isMothersDaySpecial = mode === 'special' && currentPuzzle.id === MOTHERS_DAY_PROGRESS_ID;
 
   useEffect(() => {
     latestProgressIdRef.current = progressId;
@@ -83,14 +91,17 @@ export default function Game({
   const puzzleSolutions = useMemo(() => {
     const minLen = currentPuzzle.minLen || 3;
     const allowEnye = currentPuzzle.allowEnye ?? true;
-    const solutions = solvePuzzle(currentPuzzle.center, currentPuzzle.outer, dictionary, minLen, allowEnye);
+    const baseSolutions = solvePuzzle(currentPuzzle.center, currentPuzzle.outer, dictionary, minLen, allowEnye);
+    const solutions = isMothersDaySpecial
+      ? Array.from(new Set([...baseSolutions, ...MOTHERS_DAY_EXTRA_SOLUTIONS])).sort((a, b) => a.localeCompare(b, 'es'))
+      : baseSolutions;
 
     if (import.meta.env.DEV) {
       console.log(`[Game] Soluciones cargadas para ${currentPuzzle.id}:`, solutions.length, 'palabras');
     }
 
     return solutions;
-  }, [currentPuzzle, dictionary]);
+  }, [currentPuzzle, dictionary, isMothersDaySpecial]);
 
   const loadPuzzleProgressState = useCallback(async (progressIdToLoad: string) => {
     await preloadPuzzleProgress(progressIdToLoad);
@@ -205,17 +216,27 @@ export default function Game({
 
   useEffect(() => {
     if (!message) {
-      setMessageTone('neutral');
-      resetFeedbackTone();
       return;
     }
 
-    const timer = setTimeout(() => setMessage(''), 3000);
+    const timer = setTimeout(() => {
+      setMessage('');
+      setMessageTone('neutral');
+      resetFeedbackTone();
+    }, 3000);
+
     return () => clearTimeout(timer);
   }, [message, resetFeedbackTone]);
 
   const handleSubmit = (word: string) => {
-    const result = validateWord(word, currentPuzzle, foundWords, puzzleSolutions);
+    const result = validateWord(
+      word,
+      currentPuzzle,
+      foundWords,
+      puzzleSolutions,
+      null,
+      { allowMissingCenterWords: isMothersDaySpecial ? MOTHERS_DAY_ALLOW_MISSING_CENTER : [] }
+    );
     const playerState = loadPlayerState();
 
     if (!result.ok) {
@@ -267,11 +288,12 @@ export default function Game({
   };
 
   return (
-    <PageContainer>
+    <PageContainer className={isMothersDaySpecial ? 'special-page-theme' : ''}>
+      <div className={isMothersDaySpecial ? 'game-screen special-game-theme' : 'game-screen'}>
       <TopBar
         onThemeClick={() => {}}
         onSettingsClick={() => {}}
-        title={mode === 'daily' ? t('common.daily') : t('home.classic_title')}
+        title={mode === 'daily' ? t('common.daily') : mode === 'special' ? t('common.special') : t('home.classic_title')}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
@@ -301,6 +323,7 @@ export default function Game({
         onLetterClick={handleLetterClick}
         successAnimation={successAnimation}
         onShuffleOuter={setShuffledOuter}
+        variant={isMothersDaySpecial ? 'mothers-day' : 'default'}
       />
 
       <WordInput
@@ -359,12 +382,15 @@ export default function Game({
         words={foundWords}
         total={puzzleSolutions.length}
         superHeptaWords={achievements.superHeptaWords}
+        customDefinitions={isMothersDaySpecial ? MOTHERS_DAY_DEFINITIONS : undefined}
+        highlightedWords={isMothersDaySpecial ? MOTHERS_DAY_HIGHLIGHT_WORDS : undefined}
       />
 
       <PuzzleStats
         letters={[...currentPuzzle.outer, currentPuzzle.center]}
         solutions={puzzleSolutions}
         foundWords={foundWords}
+        specialMissingCenterWord={isMothersDaySpecial ? MOTHERS_DAY_ALLOW_MISSING_CENTER[0] : undefined}
       />
 
       {showPuzzleSelector && mode === 'classic' && (
@@ -376,6 +402,7 @@ export default function Game({
           onClose={() => setShowPuzzleSelector(false)}
         />
       )}
+      </div>
     </PageContainer>
   );
 }

@@ -6,7 +6,7 @@ import { useLanguage } from '../contexts/useLanguage';
 import { APP_VERSION } from '../lib/appInfo';
 
 interface HomeProps {
-  onNavigate: (screen: 'daily' | 'classic' | 'exotic') => void;
+  onNavigate: (screen: 'daily' | 'classic' | 'exotic' | 'special') => void;
   onNavigateToSettings?: () => void;
 }
 
@@ -53,6 +53,22 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
         </header>
 
         <div className="home-menu">
+          <button
+            className="menu-btn menu-btn-special"
+            onClick={() => onNavigate('special')}
+          >
+            <span className="menu-btn-icon" aria-hidden="true">
+              <svg className="home-icon" viewBox="0 0 48 48">
+                <path d="M24 40C16 34 10 28 10 20C10 15 13 12 18 12C21 12 23 14 24 16C25 14 27 12 30 12C35 12 38 15 38 20C38 28 32 34 24 40Z" />
+                <circle cx="24" cy="24" r="4" />
+                <path d="M24 14V34" />
+                <path d="M14 24H34" />
+              </svg>
+            </span>
+            <span className="menu-btn-title">{t('home.special_mothers_day_title')}</span>
+            <span className="menu-btn-desc">{t('home.special_mothers_day_desc')}</span>
+          </button>
+
           <button 
             className="menu-btn menu-btn-daily"
             onClick={() => onNavigate('daily')}

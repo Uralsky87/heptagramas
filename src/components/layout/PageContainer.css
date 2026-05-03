@@ -32,6 +32,14 @@
   max-width: 1200px;
 }
 
+.page-container-inner.special-page-theme {
+  background: linear-gradient(180deg, rgba(255, 247, 250, 0.98) 0%, rgba(252, 231, 239, 0.96) 100%);
+  border-color: rgba(224, 156, 184, 0.82);
+  box-shadow:
+    0 22px 60px rgba(119, 54, 125, 0.18),
+    0 4px 18px rgba(188, 82, 123, 0.14);
+}
+
 @media (max-width: 480px) {
   .page-container-inner {
     padding: 12px;

@@ -6,6 +6,7 @@ import DailyScreen from './components/DailyScreen';
 import ClassicList from './components/ClassicList';
 import ExoticsHome from './components/ExoticsHome';
 import ExoticsPlay from './components/ExoticsPlay';
+import SpecialScreen from './components/SpecialScreen';
 import Settings from './components/Settings';
 import UpdateBanner from './components/UpdateBanner';
 import InitialLoadingScreen from './components/InitialLoadingScreen';
@@ -16,8 +17,10 @@ import { loadDictionary, type DictionaryData } from './lib/dictionary';
 import { getDailySession, getPuzzleForDailySession, preloadDailySessions } from './lib/dailySession';
 import { applyTheme, getThemeById } from './lib/themes';
 import { applyFont } from './lib/fonts';
+import { runAppVersionMigrations } from './lib/appVersionMigrations';
 import { migrateFromLocalStorage, getPlayerState, openDatabase, setPlayerState } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
+import { MOTHERS_DAY_PROGRESS_ID, MOTHERS_DAY_PUZZLE } from './lib/specialPuzzles';
 
 // Importar tests solo en desarrollo (disponibles en consola)
 if (import.meta.env.DEV) {
@@ -26,7 +29,7 @@ if (import.meta.env.DEV) {
   import('./lib/testExoticsScoring');
 }
 
-type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'settings';
+type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'special' | 'special-game' | 'settings';
 
 interface AppHistoryState {
   screen: Screen;
@@ -52,6 +55,7 @@ export default function App() {
     currentScreen === 'daily-game' ||
     currentScreen === 'classic' ||
     currentScreen === 'classic-game' ||
+    currentScreen === 'special-game' ||
     currentScreen === 'exotic' ||
     currentScreen === 'exotic-play';
 
@@ -113,6 +117,16 @@ export default function App() {
       return;
     }
 
+    if (nextScreen === 'special-game') {
+      setNavigationStack(['home', 'special', 'special-game']);
+      return;
+    }
+
+    if (nextScreen === 'special') {
+      setNavigationStack(['home', 'special']);
+      return;
+    }
+
     if (nextScreen === 'exotic') {
       setNavigationStack(['home', 'exotic']);
       return;
@@ -153,12 +167,14 @@ export default function App() {
         await migrateFromLocalStorage();
 
         // Cargar playerState
-        const playerState = await getPlayerState();
+        const storedPlayerState = await getPlayerState();
+        const migrationResult = await runAppVersionMigrations(storedPlayerState);
+        const playerState = migrationResult.playerState;
+
         if (playerState) {
           await cleanupLocalDevCaches();
 
-          if (import.meta.env.DEV && playerState.settings.activeTheme !== 'default') {
-            playerState.settings.activeTheme = 'default';
+          if (migrationResult.didUpdatePlayerState) {
             await setPlayerState(playerState);
           }
 
@@ -307,6 +323,16 @@ export default function App() {
     goBackOrFallback({ screen: 'daily' });
   };
 
+  const handleBackToSpecialHome = () => {
+    goBackOrFallback({ screen: 'special' });
+  };
+
+  const handlePlaySpecial = () => {
+    setCurrentScreen('special-game');
+    setNavigationStack((prev) => [...prev, 'special-game']);
+    pushHistoryState({ screen: 'special-game' });
+  };
+
   // Mostrar carga mientras se inicializa
   if (!isHydrated || !puzzles || (screenNeedsDictionary && !dictionary)) {
     return (
@@ -395,6 +421,25 @@ export default function App() {
       <ExoticsPlay
         onBack={handleBackToExoticHome}
         dictionary={dictionary!}
+      />
+    );
+  } else if (currentScreen === 'special') {
+    screenContent = (
+      <SpecialScreen
+        puzzle={MOTHERS_DAY_PUZZLE}
+        onBack={handleBackToHome}
+        onPlay={handlePlaySpecial}
+      />
+    );
+  } else if (currentScreen === 'special-game') {
+    screenContent = (
+      <Game
+        initialPuzzle={MOTHERS_DAY_PUZZLE}
+        dictionary={dictionary!}
+        allPuzzles={puzzles}
+        onBack={handleBackToSpecialHome}
+        mode="special"
+        dailyProgressId={MOTHERS_DAY_PROGRESS_ID}
       />
     );
   } else {
