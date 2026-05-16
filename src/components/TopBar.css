@@ -85,9 +85,9 @@
 .top-bar-title {
   margin: 0;
   padding: 0;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.3px;
   text-align: center;
   font-family: var(--app-font);
   color: var(--theme-ui-text);
@@ -102,22 +102,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  padding: 10px 24px 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(120, 84, 53, 0.32);
+  min-height: 48px;
+  padding: 9px 22px 11px;
+  border-radius: 12px;
+  border: 1px solid var(--theme-ui-border);
   background:
-    linear-gradient(180deg, rgba(252, 242, 224, 0.98) 0%, rgba(237, 218, 188, 0.98) 100%);
-  color: #4b3525;
+    linear-gradient(180deg, var(--theme-ui-surface) 0%, var(--theme-ui-surface-alt) 100%);
+  color: var(--theme-ui-text);
   box-shadow:
-    0 10px 24px rgba(var(--theme-shadow-rgb), 0.16),
-    inset 0 1px 0 rgba(255, 250, 241, 0.95);
-  text-shadow: 0 1px 0 rgba(255, 248, 238, 0.65);
+    0 6px 14px rgba(var(--theme-shadow-rgb), 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  text-shadow: none;
 }
 
 @media (max-width: 768px) {
   .top-bar-title {
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: 0.3px;
   }
 
@@ -139,7 +139,7 @@
 
   .top-bar-title {
     font-size: 18px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
   }
 
   .top-bar-btn {
@@ -164,12 +164,11 @@
   }
 
   .top-bar-title {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .top-bar-title-plate {
-    min-height: 58px;
-    padding: 12px 28px 14px;
-    border-radius: 20px;
+    min-height: 52px;
+    padding: 10px 26px 12px;
   }
 }

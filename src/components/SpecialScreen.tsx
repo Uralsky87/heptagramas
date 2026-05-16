@@ -1,23 +1,27 @@
 import type { Puzzle } from '../types';
+import type { EventPuzzle } from '../lib/specialPuzzles';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
 import { useLanguage } from '../contexts/useLanguage';
 
 interface SpecialScreenProps {
+  event?: EventPuzzle;
   puzzle: Puzzle | null;
   onBack: () => void;
   onPlay: () => void;
 }
 
-export default function SpecialScreen({ puzzle, onBack, onPlay }: SpecialScreenProps) {
+export default function SpecialScreen({ event, puzzle, onBack, onPlay }: SpecialScreenProps) {
   const { t } = useLanguage();
+  const title = event?.title ?? puzzle?.title ?? 'Especial';
+  const description = event?.description ?? '';
 
   return (
     <PageContainer>
       <TopBar
         onSettingsClick={() => {}}
-        title={t('special.mothers_day_title')}
+        title={title}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
@@ -38,8 +42,8 @@ export default function SpecialScreen({ puzzle, onBack, onPlay }: SpecialScreenP
               </svg>
             </span>
             <div>
-              <h2>{t('special.mothers_day_title')}</h2>
-              <p>{t('special.mothers_day_desc')}</p>
+              <h2>{title}</h2>
+              <p>{description}</p>
             </div>
           </div>
 
@@ -51,7 +55,7 @@ export default function SpecialScreen({ puzzle, onBack, onPlay }: SpecialScreenP
               </div>
 
               <button className="btn-play-today" onClick={onPlay}>
-                {t('special.play')}
+                {t('events.play')}
               </button>
             </>
           ) : (

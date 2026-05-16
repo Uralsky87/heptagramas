@@ -4,16 +4,19 @@ import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import { useLanguage } from '../contexts/useLanguage';
 import { APP_VERSION } from '../lib/appInfo';
+import { getActiveEventPuzzles } from '../lib/specialPuzzles';
 
 interface HomeProps {
-  onNavigate: (screen: 'daily' | 'classic' | 'exotic' | 'special') => void;
+  onNavigate: (screen: 'daily' | 'classic' | 'exotic' | 'events' | 'special') => void;
+  onNavigateToEvent?: (eventId: string) => void;
   onNavigateToSettings?: () => void;
 }
 
-export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
+export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettings }: HomeProps) {
   const { t } = useLanguage();
   const playerState = loadPlayerState();
   const progress = getLevelProgress(playerState.xpTotal);
+  const activeEvents = getActiveEventPuzzles();
   const levelInfo: {
     level: number;
     progressPercentage: number;
@@ -53,21 +56,24 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
         </header>
 
         <div className="home-menu">
-          <button
-            className="menu-btn menu-btn-special"
-            onClick={() => onNavigate('special')}
-          >
-            <span className="menu-btn-icon" aria-hidden="true">
-              <svg className="home-icon" viewBox="0 0 48 48">
-                <path d="M24 40C16 34 10 28 10 20C10 15 13 12 18 12C21 12 23 14 24 16C25 14 27 12 30 12C35 12 38 15 38 20C38 28 32 34 24 40Z" />
-                <circle cx="24" cy="24" r="4" />
-                <path d="M24 14V34" />
-                <path d="M14 24H34" />
-              </svg>
-            </span>
-            <span className="menu-btn-title">{t('home.special_mothers_day_title')}</span>
-            <span className="menu-btn-desc">{t('home.special_mothers_day_desc')}</span>
-          </button>
+          {activeEvents.map((event) => (
+            <button
+              key={event.id}
+              className="menu-btn menu-btn-special"
+              onClick={() => onNavigateToEvent?.(event.id)}
+            >
+              <span className="menu-btn-icon" aria-hidden="true">
+                <svg className="home-icon" viewBox="0 0 48 48">
+                  <path d="M24 40C16 34 10 28 10 20C10 15 13 12 18 12C21 12 23 14 24 16C25 14 27 12 30 12C35 12 38 15 38 20C38 28 32 34 24 40Z" />
+                  <circle cx="24" cy="24" r="4" />
+                  <path d="M24 14V34" />
+                  <path d="M14 24H34" />
+                </svg>
+              </span>
+              <span className="menu-btn-title">{event.title}</span>
+              <span className="menu-btn-desc">{event.description}</span>
+            </button>
+          ))}
 
           <button 
             className="menu-btn menu-btn-daily"
@@ -120,6 +126,23 @@ export default function Home({ onNavigate, onNavigateToSettings }: HomeProps) {
             </span>
             <span className="menu-btn-title">{t('home.exotic_title')}</span>
             <span className="menu-btn-desc">{t('home.exotic_desc')}</span>
+          </button>
+
+          <button 
+            className="menu-btn menu-btn-events"
+            onClick={() => onNavigate('events')}
+          >
+            <span className="menu-btn-icon" aria-hidden="true">
+              <svg className="home-icon" viewBox="0 0 48 48">
+                <rect x="8" y="10" width="32" height="30" rx="4" />
+                <path d="M16 6v8" />
+                <path d="M32 6v8" />
+                <path d="M8 19h32" />
+                <path d="M18 28l4 4 8-9" />
+              </svg>
+            </span>
+            <span className="menu-btn-title">{t('home.events_title')}</span>
+            <span className="menu-btn-desc">{t('home.events_desc')}</span>
           </button>
 
           <button

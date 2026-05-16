@@ -6,6 +6,7 @@ import DailyScreen from './components/DailyScreen';
 import ClassicList from './components/ClassicList';
 import ExoticsHome from './components/ExoticsHome';
 import ExoticsPlay from './components/ExoticsPlay';
+import EventsScreen from './components/EventsScreen';
 import SpecialScreen from './components/SpecialScreen';
 import Settings from './components/Settings';
 import UpdateBanner from './components/UpdateBanner';
@@ -20,7 +21,7 @@ import { applyFont } from './lib/fonts';
 import { runAppVersionMigrations } from './lib/appVersionMigrations';
 import { migrateFromLocalStorage, getPlayerState, openDatabase, setPlayerState } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
-import { MOTHERS_DAY_PROGRESS_ID, MOTHERS_DAY_PUZZLE } from './lib/specialPuzzles';
+import { getEventPuzzleById, MOTHERS_DAY_PROGRESS_ID } from './lib/specialPuzzles';
 
 // Importar tests solo en desarrollo (disponibles en consola)
 if (import.meta.env.DEV) {
@@ -29,12 +30,13 @@ if (import.meta.env.DEV) {
   import('./lib/testExoticsScoring');
 }
 
-type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'special' | 'special-game' | 'settings';
+type Screen = 'home' | 'daily' | 'daily-game' | 'classic' | 'classic-game' | 'exotic' | 'exotic-play' | 'events' | 'event-detail' | 'event-game' | 'special' | 'special-game' | 'settings';
 
 interface AppHistoryState {
   screen: Screen;
   dailyDateKey?: string;
   classicPuzzleId?: string;
+  eventId?: string;
 }
 
 const HOME_HISTORY_STATE: AppHistoryState = { screen: 'home' };
@@ -43,6 +45,7 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedClassicPuzzle, setSelectedClassicPuzzle] = useState<Puzzle | null>(null);
   const [selectedDailyDateKey, setSelectedDailyDateKey] = useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [dictionary, setDictionary] = useState<DictionaryData | null>(null);
   const [dictionaryLoadError, setDictionaryLoadError] = useState<string | null>(null);
   const [puzzles, setPuzzles] = useState<Puzzle[] | null>(null);
@@ -55,6 +58,7 @@ export default function App() {
     currentScreen === 'daily-game' ||
     currentScreen === 'classic' ||
     currentScreen === 'classic-game' ||
+    currentScreen === 'event-game' ||
     currentScreen === 'special-game' ||
     currentScreen === 'exotic' ||
     currentScreen === 'exotic-play';
@@ -101,6 +105,7 @@ export default function App() {
 
     setSelectedClassicPuzzle(null);
     setSelectedDailyDateKey(null);
+    setSelectedEventId(null);
 
     if (nextScreen === 'classic') {
       setNavigationStack(['home', 'classic']);
@@ -118,12 +123,31 @@ export default function App() {
     }
 
     if (nextScreen === 'special-game') {
+      setSelectedEventId(MOTHERS_DAY_PROGRESS_ID);
       setNavigationStack(['home', 'special', 'special-game']);
       return;
     }
 
     if (nextScreen === 'special') {
+      setSelectedEventId(MOTHERS_DAY_PROGRESS_ID);
       setNavigationStack(['home', 'special']);
+      return;
+    }
+
+    if (nextScreen === 'event-game') {
+      setSelectedEventId(historyState?.eventId ?? null);
+      setNavigationStack(['home', 'events', 'event-detail', 'event-game']);
+      return;
+    }
+
+    if (nextScreen === 'event-detail') {
+      setSelectedEventId(historyState?.eventId ?? null);
+      setNavigationStack(['home', 'events', 'event-detail']);
+      return;
+    }
+
+    if (nextScreen === 'events') {
+      setNavigationStack(['home', 'events']);
       return;
     }
 
@@ -324,13 +348,29 @@ export default function App() {
   };
 
   const handleBackToSpecialHome = () => {
-    goBackOrFallback({ screen: 'special' });
+    goBackOrFallback({ screen: 'event-detail', eventId: selectedEventId ?? MOTHERS_DAY_PROGRESS_ID });
+  };
+
+  const handleNavigateToEventDetail = (eventId: string) => {
+    setSelectedEventId(eventId);
+    setCurrentScreen('event-detail');
+    setNavigationStack((prev) => [...prev, 'event-detail']);
+    pushHistoryState({ screen: 'event-detail', eventId });
+  };
+
+  const handleBackToEvents = () => {
+    goBackOrFallback({ screen: 'events' });
+  };
+
+  const handlePlayEvent = (eventId: string) => {
+    setSelectedEventId(eventId);
+    setCurrentScreen('event-game');
+    setNavigationStack((prev) => [...prev, 'event-game']);
+    pushHistoryState({ screen: 'event-game', eventId });
   };
 
   const handlePlaySpecial = () => {
-    setCurrentScreen('special-game');
-    setNavigationStack((prev) => [...prev, 'special-game']);
-    pushHistoryState({ screen: 'special-game' });
+    handlePlayEvent(MOTHERS_DAY_PROGRESS_ID);
   };
 
   // Mostrar carga mientras se inicializa
@@ -357,9 +397,16 @@ export default function App() {
   }
 
   let screenContent: React.ReactNode;
+  const selectedEvent = getEventPuzzleById(selectedEventId ?? MOTHERS_DAY_PROGRESS_ID);
 
   if (currentScreen === 'home') {
-    screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
+    screenContent = (
+      <Home
+        onNavigate={handleNavigate}
+        onNavigateToEvent={handleNavigateToEventDetail}
+        onNavigateToSettings={handleNavigateToSettings}
+      />
+    );
   } else if (currentScreen === 'settings') {
     screenContent = <Settings onBack={handleBackToHome} />;
   } else if (currentScreen === 'daily') {
@@ -423,27 +470,57 @@ export default function App() {
         dictionary={dictionary!}
       />
     );
+  } else if (currentScreen === 'events') {
+    screenContent = (
+      <EventsScreen
+        onBack={handleBackToHome}
+        onSelectEvent={handleNavigateToEventDetail}
+      />
+    );
+  } else if (currentScreen === 'event-detail' && selectedEvent) {
+    screenContent = (
+      <SpecialScreen
+        event={selectedEvent}
+        puzzle={selectedEvent.puzzle}
+        onBack={handleBackToEvents}
+        onPlay={() => handlePlayEvent(selectedEvent.id)}
+      />
+    );
+  } else if (currentScreen === 'event-game' && selectedEvent) {
+    screenContent = (
+      <Game
+        initialPuzzle={selectedEvent.puzzle}
+        dictionary={dictionary!}
+        allPuzzles={puzzles}
+        onBack={handleBackToSpecialHome}
+        mode="special"
+        dailyProgressId={selectedEvent.id}
+        eventConfig={selectedEvent}
+      />
+    );
   } else if (currentScreen === 'special') {
     screenContent = (
       <SpecialScreen
-        puzzle={MOTHERS_DAY_PUZZLE}
+        event={selectedEvent ?? undefined}
+        puzzle={selectedEvent?.puzzle ?? null}
         onBack={handleBackToHome}
         onPlay={handlePlaySpecial}
       />
     );
-  } else if (currentScreen === 'special-game') {
+  } else if (currentScreen === 'special-game' && selectedEvent) {
     screenContent = (
       <Game
-        initialPuzzle={MOTHERS_DAY_PUZZLE}
+        initialPuzzle={selectedEvent.puzzle}
         dictionary={dictionary!}
         allPuzzles={puzzles}
         onBack={handleBackToSpecialHome}
         mode="special"
         dailyProgressId={MOTHERS_DAY_PROGRESS_ID}
+        eventConfig={selectedEvent}
       />
     );
   } else {
-    screenContent = <Home onNavigate={handleNavigate} onNavigateToSettings={handleNavigateToSettings} />;
+    screenContent = <Home onNavigate={handleNavigate} onNavigateToEvent={handleNavigateToEventDetail} onNavigateToSettings={handleNavigateToSettings} />;
   }
 
   return (
