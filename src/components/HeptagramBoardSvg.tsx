@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 
 interface HeptagramBoardSvgProps {
   center: string;
@@ -7,7 +7,7 @@ interface HeptagramBoardSvgProps {
   successAnimation?: boolean;
   onShuffleOuter?: (shuffled: string[]) => void;
   extraLetterIndices?: Set<number>;
-  variant?: 'default' | 'mothers-day';
+  variant?: 'default' | 'mothers-day' | 'christmas' | 'summer';
 }
 
 const SVG_SIZE = 300;
@@ -92,6 +92,13 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
 }, ref) => {
   const [outerLetters, setOuterLetters] = useState(outer);
   const isMothersDay = variant === 'mothers-day';
+  const isChristmas = variant === 'christmas';
+  const isSummer = variant === 'summer';
+  const variantClass = variant !== 'default' ? `heptagram-section-${variant}` : '';
+
+  useEffect(() => {
+    setOuterLetters(outer);
+  }, [outer.join('')]);
 
   const shuffleOuter = () => {
     const shuffled = [...outerLetters];
@@ -109,16 +116,32 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
 
   const centerStart = isMothersDay
     ? '#e84d93'
-    : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-start').trim();
+    : isChristmas
+      ? '#d6a642'
+      : isSummer
+        ? '#ffd166'
+        : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-start').trim();
   const centerEnd = isMothersDay
     ? '#8b3bb4'
-    : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-end').trim();
+    : isChristmas
+      ? '#8f1d24'
+      : isSummer
+        ? '#f6a21a'
+        : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-end').trim();
   const outerStart = isMothersDay
     ? '#f59abb'
-    : getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-start').trim();
+    : isChristmas
+      ? '#1f7a49'
+      : isSummer
+        ? '#18afc7'
+        : getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-start').trim();
   const outerEnd = isMothersDay
     ? '#a45cc7'
-    : getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-end').trim();
+    : isChristmas
+      ? '#0f3f2b'
+      : isSummer
+        ? '#0e7fa0'
+        : getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-end').trim();
 
   const n = outerLetters.length;
   const centerPolygonPoints = getPolygonPoints(n, POLYGON_RADIUS);
@@ -134,7 +157,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
   );
 
   return (
-    <div className={`heptagram-section ${isMothersDay ? 'heptagram-section-mothers-day' : ''}`}>
+    <div className={`heptagram-section ${variantClass}`}>
       <div className={`svg-container ${successAnimation ? 'success-bounce' : ''}`}>
         <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} className="heptagram-svg">
           <defs>
@@ -167,7 +190,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
                   stroke={strokeColor}
                   strokeWidth={strokeWidth}
                   className="trap-shape"
-                  style={{ filter: `drop-shadow(0 2px 6px ${isMothersDay ? 'rgba(122, 42, 120, 0.28)' : 'rgba(0,0,0,0.2)'})` }}
+                  style={{ filter: `drop-shadow(0 2px 6px ${isMothersDay ? 'rgba(122, 42, 120, 0.28)' : isChristmas ? 'rgba(18, 64, 43, 0.32)' : isSummer ? 'rgba(14, 127, 160, 0.32)' : 'rgba(0,0,0,0.2)'})` }}
                 />
                 <text
                   x={centerPoint.x}
@@ -189,7 +212,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
               fill="url(#centerGradient)"
               stroke="none"
               className="center-polygon"
-              style={{ filter: `drop-shadow(0 4px 12px ${isMothersDay ? 'rgba(188, 82, 153, 0.45)' : 'rgba(237,75,130,0.4)'})` }}
+              style={{ filter: `drop-shadow(0 4px 12px ${isMothersDay ? 'rgba(188, 82, 153, 0.45)' : isChristmas ? 'rgba(143, 29, 36, 0.42)' : isSummer ? 'rgba(246, 162, 26, 0.46)' : 'rgba(237,75,130,0.4)'})` }}
             />
             <text
               x={CENTER_X}

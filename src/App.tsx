@@ -21,7 +21,8 @@ import { applyFont } from './lib/fonts';
 import { runAppVersionMigrations } from './lib/appVersionMigrations';
 import { migrateFromLocalStorage, getPlayerState, openDatabase, setPlayerState } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
-import { getEventPuzzleById, MOTHERS_DAY_PROGRESS_ID } from './lib/specialPuzzles';
+import { loadPuzzleProgress, savePuzzleProgress } from './lib/storageAdapter';
+import { getEventProgressId, getEventPuzzleAvailability, getEventPuzzleById, MOTHERS_DAY_PROGRESS_ID } from './lib/specialPuzzles';
 
 // Importar tests solo en desarrollo (disponibles en consola)
 if (import.meta.env.DEV) {
@@ -352,6 +353,13 @@ export default function App() {
   };
 
   const handleNavigateToEventDetail = (eventId: string) => {
+    const event = getEventPuzzleById(eventId);
+    const progress = event ? loadPuzzleProgress(getEventProgressId(event)) : null;
+
+    if (!event || !getEventPuzzleAvailability(event, progress).canOpen) {
+      return;
+    }
+
     setSelectedEventId(eventId);
     setCurrentScreen('event-detail');
     setNavigationStack((prev) => [...prev, 'event-detail']);
@@ -363,6 +371,25 @@ export default function App() {
   };
 
   const handlePlayEvent = (eventId: string) => {
+    const event = getEventPuzzleById(eventId);
+    const progressId = event ? getEventProgressId(event) : eventId;
+    const progress = loadPuzzleProgress(progressId);
+
+    if (!event || !getEventPuzzleAvailability(event, progress).canOpen) {
+      return;
+    }
+
+    if (!progress) {
+      const now = new Date().toISOString();
+      savePuzzleProgress(progressId, {
+        foundWords: [],
+        score: 0,
+        superHeptaWords: [],
+        startedAt: now,
+        lastPlayedAt: now,
+      });
+    }
+
     setSelectedEventId(eventId);
     setCurrentScreen('event-game');
     setNavigationStack((prev) => [...prev, 'event-game']);
@@ -398,6 +425,11 @@ export default function App() {
 
   let screenContent: React.ReactNode;
   const selectedEvent = getEventPuzzleById(selectedEventId ?? MOTHERS_DAY_PROGRESS_ID);
+  const selectedEventProgressId = selectedEvent ? getEventProgressId(selectedEvent) : null;
+  const selectedEventProgress = selectedEventProgressId ? loadPuzzleProgress(selectedEventProgressId) : null;
+  const selectedEventAvailability = selectedEvent
+    ? getEventPuzzleAvailability(selectedEvent, selectedEventProgress)
+    : null;
 
   if (currentScreen === 'home') {
     screenContent = (
@@ -477,7 +509,7 @@ export default function App() {
         onSelectEvent={handleNavigateToEventDetail}
       />
     );
-  } else if (currentScreen === 'event-detail' && selectedEvent) {
+  } else if (currentScreen === 'event-detail' && selectedEvent && selectedEventAvailability?.canOpen) {
     screenContent = (
       <SpecialScreen
         event={selectedEvent}
@@ -486,7 +518,7 @@ export default function App() {
         onPlay={() => handlePlayEvent(selectedEvent.id)}
       />
     );
-  } else if (currentScreen === 'event-game' && selectedEvent) {
+  } else if (currentScreen === 'event-game' && selectedEvent && selectedEventAvailability?.canOpen) {
     screenContent = (
       <Game
         initialPuzzle={selectedEvent.puzzle}
@@ -494,11 +526,11 @@ export default function App() {
         allPuzzles={puzzles}
         onBack={handleBackToSpecialHome}
         mode="special"
-        dailyProgressId={selectedEvent.id}
+        dailyProgressId={selectedEventProgressId ?? selectedEvent.id}
         eventConfig={selectedEvent}
       />
     );
-  } else if (currentScreen === 'special') {
+  } else if (currentScreen === 'special' && selectedEvent && selectedEventAvailability?.canOpen) {
     screenContent = (
       <SpecialScreen
         event={selectedEvent ?? undefined}
@@ -507,7 +539,7 @@ export default function App() {
         onPlay={handlePlaySpecial}
       />
     );
-  } else if (currentScreen === 'special-game' && selectedEvent) {
+  } else if (currentScreen === 'special-game' && selectedEvent && selectedEventAvailability?.canOpen) {
     screenContent = (
       <Game
         initialPuzzle={selectedEvent.puzzle}
@@ -515,7 +547,7 @@ export default function App() {
         allPuzzles={puzzles}
         onBack={handleBackToSpecialHome}
         mode="special"
-        dailyProgressId={MOTHERS_DAY_PROGRESS_ID}
+        dailyProgressId={selectedEventProgressId ?? MOTHERS_DAY_PROGRESS_ID}
         eventConfig={selectedEvent}
       />
     );

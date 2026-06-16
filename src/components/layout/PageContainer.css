@@ -40,6 +40,28 @@
     0 4px 18px rgba(188, 82, 123, 0.14);
 }
 
+.page-container-inner.special-page-theme.special-game-theme-christmas,
+.page-container-inner.special-page-theme.special-detail-christmas {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 251, 236, 0.82) 0%, rgba(255, 251, 236, 0) 34%),
+    linear-gradient(180deg, rgba(247, 244, 228, 0.98) 0%, rgba(224, 237, 218, 0.96) 100%);
+  border-color: rgba(31, 122, 73, 0.5);
+  box-shadow:
+    0 22px 60px rgba(24, 64, 43, 0.24),
+    0 4px 18px rgba(126, 37, 42, 0.16);
+}
+
+.page-container-inner.special-page-theme.special-game-theme-summer,
+.page-container-inner.special-page-theme.special-detail-summer {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 209, 102, 0.36) 0%, rgba(255, 209, 102, 0) 34%),
+    linear-gradient(180deg, rgba(255, 246, 204, 0.98) 0%, rgba(199, 239, 238, 0.96) 100%);
+  border-color: rgba(24, 175, 199, 0.58);
+  box-shadow:
+    0 22px 60px rgba(14, 127, 160, 0.22),
+    0 4px 18px rgba(255, 107, 94, 0.14);
+}
+
 @media (max-width: 480px) {
   .page-container-inner {
     padding: 12px;

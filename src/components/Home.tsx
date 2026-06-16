@@ -56,24 +56,51 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
         </header>
 
         <div className="home-menu">
-          {activeEvents.map((event) => (
-            <button
-              key={event.id}
-              className="menu-btn menu-btn-special"
-              onClick={() => onNavigateToEvent?.(event.id)}
-            >
-              <span className="menu-btn-icon" aria-hidden="true">
-                <svg className="home-icon" viewBox="0 0 48 48">
-                  <path d="M24 40C16 34 10 28 10 20C10 15 13 12 18 12C21 12 23 14 24 16C25 14 27 12 30 12C35 12 38 15 38 20C38 28 32 34 24 40Z" />
-                  <circle cx="24" cy="24" r="4" />
-                  <path d="M24 14V34" />
-                  <path d="M14 24H34" />
-                </svg>
-              </span>
-              <span className="menu-btn-title">{event.title}</span>
-              <span className="menu-btn-desc">{event.description}</span>
-            </button>
-          ))}
+          {activeEvents.map((event) => {
+            const isChristmas = event.theme === 'christmas';
+            const isSummer = event.theme === 'summer';
+
+            return (
+              <button
+                key={event.id}
+                className={`menu-btn menu-btn-special menu-btn-special-${event.theme}`}
+                onClick={() => onNavigateToEvent?.(event.id)}
+              >
+                <span className="menu-btn-icon" aria-hidden="true">
+                  {isChristmas ? (
+                    <svg className="home-icon home-icon-christmas" viewBox="0 0 48 48">
+                      <path className="christmas-star" d="M24 5l1.8 4 4.2.5-3.1 2.8.8 4.1L24 14.2l-3.7 2.2.8-4.1L18 9.5l4.2-.5Z" />
+                      <path d="M24 13L13 27h7l-8 10h24l-8-10h7Z" />
+                      <path d="M20 37v5h8v-5" />
+                      <circle className="christmas-light christmas-light-red" cx="20" cy="27" r="1.9" />
+                      <circle className="christmas-light christmas-light-gold" cx="28" cy="31" r="1.9" />
+                    </svg>
+                  ) : isSummer ? (
+                    <svg className="home-icon home-icon-summer" viewBox="0 0 48 48">
+                      <circle className="summer-sun" cx="30" cy="15" r="6" />
+                      <path className="summer-ray" d="M30 4v4" />
+                      <path className="summer-ray" d="M30 22v4" />
+                      <path className="summer-ray" d="M19 15h4" />
+                      <path className="summer-ray" d="M37 15h4" />
+                      <path className="summer-ray" d="M22.2 7.2l2.8 2.8" />
+                      <path className="summer-ray" d="M35 20l2.8 2.8" />
+                      <path d="M8 31c4.5-4 9-4 13.5 0s9 4 13.5 0" />
+                      <path d="M8 39c4.5-4 9-4 13.5 0s9 4 13.5 0" />
+                    </svg>
+                  ) : (
+                    <svg className="home-icon" viewBox="0 0 48 48">
+                      <path d="M24 40C16 34 10 28 10 20C10 15 13 12 18 12C21 12 23 14 24 16C25 14 27 12 30 12C35 12 38 15 38 20C38 28 32 34 24 40Z" />
+                      <circle cx="24" cy="24" r="4" />
+                      <path d="M24 14V34" />
+                      <path d="M14 24H34" />
+                    </svg>
+                  )}
+                </span>
+                <span className="menu-btn-title">{event.title}</span>
+                <span className="menu-btn-desc">{event.description}</span>
+              </button>
+            );
+          })}
 
           <button 
             className="menu-btn menu-btn-daily"

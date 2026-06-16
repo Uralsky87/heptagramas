@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { PuzzleProgress } from '../types';
-import { EVENT_PUZZLES, isEventActive, type EventPuzzle } from '../lib/specialPuzzles';
+import { EVENT_PUZZLES, getEventProgressId, getEventPuzzleAvailability, getEventSolutionCount, type EventPuzzle } from '../lib/specialPuzzles';
 import { loadPuzzleProgress, preloadPuzzleProgress } from '../lib/storageAdapter';
 import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
@@ -24,15 +24,20 @@ export default function EventsScreen({ onBack, onSelectEvent }: EventsScreenProp
     let isCancelled = false;
 
     async function loadEventsProgress() {
-      await Promise.all(EVENT_PUZZLES.map((event) => preloadPuzzleProgress(event.id)));
+      await Promise.all(EVENT_PUZZLES.map((event) => preloadPuzzleProgress(getEventProgressId(event))));
       if (isCancelled) {
         return;
       }
 
-      setEvents(EVENT_PUZZLES.map((event) => ({
-        ...event,
-        progress: loadPuzzleProgress(event.id),
-      })));
+      setEvents(EVENT_PUZZLES
+        .map((event) => {
+          const progress = loadPuzzleProgress(getEventProgressId(event));
+          return {
+            ...event,
+            progress,
+          };
+        })
+        .filter((event) => getEventPuzzleAvailability(event, event.progress).visibleInEvents));
     }
 
     loadEventsProgress().catch((error) => {
@@ -65,9 +70,9 @@ export default function EventsScreen({ onBack, onSelectEvent }: EventsScreenProp
         ) : (
           <div className="events-list">
             {events.map((event) => {
-              const active = isEventActive(event);
+              const availability = getEventPuzzleAvailability(event, event.progress);
               const foundCount = event.progress?.foundWords.length ?? 0;
-              const solutionCount = event.puzzle.solutionCount ?? null;
+              const solutionCount = getEventSolutionCount(event, event.progress);
               const progressPercent = solutionCount
                 ? Math.round((foundCount / solutionCount) * 100)
                 : 0;
@@ -75,7 +80,7 @@ export default function EventsScreen({ onBack, onSelectEvent }: EventsScreenProp
               return (
                 <button
                   key={event.id}
-                  className={`event-card ${active ? 'event-card-active' : ''}`}
+                  className={`event-card event-card-${event.theme} ${availability.active ? 'event-card-active' : ''}`}
                   onClick={() => onSelectEvent(event.id)}
                 >
                   <div className="event-card-header">
@@ -83,7 +88,10 @@ export default function EventsScreen({ onBack, onSelectEvent }: EventsScreenProp
                       <h2>{event.title}</h2>
                       <p>{event.description}</p>
                     </div>
-                    {active && <span className="event-active-badge">{t('events.active_badge')}</span>}
+                    {availability.active && <span className="event-active-badge">{t('events.active_badge')}</span>}
+                    {!availability.active && availability.canContinue && (
+                      <span className="event-active-badge event-continue-badge">{t('daily.continue')}</span>
+                    )}
                   </div>
 
                   <div className="event-card-preview">

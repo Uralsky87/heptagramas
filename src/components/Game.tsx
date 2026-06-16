@@ -29,6 +29,7 @@ import type { FeedbackTone } from '../lib/feedback';
 import { buildSuccessFeedbackIntent, buildValidationFeedbackIntent } from '../lib/feedback';
 import useSubmissionFeedback from '../lib/useSubmissionFeedback';
 import { getEventPuzzleById, type EventPuzzle } from '../lib/specialPuzzles';
+import { normalizeString } from '../lib/normalizeChar';
 
 interface GameProps {
   initialPuzzle: Puzzle;
@@ -63,6 +64,7 @@ export default function Game({
   const [shuffledOuter, setShuffledOuter] = useState<string[]>(initialPuzzle.outer);
   const [showAnswers, setShowAnswers] = useState(false);
   const [selectedAnswerWord, setSelectedAnswerWord] = useState<string | null>(null);
+  const [eventExtraLetter, setEventExtraLetter] = useState<string | null>(null);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const { getDefinition } = useDefinitions();
   const {
@@ -82,16 +84,59 @@ export default function Game({
     ? eventConfig ?? getEventPuzzleById(progressId) ?? getEventPuzzleById(currentPuzzle.id)
     : null;
   const isThemedSpecial = Boolean(activeEventConfig && activeEventConfig.theme !== 'default');
+  const eventThemeClass = isThemedSpecial && activeEventConfig ? `special-game-theme-${activeEventConfig.theme}` : '';
+  const eventUnlockLetter = activeEventConfig?.unlockedExtraLetter ?? null;
+  const isEventExtraLetterUnlocked = Boolean(eventUnlockLetter && eventExtraLetter === eventUnlockLetter);
+  const isChristmasEvent = activeEventConfig?.theme === 'christmas';
+  const eventRewardTitle = isChristmasEvent ? 'Regalo navideño' : 'Recompensa veraniega';
+  const eventRewardOpenedTitle = isChristmasEvent ? 'Regalo abierto' : 'Recompensa desbloqueada';
+  const eventRewardIcon = isChristmasEvent ? '🎁' : '☀️';
+  const eventRewardOpenText = isChristmasEvent ? 'Abre el regalo' : 'Abre la recompensa';
+  const eventRewardUnlockText = isChristmasEvent ? 'desbloquear el regalo' : 'desbloquear la recompensa';
+  const activeEventExtraSolutions = [
+    ...(activeEventConfig?.extraSolutions ?? []),
+    ...(isEventExtraLetterUnlocked ? activeEventConfig?.unlockedExtraSolutions ?? [] : []),
+  ];
+  const activeAllowMissingCenterWords = [
+    ...(activeEventConfig?.allowMissingCenterWords ?? []),
+    ...(isEventExtraLetterUnlocked ? activeEventConfig?.unlockedAllowMissingCenterWords ?? [] : []),
+  ];
+  const activeHighlightedWords = [
+    ...(activeEventConfig?.highlightedWords ?? []),
+    ...(isEventExtraLetterUnlocked ? activeEventConfig?.unlockedHighlightedWords ?? [] : []),
+  ];
+  const giftUnlockThreshold = activeEventConfig?.unlockAtWordCount ?? null;
+  const canOpenEventGift = Boolean(
+    giftUnlockThreshold &&
+    eventUnlockLetter &&
+    !isEventExtraLetterUnlocked &&
+    foundWords.length >= giftUnlockThreshold
+  );
+  const wordsUntilGift = giftUnlockThreshold
+    ? Math.max(0, giftUnlockThreshold - foundWords.length)
+    : 0;
+  const displayedOuter = isEventExtraLetterUnlocked && eventUnlockLetter
+    ? [...currentPuzzle.outer, eventUnlockLetter]
+    : currentPuzzle.outer;
+  const extraLetterIndices = isEventExtraLetterUnlocked && eventUnlockLetter
+    ? new Set(shuffledOuter
+      .map((letter, index) => (letter === eventUnlockLetter ? index : -1))
+      .filter((index) => index >= 0))
+    : undefined;
 
   useEffect(() => {
     latestProgressIdRef.current = progressId;
   }, [progressId]);
 
+  useEffect(() => {
+    setShuffledOuter(displayedOuter);
+  }, [displayedOuter.join('')]);
+
   const puzzleSolutions = useMemo(() => {
     const minLen = currentPuzzle.minLen || 3;
     const allowEnye = currentPuzzle.allowEnye ?? true;
-    const baseSolutions = solvePuzzle(currentPuzzle.center, currentPuzzle.outer, dictionary, minLen, allowEnye);
-    const extraSolutions = activeEventConfig?.extraSolutions ?? [];
+    const baseSolutions = solvePuzzle(currentPuzzle.center, currentPuzzle.outer, dictionary, minLen, allowEnye, eventExtraLetter ?? undefined);
+    const extraSolutions = activeEventExtraSolutions;
     const solutions = extraSolutions.length > 0
       ? Array.from(new Set([...baseSolutions, ...extraSolutions])).sort((a, b) => a.localeCompare(b, 'es'))
       : baseSolutions;
@@ -101,7 +146,7 @@ export default function Game({
     }
 
     return solutions;
-  }, [activeEventConfig, currentPuzzle, dictionary]);
+  }, [activeEventExtraSolutions, currentPuzzle, dictionary, eventExtraLetter]);
 
   const loadPuzzleProgressState = useCallback(async (progressIdToLoad: string) => {
     await preloadPuzzleProgress(progressIdToLoad);
@@ -115,10 +160,12 @@ export default function Game({
       setFoundWords(progress.foundWords);
       setScore(progress.score);
       setAchievements({ superHeptaWords: progress.superHeptaWords });
+      setEventExtraLetter(progress.exoticLetter ?? null);
     } else {
       setFoundWords([]);
       setScore(0);
       setAchievements({ superHeptaWords: [] });
+      setEventExtraLetter(null);
     }
     setClickedWord('');
   }, []);
@@ -139,15 +186,16 @@ export default function Game({
       superHeptaWords: achievements.superHeptaWords,
       startedAt: loadPuzzleProgress(progressId)?.startedAt || now,
       lastPlayedAt: now,
+      exoticLetter: eventExtraLetter ?? undefined,
     };
     savePuzzleProgress(progressId, progress);
-  }, [achievements.superHeptaWords, foundWords, progressId, score]);
+  }, [achievements.superHeptaWords, eventExtraLetter, foundWords, progressId, score]);
 
   useEffect(() => {
     if (foundWords.length > 0 || score > 0) {
       savePuzzleProgressState();
     }
-  }, [foundWords, savePuzzleProgressState, score]);
+  }, [eventExtraLetter, foundWords, savePuzzleProgressState, score]);
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
@@ -192,8 +240,13 @@ export default function Game({
     );
   };
 
+  const getWordDefinition = (word: string): string | null => {
+    const normalized = normalizeString(word, currentPuzzle.allowEnye ?? true);
+    return activeEventConfig?.customDefinitions?.[normalized] || getDefinition(word);
+  };
+
   const handleAnswerClick = (word: string) => {
-    const definition = getDefinition(word);
+    const definition = getWordDefinition(word);
     if (definition) {
       setSelectedAnswerWord(word);
     }
@@ -212,6 +265,16 @@ export default function Game({
   const handleDeleteLetter = () => {
     dismissBanner();
     setClickedWord((prev) => prev.slice(0, -1));
+  };
+
+  const handleOpenEventGift = () => {
+    if (!eventUnlockLetter) {
+      return;
+    }
+
+    setEventExtraLetter(eventUnlockLetter);
+    setMessage(`¡${eventRewardOpenedTitle}! Nueva letra: ${eventUnlockLetter.toUpperCase()}`);
+    setMessageTone('success');
   };
 
   useEffect(() => {
@@ -234,8 +297,8 @@ export default function Game({
       currentPuzzle,
       foundWords,
       puzzleSolutions,
-      null,
-      { allowMissingCenterWords: activeEventConfig?.allowMissingCenterWords ?? [] }
+      eventExtraLetter,
+      { allowMissingCenterWords: activeAllowMissingCenterWords }
     );
     const playerState = loadPlayerState();
 
@@ -288,8 +351,8 @@ export default function Game({
   };
 
   return (
-    <PageContainer className={isThemedSpecial ? 'special-page-theme' : ''}>
-      <div className={isThemedSpecial ? 'game-screen special-game-theme' : 'game-screen'}>
+    <PageContainer className={isThemedSpecial ? `special-page-theme ${eventThemeClass}` : ''}>
+      <div className={isThemedSpecial ? `game-screen special-game-theme ${eventThemeClass}` : 'game-screen'}>
       <TopBar
         onThemeClick={() => {}}
         onSettingsClick={() => {}}
@@ -317,6 +380,7 @@ export default function Game({
       <UnifiedFeedback signal={banner} onAnimationEnd={dismissBanner} />
 
       <HeptagramBoardSvg
+        key={`${currentPuzzle.id}-${displayedOuter.join('')}`}
         ref={heptagramRef}
         center={currentPuzzle.center}
         outer={shuffledOuter}
@@ -324,6 +388,7 @@ export default function Game({
         successAnimation={successAnimation}
         onShuffleOuter={setShuffledOuter}
         variant={activeEventConfig?.theme ?? 'default'}
+        extraLetterIndices={extraLetterIndices}
       />
 
       <WordInput
@@ -338,6 +403,29 @@ export default function Game({
         errorAnimation={errorAnimation}
         submitPulseTone={submitPulseTone}
       />
+
+      {giftUnlockThreshold && eventUnlockLetter && (
+        <section className={`event-gift-panel ${isEventExtraLetterUnlocked ? 'event-gift-panel-open' : ''}`}>
+          <div className="event-gift-icon" aria-hidden="true">
+            {isEventExtraLetterUnlocked ? eventUnlockLetter.toUpperCase() : eventRewardIcon}
+          </div>
+          <div className="event-gift-copy">
+            <h2>{isEventExtraLetterUnlocked ? eventRewardOpenedTitle : eventRewardTitle}</h2>
+            <p>
+              {isEventExtraLetterUnlocked
+                ? `La letra ${eventUnlockLetter.toUpperCase()} se queda desbloqueada para esta partida.`
+                : canOpenEventGift
+                  ? `Has llegado a ${giftUnlockThreshold} palabras. ${eventRewardOpenText} para añadir la letra ${eventUnlockLetter.toUpperCase()}.`
+                  : `Encuentra ${wordsUntilGift} palabras más para ${eventRewardUnlockText}.`}
+            </p>
+          </div>
+          {canOpenEventGift && (
+            <button className="event-gift-button" onClick={handleOpenEventGift}>
+              {isChristmasEvent ? 'Abrir regalo' : 'Abrir recompensa'}
+            </button>
+          )}
+        </section>
+      )}
 
       {isPastDaily && (
         <div className="answers-section">
@@ -356,7 +444,7 @@ export default function Game({
                         key={word}
                         className="answers-word"
                         onClick={() => handleAnswerClick(word)}
-                        title={getDefinition(word) ? 'Haz clic para ver la definición' : ''}
+                        title={getWordDefinition(word) ? 'Haz clic para ver la definición' : ''}
                       >
                         {renderWordWithCenter(word, currentPuzzle.center)}
                       </span>
@@ -369,10 +457,10 @@ export default function Game({
         </div>
       )}
 
-      {selectedAnswerWord && getDefinition(selectedAnswerWord) && (
+      {selectedAnswerWord && getWordDefinition(selectedAnswerWord) && (
         <DefinitionModal
           word={selectedAnswerWord}
-          definition={getDefinition(selectedAnswerWord) as string}
+          definition={getWordDefinition(selectedAnswerWord) as string}
           isOpen={true}
           onClose={() => setSelectedAnswerWord(null)}
         />
@@ -383,14 +471,14 @@ export default function Game({
         total={puzzleSolutions.length}
         superHeptaWords={achievements.superHeptaWords}
         customDefinitions={activeEventConfig?.customDefinitions}
-        highlightedWords={activeEventConfig?.highlightedWords}
+        highlightedWords={activeHighlightedWords}
       />
 
       <PuzzleStats
-        letters={[...currentPuzzle.outer, currentPuzzle.center]}
+        letters={[...displayedOuter, currentPuzzle.center]}
         solutions={puzzleSolutions}
         foundWords={foundWords}
-        specialMissingCenterWord={activeEventConfig?.allowMissingCenterWords?.[0]}
+        specialMissingCenterWord={activeAllowMissingCenterWords[0]}
       />
 
       {showPuzzleSelector && mode === 'classic' && (

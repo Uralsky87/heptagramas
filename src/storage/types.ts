@@ -44,6 +44,7 @@ export interface ClassicProgress {
   score?: number;
   superHeptaWords?: string[];
   startedAt?: number;
+  exoticLetter?: string;
 }
 
 // ========================================

@@ -152,6 +152,7 @@ export function savePuzzleProgress(puzzleId: string, progress: PuzzleProgress): 
         score: progress.score,
         superHeptaWords: progress.superHeptaWords,
         startedAt: progress.startedAt ? new Date(progress.startedAt).getTime() : undefined,
+        exoticLetter: progress.exoticLetter,
       };
       await setClassicProgress(classic);
     } catch (error) {
@@ -216,6 +217,7 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
         superHeptaWords: classic.superHeptaWords || [],
         startedAt: classic.startedAt ? new Date(classic.startedAt).toISOString() : new Date(classic.lastPlayedAt).toISOString(),
         lastPlayedAt: new Date(classic.lastPlayedAt).toISOString(),
+        exoticLetter: classic.exoticLetter,
       };
       progressCache.set(puzzleId, progress);
     }
