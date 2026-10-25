@@ -1,6 +1,117 @@
 # Hoja de Ruta de Lanzamiento
 
-Ultima actualizacion: 2026-04-15
+Ultima actualizacion: 2026-10-25
+
+## Revision al retomar el proyecto
+
+Estado verificado el 25 de octubre de 2026: [revision general](REVISION_2026-10-25.md).
+El codigo incluye cambios hasta el 16 de junio y eventos de verano y Navidad.
+Build correcto; lint con 2 errores y 5 avisos. Auditoria actual: 474 puzzles,
+0 incidencias estructurales o de letras, 0 conteos desalineados y 0 diarios fuera de rango.
+Los pendientes historicos de esta hoja deben contrastarse con esa revision.
+La prioridad al continuar es revisar el guardado al cambiar de clasico y la importacion
+de copias de seguridad, seguidos de la coordinacion de escrituras y los errores de lint.
+
+## Criterio de conservacion de progreso
+
+Peticion expresa del usuario, 2026-10-25: proteger las partidas que las personas ya
+tengan guardadas. Si un cambio puede borrar, invalidar o perder progreso al actualizar,
+hay que explicar el riesgo al usuario antes de aplicar ese cambio.
+No asumir que se permite reiniciar datos, regenerar identificadores o migrar partidas
+de forma destructiva como parte de una correccion.
+
+## Paso 1 completado: guardado al cambiar de puzzle (2026-10-25)
+
+- El guardado exige que el estado cargado pertenezca al puzzle activo y haya cambios de juego.
+- Abrir o abandonar una partida sin jugar no reescribe su registro.
+- La carga espera las escrituras pendientes de progreso y descarta resultados de cargas canceladas.
+- Un fallo de lectura bloquea el juego y el guardado; permite reintentar o volver.
+- Sin cambios en esquema/version de IndexedDB, formato de copia, IDs de puzzles,
+  diccionario, dataset ni migraciones de arranque. No se ha publicado esta correccion.
+- Validacion: 9 escenarios con Chrome, React StrictMode e IndexedDB real, incluido
+  reinicio de pagina, diarios antiguos y eventos con letra desbloqueada.
+- `npm run build` y `npm run audit-puzzles` correctos. Lint conserva los 2 errores
+  y 5 avisos anteriores en los componentes del tablero y Game.
+- Pendiente: paso 2 (validacion y restauracion atomica de copias), paso 3
+  (coordinacion de todas las escrituras). Esta correccion no resuelve fallos de
+  escritura silenciados por la API ni conflictos entre varias pestanas.
+- Comando de regresion: `npm run test-progress-safety`; detalles en `scripts/README.md`.
+
+## Entrada segura a eventos y ciclos anuales (2026-10-25)
+
+- Inicio y la ficha del evento leen IndexedDB con errores propagados antes de
+  decidir si existe una partida. Un error bloquea la entrada y ofrece reintento.
+- Pulsar Jugar crea un registro solo si no existe, en una transaccion atomica
+  de lectura/escritura que conserva cualquier partida existente.
+- Se ignoran dobles pulsaciones y se cancelan las navegaciones pendientes al
+  volver o desmontar la aplicacion.
+- Todos los eventos actuales son anuales: Madre 1-31 de mayo, Verano 21 de junio-21
+  de julio y Navidad 15 de diciembre-15 de enero, ambos extremos incluidos.
+- El evento Madre conserva su ID de ruta original y usa un prefijo para las
+  temporadas: el guardado 2026 sigue siendo exactamente `special-mothers-day-2026`;
+  2027 usa `special-mothers-day-2027`. No hay migracion, copia ni borrado de registros.
+- Cada temporada tiene su propia partida. Las anteriores siguen almacenadas, pero
+  la pantalla actual solo consulta la temporada mas reciente; no hay selector historico.
+- Validacion: 17 escenarios de regresion en Chrome con IndexedDB real; build y
+  auditoria de puzzles correctos. Lint completo mantiene los 2 errores y 5 avisos
+  previos; los archivos de esta correccion pasan su comprobacion de lint.
+- Halloween aun no se ha creado. Cambios locales, sin publicar.
+
+## Propuesta de Halloween (2026-10-25)
+
+- Calendario solicitado: anual, 31 de octubre a 30 de noviembre inclusive.
+- Maqueta visual local y estudio de letras en [design/halloween](design/halloween/README.md).
+- Direccion propuesta: calabaza, ciruela, papel crema, malva y salvia; ilustracion
+  SVG propia y vistas de invitacion y partida. Captura abierta en VS Code.
+- Cuatro candidatos con conteos reales del solver; primera propuesta A + B C L O S Z,
+  regalo E, 280 a 482 soluciones (calabaza, calabozo, luego escoba).
+- Pendiente elegir estetica/letras definitivas y umbral de recompensa. El evento
+  aun no se ha incorporado al catalogo y la maqueta no usa almacenamiento.
+
+## Halloween integrado (2026-10-25)
+
+- Estetica y direccion Calabazas y escobas aprobadas por el usuario.
+- Evento `special-halloween`, anual del 31 de octubre al 30 de noviembre inclusive;
+  progreso propio por temporada (`special-halloween-2026`, etc.).
+- Central A, exteriores B C L O S Z: 280 soluciones. Regalo a las 50 palabras:
+  letra E, 482 soluciones. Calabaza y calabozo destacados inicialmente;
+  escoba destacada tras abrir el regalo. Definiciones tematicas, sin excepciones
+  a la central ni cambios de diccionario.
+- Invitacion, ficha, partida, listado de eventos y tablero con tema propio;
+  ilustracion SVG local `public/halloween-scene.svg`, estilos acotados a Halloween.
+- Sin cambios de IDs de eventos existentes, esquema de guardado ni migraciones.
+- 21 escenarios de regresion en Chrome con IndexedDB real, incluyendo el evento
+  completo, persistencia de la recompensa y continuacion despues del 30 de noviembre.
+- Build y auditoria correctos; lint conserva los 2 errores y 5 avisos anteriores.
+- Cambio local, sin publicar. La revision visual del juego base queda para una
+  peticion posterior del usuario.
+
+## Revision visual del juego base (2026-10-25)
+
+- Peticion del usuario: evolucion suave, conservando tonos calidos y elegantes.
+- Revision y maqueta independiente en [design/base](design/base/REVISION_Y_PROPUESTA.md),
+  con Inicio, partida, Clasicos, definiciones y muestra de Ajustes.
+- Paleta actual conservada; propuesta de menos marcos/sombras, diario con jerarquia,
+  menus secundarios compactos y fichas de palabras mas ligeras.
+- Dos variantes de titulos (serif y monoespaciados) para revisar; sin modificar la
+  preferencia de fuente ni otros datos de usuarios.
+- Capturas abiertas en VS Code. Interacciones comprobadas y sin desbordamientos
+  a 320/390 px. Sin cambios en estilos o logica del juego base: pendiente revision
+  del usuario antes de trasladar esta propuesta al producto.
+
+## Estilo serif integrado en el juego base (2026-10-25)
+
+- Variante serif aprobada por el usuario: titulos Georgia y paleta calida conservada.
+- Inicio con diario destacado y miniatura, accesos compactos; bordes y palabras
+  mas ligeros; Clasicos y Ajustes con acabados comunes. Estadisticas desplegables
+  en partidas base; eventos con su presentacion propia.
+- Se respeta la fuente guardada para palabras y datos. La miniatura del diario
+  consulta la sesion existente sin crearla ni cambiar su puzzle fijado.
+- Sin migraciones ni cambios en IDs, puzzles, diccionario o formato de copias.
+- 23 escenarios de proteccion del progreso correctos, incluidos fuente guardada
+  y diario fijado; build correcto. Lint mantiene los 2 errores y 5 avisos previos.
+- Capturas reales en `design/base/integrado.png`; partida sin desbordamientos
+  a 320/390/768 px. Cambios locales, sin publicar.
 
 ## Contexto
 

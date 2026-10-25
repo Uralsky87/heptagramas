@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test-progress-safety": "node scripts/testProgressSafety.mjs",
     "preview": "vite preview",
     "audit-puzzles": "tsx src/scripts/auditPuzzles.ts",
     "sync-puzzle-counts": "tsx src/scripts/syncPuzzleSolutionCounts.ts",

@@ -1,0 +1,386 @@
+{
+  "dictionaryWords": 109735,
+  "candidates": 1010,
+  "evaluated": 302,
+  "missingFromDictionary": [
+    "calabazas",
+    "brujas",
+    "brujos",
+    "escobas",
+    "fantasmas",
+    "miedos",
+    "sustos",
+    "tumbas",
+    "noches",
+    "hechizos",
+    "calaveras",
+    "cadáveres",
+    "velas",
+    "murciélagos",
+    "arañas",
+    "telarañas",
+    "monstruos",
+    "vampiros",
+    "zombis",
+    "calabozos",
+    "muertos",
+    "muertas",
+    "temores",
+    "terrores",
+    "sombras",
+    "huesos",
+    "rituales",
+    "gatos",
+    "lunas",
+    "máscaras",
+    "ataúdes",
+    "momias",
+    "diablos",
+    "cuervos",
+    "sapos"
+  ],
+  "proposals": [
+    {
+      "anchor": "calabaza",
+      "candidate": {
+        "center": "a",
+        "outer": [
+          "b",
+          "c",
+          "l",
+          "o",
+          "s",
+          "z"
+        ],
+        "extraLetter": "e",
+        "baseCount": 280,
+        "expandedCount": 482,
+        "baseThematic": [
+          "calabaza",
+          "calabozo"
+        ],
+        "unlockedThematic": [
+          "escoba"
+        ],
+        "familyCount": 3,
+        "score": 47
+      }
+    },
+    {
+      "anchor": "bruja",
+      "candidate": {
+        "center": "u",
+        "outer": [
+          "a",
+          "b",
+          "j",
+          "m",
+          "r",
+          "t"
+        ],
+        "extraLetter": "e",
+        "baseCount": 116,
+        "expandedCount": 214,
+        "baseThematic": [
+          "bruja",
+          "tumba"
+        ],
+        "unlockedThematic": [
+          "muerte",
+          "muerta"
+        ],
+        "familyCount": 3,
+        "score": 48
+      }
+    },
+    {
+      "anchor": "fantasma"
+    },
+    {
+      "anchor": "miedo",
+      "candidate": {
+        "center": "e",
+        "outer": [
+          "i",
+          "m",
+          "o",
+          "r",
+          "t",
+          "u"
+        ],
+        "extraLetter": "d",
+        "baseCount": 182,
+        "expandedCount": 302,
+        "baseThematic": [
+          "muerte",
+          "muerto",
+          "temor",
+          "terror"
+        ],
+        "unlockedThematic": [
+          "miedo"
+        ],
+        "familyCount": 4,
+        "score": 66
+      }
+    },
+    {
+      "anchor": "noche",
+      "candidate": {
+        "center": "o",
+        "outer": [
+          "e",
+          "h",
+          "n",
+          "s",
+          "t",
+          "u"
+        ],
+        "extraLetter": "c",
+        "baseCount": 125,
+        "expandedCount": 328,
+        "baseThematic": [
+          "susto",
+          "hueso"
+        ],
+        "unlockedThematic": [
+          "noche"
+        ],
+        "familyCount": 3,
+        "score": 47
+      }
+    },
+    {
+      "anchor": "calavera",
+      "candidate": {
+        "center": "a",
+        "outer": [
+          "e",
+          "l",
+          "ñ",
+          "r",
+          "t",
+          "v"
+        ],
+        "extraLetter": "c",
+        "baseCount": 286,
+        "expandedCount": 683,
+        "baseThematic": [
+          "vela",
+          "araña",
+          "telaraña"
+        ],
+        "unlockedThematic": [
+          "calavera"
+        ],
+        "familyCount": 4,
+        "score": 65
+      }
+    }
+  ],
+  "top": [
+    {
+      "center": "t",
+      "outer": [
+        "e",
+        "m",
+        "o",
+        "r",
+        "s",
+        "u"
+      ],
+      "extraLetter": "n",
+      "baseCount": 235,
+      "expandedCount": 450,
+      "baseThematic": [
+        "susto",
+        "muerte",
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "monstruo"
+      ],
+      "familyCount": 5,
+      "score": 84
+    },
+    {
+      "center": "o",
+      "outer": [
+        "e",
+        "m",
+        "r",
+        "s",
+        "t",
+        "u"
+      ],
+      "extraLetter": "n",
+      "baseCount": 285,
+      "expandedCount": 554,
+      "baseThematic": [
+        "susto",
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "monstruo"
+      ],
+      "familyCount": 5,
+      "score": 83
+    },
+    {
+      "center": "o",
+      "outer": [
+        "e",
+        "m",
+        "r",
+        "s",
+        "t",
+        "u"
+      ],
+      "extraLetter": "h",
+      "baseCount": 285,
+      "expandedCount": 333,
+      "baseThematic": [
+        "susto",
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "hueso"
+      ],
+      "familyCount": 5,
+      "score": 83
+    },
+    {
+      "center": "t",
+      "outer": [
+        "e",
+        "m",
+        "n",
+        "o",
+        "r",
+        "u"
+      ],
+      "extraLetter": "s",
+      "baseCount": 253,
+      "expandedCount": 450,
+      "baseThematic": [
+        "muerte",
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "susto",
+        "monstruo"
+      ],
+      "familyCount": 5,
+      "score": 77
+    },
+    {
+      "center": "o",
+      "outer": [
+        "e",
+        "m",
+        "n",
+        "r",
+        "t",
+        "u"
+      ],
+      "extraLetter": "s",
+      "baseCount": 293,
+      "expandedCount": 554,
+      "baseThematic": [
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "susto",
+        "monstruo"
+      ],
+      "familyCount": 5,
+      "score": 76
+    },
+    {
+      "center": "o",
+      "outer": [
+        "e",
+        "h",
+        "r",
+        "s",
+        "t",
+        "u"
+      ],
+      "extraLetter": "m",
+      "baseCount": 210,
+      "expandedCount": 333,
+      "baseThematic": [
+        "susto",
+        "terror",
+        "hueso"
+      ],
+      "unlockedThematic": [
+        "muerto",
+        "temor"
+      ],
+      "familyCount": 5,
+      "score": 76
+    },
+    {
+      "center": "o",
+      "outer": [
+        "e",
+        "h",
+        "m",
+        "r",
+        "t",
+        "u"
+      ],
+      "extraLetter": "s",
+      "baseCount": 165,
+      "expandedCount": 333,
+      "baseThematic": [
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "susto",
+        "hueso"
+      ],
+      "familyCount": 5,
+      "score": 76
+    },
+    {
+      "center": "t",
+      "outer": [
+        "e",
+        "m",
+        "o",
+        "r",
+        "s",
+        "u"
+      ],
+      "extraLetter": "a",
+      "baseCount": 235,
+      "expandedCount": 799,
+      "baseThematic": [
+        "susto",
+        "muerte",
+        "muerto",
+        "temor",
+        "terror"
+      ],
+      "unlockedThematic": [
+        "muerta"
+      ],
+      "familyCount": 4,
+      "score": 74
+    }
+  ]
+}

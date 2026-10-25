@@ -17,6 +17,7 @@ import {
   preloadPuzzleProgress,
   loadPlayerState,
   savePlayerState,
+  flushPendingWrites,
 } from '../lib/storageAdapter';
 import { type DictionaryData } from '../lib/dictionary';
 import { solvePuzzle } from '../lib/solvePuzzle';
@@ -65,6 +66,11 @@ export default function Game({
   const [showAnswers, setShowAnswers] = useState(false);
   const [selectedAnswerWord, setSelectedAnswerWord] = useState<string | null>(null);
   const [eventExtraLetter, setEventExtraLetter] = useState<string | null>(null);
+  // This marker belongs to the loaded snapshot, never to the selected puzzle.
+  const [loadedProgress, setLoadedProgress] = useState<{ id: string; startedAt: string | null } | null>(null);
+  const [hasProgressChanges, setHasProgressChanges] = useState(false);
+  const [progressLoadError, setProgressLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const heptagramRef = useRef<HeptagramBoardHandle>(null);
   const { getDefinition } = useDefinitions();
   const {
@@ -79,7 +85,7 @@ export default function Game({
   } = useSubmissionFeedback();
 
   const progressId = dailyProgressId ?? currentPuzzle.id;
-  const latestProgressIdRef = useRef(progressId);
+  const isProgressReady = loadedProgress?.id === progressId;
   const activeEventConfig = mode === 'special'
     ? eventConfig ?? getEventPuzzleById(progressId) ?? getEventPuzzleById(currentPuzzle.id)
     : null;
@@ -88,11 +94,13 @@ export default function Game({
   const eventUnlockLetter = activeEventConfig?.unlockedExtraLetter ?? null;
   const isEventExtraLetterUnlocked = Boolean(eventUnlockLetter && eventExtraLetter === eventUnlockLetter);
   const isChristmasEvent = activeEventConfig?.theme === 'christmas';
-  const eventRewardTitle = isChristmasEvent ? 'Regalo navideño' : 'Recompensa veraniega';
-  const eventRewardOpenedTitle = isChristmasEvent ? 'Regalo abierto' : 'Recompensa desbloqueada';
-  const eventRewardIcon = isChristmasEvent ? '🎁' : '☀️';
-  const eventRewardOpenText = isChristmasEvent ? 'Abre el regalo' : 'Abre la recompensa';
-  const eventRewardUnlockText = isChristmasEvent ? 'desbloquear el regalo' : 'desbloquear la recompensa';
+  const isHalloweenEvent = activeEventConfig?.theme === 'halloween';
+  const hasEventGift = isChristmasEvent || isHalloweenEvent;
+  const eventRewardTitle = isHalloweenEvent ? 'Un regalo entre las sombras' : isChristmasEvent ? 'Regalo navideño' : 'Recompensa veraniega';
+  const eventRewardOpenedTitle = isChristmasEvent || isHalloweenEvent ? 'Regalo abierto' : 'Recompensa desbloqueada';
+  const eventRewardIcon = hasEventGift ? '🎁' : '☀️';
+  const eventRewardOpenText = hasEventGift ? 'Abre el regalo' : 'Abre la recompensa';
+  const eventRewardUnlockText = hasEventGift ? 'desbloquear el regalo' : 'desbloquear la recompensa';
   const activeEventExtraSolutions = [
     ...(activeEventConfig?.extraSolutions ?? []),
     ...(isEventExtraLetterUnlocked ? activeEventConfig?.unlockedExtraSolutions ?? [] : []),
@@ -125,10 +133,6 @@ export default function Game({
     : undefined;
 
   useEffect(() => {
-    latestProgressIdRef.current = progressId;
-  }, [progressId]);
-
-  useEffect(() => {
     setShuffledOuter(displayedOuter);
   }, [displayedOuter.join('')]);
 
@@ -148,48 +152,54 @@ export default function Game({
     return solutions;
   }, [activeEventExtraSolutions, currentPuzzle, dictionary, eventExtraLetter]);
 
-  const loadPuzzleProgressState = useCallback(async (progressIdToLoad: string) => {
-    await preloadPuzzleProgress(progressIdToLoad);
-
-    if (progressIdToLoad !== latestProgressIdRef.current) {
-      return;
-    }
-
-    const progress = loadPuzzleProgress(progressIdToLoad);
-    if (progress) {
-      setFoundWords(progress.foundWords);
-      setScore(progress.score);
-      setAchievements({ superHeptaWords: progress.superHeptaWords });
-      setEventExtraLetter(progress.exoticLetter ?? null);
-    } else {
-      setFoundWords([]);
-      setScore(0);
-      setAchievements({ superHeptaWords: [] });
-      setEventExtraLetter(null);
-    }
-    setClickedWord('');
-  }, []);
-
   useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      void loadPuzzleProgressState(progressId);
-    }, 0);
+    let cancelled = false;
 
-    return () => clearTimeout(timerId);
-  }, [loadPuzzleProgressState, progressId]);
+    async function loadProgress() {
+      try {
+        // A quick A → B → A must not read A before its last save finishes.
+        await flushPendingWrites();
+        if (cancelled) return;
+
+        // A read failure must never enable saving an empty replacement.
+        await preloadPuzzleProgress(progressId, { throwOnError: true });
+        if (cancelled) return;
+
+        const progress = loadPuzzleProgress(progressId);
+        setFoundWords(progress?.foundWords ?? []);
+        setScore(progress?.score ?? 0);
+        setAchievements({ superHeptaWords: progress?.superHeptaWords ?? [] });
+        setEventExtraLetter(progress?.exoticLetter ?? null);
+        setClickedWord('');
+        setHasProgressChanges(false);
+        setProgressLoadError(null);
+        setLoadedProgress({ id: progressId, startedAt: progress?.startedAt ?? null });
+      } catch (error) {
+        if (cancelled) return;
+        console.error('[Game] No se pudo cargar el progreso:', error);
+        setProgressLoadError('No se pudo cargar tu progreso. Reintenta para continuar.');
+      }
+    }
+
+    void loadProgress();
+
+    return () => { cancelled = true; };
+  }, [loadAttempt, progressId]);
 
   const savePuzzleProgressState = useCallback(() => {
+    if (!isProgressReady || !hasProgressChanges) return;
+
     const now = new Date().toISOString();
     const progress: PuzzleProgress = {
       foundWords,
       score,
       superHeptaWords: achievements.superHeptaWords,
-      startedAt: loadPuzzleProgress(progressId)?.startedAt || now,
+      startedAt: loadedProgress.startedAt || loadPuzzleProgress(progressId)?.startedAt || now,
       lastPlayedAt: now,
       exoticLetter: eventExtraLetter ?? undefined,
     };
     savePuzzleProgress(progressId, progress);
-  }, [achievements.superHeptaWords, eventExtraLetter, foundWords, progressId, score]);
+  }, [achievements.superHeptaWords, eventExtraLetter, foundWords, hasProgressChanges, isProgressReady, loadedProgress, progressId, score]);
 
   useEffect(() => {
     if (foundWords.length > 0 || score > 0) {
@@ -199,6 +209,9 @@ export default function Game({
 
   const handleSelectPuzzle = (puzzle: Puzzle) => {
     savePuzzleProgressState();
+    if (puzzle.id === currentPuzzle.id) return;
+    setLoadedProgress(null);
+    setProgressLoadError(null);
     setCurrentPuzzle(puzzle);
   };
 
@@ -268,11 +281,12 @@ export default function Game({
   };
 
   const handleOpenEventGift = () => {
-    if (!eventUnlockLetter) {
+    if (!isProgressReady || !eventUnlockLetter || !canOpenEventGift) {
       return;
     }
 
     setEventExtraLetter(eventUnlockLetter);
+    setHasProgressChanges(true);
     setMessage(`¡${eventRewardOpenedTitle}! Nueva letra: ${eventUnlockLetter.toUpperCase()}`);
     setMessageTone('success');
   };
@@ -292,6 +306,8 @@ export default function Game({
   }, [message, resetFeedbackTone]);
 
   const handleSubmit = (word: string) => {
+    if (!isProgressReady) return;
+
     const result = validateWord(
       word,
       currentPuzzle,
@@ -321,6 +337,7 @@ export default function Game({
     }
 
     const normalized = normalizeWord(word);
+    setHasProgressChanges(true);
     setFoundWords((prev) => [...prev, normalized].sort());
     setClickedWord('');
 
@@ -350,13 +367,33 @@ export default function Game({
     triggerFeedback(successIntent, { soundEnabled: playerState.settings.soundEnabled });
   };
 
+  if (!isProgressReady) {
+    return (
+      <PageContainer>
+        <div className="game-screen">
+          <p role={progressLoadError ? 'alert' : 'status'}>
+            {progressLoadError ?? 'Cargando tu progreso…'}
+          </p>
+          {progressLoadError && (
+            <button className="btn-action" onClick={() => {
+              setProgressLoadError(null);
+              setLoadAttempt((attempt) => attempt + 1);
+            }}>Reintentar</button>
+          )}
+          <button className="btn-action" onClick={onBack}>Volver</button>
+        </div>
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer className={isThemedSpecial ? `special-page-theme ${eventThemeClass}` : ''}>
       <div className={isThemedSpecial ? `game-screen special-game-theme ${eventThemeClass}` : 'game-screen'}>
       <TopBar
         onThemeClick={() => {}}
         onSettingsClick={() => {}}
-        title={mode === 'daily' ? t('common.daily') : mode === 'special' ? t('common.special') : t('home.classic_title')}
+        title={isHalloweenEvent ? 'Halloween' : mode === 'daily' ? t('common.daily') : mode === 'special' ? t('common.special') : t('home.classic_title')}
+        rightButton={isHalloweenEvent ? <span className="halloween-top-star" aria-hidden="true">✧</span> : undefined}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
@@ -367,6 +404,7 @@ export default function Game({
       />
 
       <header className="header game-header">
+        {isHalloweenEvent && <p className="halloween-dates">31 OCT — 30 NOV</p>}
         <div className="game-header-row">
           <p className="puzzle-title">{currentPuzzle.title}</p>
           {mode === 'classic' && (
@@ -375,6 +413,8 @@ export default function Game({
             </button>
           )}
         </div>
+        {isHalloweenEvent && <p className="halloween-game-intro">Unas letras. Un pequeño misterio.</p>}
+        {!isThemedSpecial && <><h2 className="base-game-title">Una palabra lleva a otra.</h2><p className="base-game-intro">Incluye siempre la letra central.</p></>}
       </header>
 
       <UnifiedFeedback signal={banner} onAnimationEnd={dismissBanner} />
@@ -421,7 +461,7 @@ export default function Game({
           </div>
           {canOpenEventGift && (
             <button className="event-gift-button" onClick={handleOpenEventGift}>
-              {isChristmasEvent ? 'Abrir regalo' : 'Abrir recompensa'}
+              {hasEventGift ? 'Abrir regalo' : 'Abrir recompensa'}
             </button>
           )}
         </section>
@@ -474,12 +514,12 @@ export default function Game({
         highlightedWords={activeHighlightedWords}
       />
 
-      <PuzzleStats
+      {isThemedSpecial ? <PuzzleStats
         letters={[...displayedOuter, currentPuzzle.center]}
         solutions={puzzleSolutions}
         foundWords={foundWords}
         specialMissingCenterWord={activeAllowMissingCenterWords[0]}
-      />
+      /> : <details className="base-stats"><summary><span>El puzzle en detalle</span><span className="base-stats-toggle" aria-hidden="true">+</span></summary><PuzzleStats letters={[...displayedOuter, currentPuzzle.center]} solutions={puzzleSolutions} foundWords={foundWords} /></details>}
 
       {showPuzzleSelector && mode === 'classic' && (
         <PuzzleSelector

@@ -113,6 +113,8 @@ export default function ClassicList({ puzzles, onSelectPuzzle, onBack }: Classic
         }
       />
 
+      {selectedSectionIndex === null && <div className="base-classic-intro"><p>Tu colección de palabras</p><h2>Siempre queda<br />algo por descubrir.</h2><span>Elige una sección y sigue a tu ritmo.</span></div>}
+
       {selectedSectionIndex === null && (
         <div className="classic-menu-tabs" role="tablist" aria-label={t('home.classic_title')}>
           <button
@@ -160,6 +162,7 @@ export default function ClassicList({ puzzles, onSelectPuzzle, onBack }: Classic
                 className="classic-section-card"
                 onClick={() => setSelectedSectionIndex(sectionIndex)}
               >
+                <span className="classic-section-number" aria-hidden="true">{String(sectionIndex + 1).padStart(2, '0')}</span>
                 <h2 className="classic-section-title">{sectionLabel} {sectionIndex + 1}</h2>
                 <p className="classic-section-info">
                   {t('classic.heptagrams_label')} {sectionRangeLabel(sectionIndex, activePool.length)}

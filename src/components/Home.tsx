@@ -5,18 +5,29 @@ import TopBar from './TopBar';
 import { useLanguage } from '../contexts/useLanguage';
 import { APP_VERSION } from '../lib/appInfo';
 import { getActiveEventPuzzles } from '../lib/specialPuzzles';
+import HalloweenArtwork from './HalloweenArtwork';
+import HeptagramMiniature from './HeptagramMiniature';
+import type { Puzzle } from '../types';
+import { getDailyKey, getDailyPuzzleForDate, getPuzzleForDailySession, loadAllDailySessions } from '../lib/dailySession';
 
 interface HomeProps {
+  puzzles?: Puzzle[];
   onNavigate: (screen: 'daily' | 'classic' | 'exotic' | 'events' | 'special') => void;
   onNavigateToEvent?: (eventId: string) => void;
   onNavigateToSettings?: () => void;
 }
 
-export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettings }: HomeProps) {
+export default function Home({ puzzles = [], onNavigate, onNavigateToEvent, onNavigateToSettings }: HomeProps) {
   const { t } = useLanguage();
   const playerState = loadPlayerState();
   const progress = getLevelProgress(playerState.xpTotal);
   const activeEvents = getActiveEventPuzzles();
+  const todayKey = getDailyKey();
+  // Read the hydrated session without creating it or changing its saved puzzle.
+  const todaySession = puzzles.length ? loadAllDailySessions()[`es-${todayKey}`] : undefined;
+  const todayPuzzle = puzzles.length
+    ? todaySession ? getPuzzleForDailySession(todaySession, puzzles) : getDailyPuzzleForDate(todayKey, puzzles)
+    : null;
   const levelInfo: {
     level: number;
     progressPercentage: number;
@@ -34,8 +45,7 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
       <div className="home-screen">
         <TopBar 
           onSettingsClick={onNavigateToSettings || (() => {})}
-          titlePlate
-          showSettingsButton={false}
+          showSettingsButton
         />
 
         <header className="home-header">
@@ -55,8 +65,23 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
           </div>
         </header>
 
+        <p className="home-greeting">Un momento para las palabras.</p>
+
         <div className="home-menu">
           {activeEvents.map((event) => {
+            if (event.theme === 'halloween') {
+              return (
+                <button key={event.id} className="menu-btn menu-btn-special menu-btn-special-halloween" onClick={() => onNavigateToEvent?.(event.id)}>
+                  <span className="halloween-card-meta"><span>HALLOWEEN · EDICIÓN DE OTOÑO</span><span className="halloween-active">ACTIVO</span></span>
+                  <HalloweenArtwork />
+                  <span className="halloween-little-star" aria-hidden="true">✧</span>
+                  <span className="menu-btn-title">{event.title}</span>
+                  <span className="menu-btn-desc">Hay un poco de magia en cada letra.</span>
+                  <span className="halloween-enter">Entrar en Halloween <span aria-hidden="true">→</span></span>
+                  <span className="halloween-dates">31 OCT — 30 NOV</span>
+                </button>
+              );
+            }
             const isChristmas = event.theme === 'christmas';
             const isSummer = event.theme === 'summer';
 
@@ -106,7 +131,14 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
             className="menu-btn menu-btn-daily"
             onClick={() => onNavigate('daily')}
           >
-            <span className="menu-btn-icon" aria-hidden="true">
+            <span className="daily-invitation-eyebrow">EL HEPTAGRAMA DE HOY</span>
+            <span className="daily-invitation-body">
+              <span><span className="daily-invitation-title">Tu pequeña<br />pausa diaria.</span><span className="daily-invitation-copy">Siete letras.<br />Muchas posibilidades.</span></span>
+              {todayPuzzle && <HeptagramMiniature center={todayPuzzle.center} outer={todayPuzzle.outer} />}
+            </span>
+            <span className="daily-invitation-meta"><span>UNA NUEVA HISTORIA CADA DÍA</span>{todayPuzzle?.solutionCount !== undefined && <span>{todayPuzzle.solutionCount} palabras</span>}</span>
+            <span className="daily-invitation-action">Ver el diario <span aria-hidden="true">→</span></span>
+            <span className="menu-btn-icon daily-calendar-icon" aria-hidden="true">
               <svg className="home-icon" viewBox="0 0 48 48">
                 <rect x="6" y="9" width="36" height="33" rx="4" />
                 <line x1="6" y1="18" x2="42" y2="18" />
@@ -118,9 +150,9 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
                 <line x1="26" y1="32" x2="32" y2="32" />
               </svg>
             </span>
-            <span className="menu-btn-title">{t('home.daily_title')}</span>
-            <span className="menu-btn-desc">{t('home.daily_desc')}</span>
           </button>
+
+          <p className="home-section-label">A TU RITMO</p>
 
           <button 
             className="menu-btn menu-btn-classic"
@@ -172,26 +204,9 @@ export default function Home({ onNavigate, onNavigateToEvent, onNavigateToSettin
             <span className="menu-btn-desc">{t('home.events_desc')}</span>
           </button>
 
-          <button
-            className="menu-btn menu-btn-settings menu-btn-compact"
-            onClick={() => onNavigateToSettings?.()}
-          >
-            <span className="menu-btn-icon" aria-hidden="true">
-              <svg className="home-icon" viewBox="0 0 48 48">
-                <circle cx="24" cy="24" r="6" />
-                <path d="M24 8v5" />
-                <path d="M24 35v5" />
-                <path d="M8 24h5" />
-                <path d="M35 24h5" />
-                <path d="M12.7 12.7l3.6 3.6" />
-                <path d="M31.7 31.7l3.6 3.6" />
-                <path d="M35.3 12.7l-3.6 3.6" />
-                <path d="M16.3 31.7l-3.6 3.6" />
-              </svg>
-            </span>
-            <span className="menu-btn-title">{t('common.settings')}</span>
-          </button>
         </div>
+
+        <div className="home-footer"><span>Hecho para jugar sin prisa.</span><button className="menu-btn-settings" onClick={() => onNavigateToSettings?.()}>{t('common.settings')}</button></div>
 
         <div className="app-version">
           {t('home.version')} v{APP_VERSION}

@@ -1,0 +1,161 @@
+/* Halloween is scoped to its own cards and screens; base themes stay independent. */
+.menu-btn-special-halloween,
+.special-detail-halloween,
+.special-game-theme-halloween {
+  --halloween-night: #33243e;
+  --halloween-paper: #f6ecd7;
+  --halloween-orange: #ed914f;
+  --halloween-malva: #b9a0c8;
+  --theme-ui-bg: #33243e;
+  --theme-ui-surface: #49334f;
+  --theme-ui-surface-alt: #523b59;
+  --theme-ui-border: #886580;
+  --theme-ui-text: #f6ecd7;
+  --theme-ui-muted: #c8b2ce;
+  --theme-ui-icon: #edb47d;
+  --theme-primary-start: #ed914f;
+  --theme-primary-end: #ffb56e;
+  --theme-shadow-rgb: 28, 17, 36;
+}
+
+.halloween-artwork {
+  display: block;
+  width: 100%;
+  max-width: 330px;
+  height: auto;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.menu-btn.menu-btn-special-halloween {
+  position: relative;
+  gap: 12px;
+  padding: 20px;
+  overflow: hidden;
+  color: #f6ecd7;
+  background: radial-gradient(ellipse at 50% 45%, #65415b55, transparent 70%), #33243e;
+  border: 1px solid #80607c;
+  border-radius: 16px;
+  box-shadow: 0 14px 30px #291c3326;
+}
+
+.menu-btn.menu-btn-special-halloween:hover {
+  border-color: #edb47d;
+  box-shadow: 0 18px 34px #291c3338;
+}
+
+.halloween-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font: 10px/1.6 'Courier New', monospace;
+  letter-spacing: 1px;
+  color: #c8b2ce;
+}
+
+.halloween-active { color: #c6d3a9; white-space: nowrap; }
+.halloween-active::before { content: '● '; font-size: 8px; }
+.menu-btn-special-halloween .halloween-artwork { max-height: 240px; object-fit: contain; margin: -8px auto -18px; }
+.halloween-little-star { color: #ed914f; font-size: 26px; line-height: 1; }
+.menu-btn-special-halloween .menu-btn-title { font: normal 36px/1.1 Georgia, serif; letter-spacing: -1px; max-width: 250px; color: #f6ecd7; }
+.menu-btn-special-halloween .menu-btn-desc { max-width: 235px; font: 12px/1.8 'Courier New', monospace; color: #c8b2ce; }
+.halloween-enter { display: flex; justify-content: space-between; gap: 20px; width: 100%; padding: 15px; margin-top: 8px; border: 1px solid #ffba80; border-radius: 8px; background: #ed914f; color: #33243e; font: bold 13px 'Courier New', monospace; }
+.halloween-dates { margin: 0; font: 10px/1.6 'Courier New', monospace; letter-spacing: 2px; color: #c8b2ce; text-align: center; }
+
+.page-container-inner.special-page-theme.special-detail-halloween,
+.page-container-inner.special-page-theme.special-game-theme-halloween {
+  background: radial-gradient(ellipse at 50% 20%, #73527922, transparent 60%), #33243e;
+  border-color: #80607c;
+  box-shadow: 0 24px 60px #20142655;
+  color: #f6ecd7;
+}
+
+.special-detail-halloween .top-bar,
+.special-game-theme-halloween .top-bar { border-bottom-color: #765b78; margin-bottom: 20px; }
+.special-detail-halloween .top-bar-title,
+.special-game-theme-halloween .top-bar-title { color: #e2cbe2; font: 13px 'Courier New', monospace; letter-spacing: 3px; text-transform: uppercase; }
+.special-detail-halloween .top-bar-btn,
+.special-game-theme-halloween .top-bar-btn { background: #49334f; border: 1px solid #80607c; color: #f6ecd7; }
+.halloween-top-star { color: #ed914f; font-size: 28px; justify-self: end; }
+
+.special-content.special-detail-halloween { background: none; border: 0; padding: 0; box-shadow: none; }
+.special-detail-halloween .special-card { background: transparent; color: #f6ecd7; border: 0; box-shadow: none; padding: 8px 10px 18px; gap: 22px; }
+.halloween-detail-eyebrow { text-align: center; color: #c8b2ce; font: 10px/1.8 'Courier New', monospace; letter-spacing: 1.2px; }
+.special-detail-halloween .special-card-header { justify-content: center; text-align: center; }
+.special-detail-halloween .special-card h2 { font: normal 34px/1.12 Georgia, serif; color: #f6ecd7; letter-spacing: -1px; margin-bottom: 14px; }
+.special-detail-halloween .special-card p { color: #c8b2ce; font-size: 13px; line-height: 1.8; }
+.special-detail-halloween .special-puzzle-preview { background: #291c33; border: 1px solid #80607c; padding: 18px 12px; }
+.special-detail-halloween .center-letter-big { color: #ed914f; }
+.special-detail-halloween .outer-letters-big { color: #d6badf; }
+.special-detail-halloween .btn-play-today { background: #ed914f; color: #33243e; border: 1px solid #ffba80; border-radius: 8px; box-shadow: none; min-height: 48px; }
+.special-detail-halloween .btn-play-today:hover { background: #ffad6d; }
+.special-detail-halloween .special-card .halloween-detail-hint { font: 11px/1.8 'Courier New', monospace; text-align: center; margin: 0; color: #cab3c8; }
+
+.special-game-theme-halloween .game-header { border: 0; padding: 0; margin-bottom: 4px; }
+.special-game-theme-halloween .game-header-row { justify-content: center; margin: 8px 0; }
+.special-game-theme-halloween .puzzle-title { color: #f6ecd7; font: normal 28px/1.2 Georgia, serif; letter-spacing: -.7px; }
+.halloween-game-intro { text-align: center; color: #c8b2ce; font: 11px/1.7 'Courier New', monospace; margin: 6px 0 0; }
+.special-game-theme-halloween .heptagram-section { border: 0; background: transparent; box-shadow: none; padding: 0; margin: 0 0 8px; }
+.special-game-theme-halloween .svg-container { background: transparent; }
+.heptagram-section-halloween .trap-letter { fill: #f6ecd7; text-shadow: none; }
+.heptagram-section-halloween .center-letter { fill: #33243e; text-shadow: none; }
+.special-game-theme-halloween .center-polygon:hover,
+.special-game-theme-halloween .trap-shape:hover { filter: brightness(1.12); }
+.special-game-theme-halloween .word-input { background: #291c33; border: 1px solid #886580; border-radius: 8px; box-shadow: none; color: #ffcf9c; }
+.special-game-theme-halloween .word-input::placeholder { color: #b99cbf; opacity: 1; }
+.special-game-theme-halloween .word-input:focus { border-color: #edb47d; box-shadow: 0 0 0 2px #edb47d33; }
+.special-game-theme-halloween .btn-delete-letter,
+.special-game-theme-halloween .btn-shuffle-inline { background: #49334f; border: 1px solid #886580; border-radius: 8px; box-shadow: none; color: #f6ecd7; }
+.special-game-theme-halloween .btn-delete-letter:hover,
+.special-game-theme-halloween .btn-shuffle-inline:hover { background: #62466c; border-color: #c5a1c8; }
+.special-game-theme-halloween .btn-shuffle-inline .shuffle-icon { stroke: #e2cbe2; }
+.special-game-theme-halloween .btn-submit { background: #ed914f; color: #33243e; border: 1px solid #ffba80; border-radius: 8px; box-shadow: none; }
+.special-game-theme-halloween .btn-submit:hover { background: #ffad6d; }
+.special-game-theme-halloween .message { color: #d6c0dc; }
+.special-game-theme-halloween .message-success { color: #c6d3a9; }
+
+.special-game-theme-halloween .event-gift-panel { background: #46334b; border: 1px solid #80607c; box-shadow: none; padding: 15px 12px; border-radius: 10px; }
+.special-game-theme-halloween .event-gift-icon { background: #5e435b; border-color: #b8916e; color: #f4d6a5; }
+.special-game-theme-halloween .event-gift-copy h2 { font: normal 17px/1.3 Georgia, serif; color: #f4d6a5; }
+.special-game-theme-halloween .event-gift-copy p { color: #d2bcd1; line-height: 1.7; }
+.special-game-theme-halloween .event-gift-button { background: #ed914f; border: 1px solid #ffba80; color: #33243e; min-height: 44px; }
+.special-game-theme-halloween .event-gift-panel-open { border-color: #a7b58b; background: #3e3c3e; }
+.special-game-theme-halloween .event-gift-panel-open .event-gift-icon { background: #68724e; color: #f6ecd7; border-color: #a7b58b; }
+
+.special-game-theme-halloween .found-section,
+.special-game-theme-halloween .stats-section { background: #f6ecd7; border: 1px solid #e0c9a7; border-radius: 12px; box-shadow: none; padding: 16px; color: #4b3843; }
+.special-game-theme-halloween .found-header { border-color: #deceb4; }
+.special-game-theme-halloween .found-header h2 { font: normal 22px/1.3 Georgia, serif; color: #4b3843; }
+.special-game-theme-halloween .found-hint { color: #7b665a; }
+.special-game-theme-halloween .counter,
+.special-game-theme-halloween .level-badge,
+.special-game-theme-halloween .superhepta-counter { color: #7b492e; background: #ebddc6; border: 1px solid #cfb58e; box-shadow: none; }
+.special-game-theme-halloween .found-list li { color: #594451; background: #f9f1e5; border: 1px solid #d6c2a8; border-radius: 7px; box-shadow: none; }
+.special-game-theme-halloween .found-list li.has-definition:hover { background: #efe0c9; box-shadow: none; }
+.special-game-theme-halloween .found-list li.superhepta { background: #e4d7e5; border-color: #af91b7; color: #57385f; }
+.special-game-theme-halloween .found-list li.special-word,
+.special-game-theme-halloween .found-list li.special-word.has-definition:hover { background: #f8dfad; border: 1px solid #c99253; color: #754328; text-shadow: none; box-shadow: 0 0 0 2px #eac38633; }
+.special-game-theme-halloween .stats-title,
+.special-game-theme-halloween .stats-subtitle { color: #594451; }
+.special-game-theme-halloween .stats-chip { background: #efe2cb; border-color: #cbb18b; }
+.special-game-theme-halloween .stats-chip-letter,
+.special-game-theme-halloween .stats-chip-count,
+.special-game-theme-halloween .stats-value { color: #754e36; }
+.special-game-theme-halloween .stats-value { background: #efe2cb; border-color: #cbb18b; }
+.special-game-theme-halloween .empty-message { color: #7b665a; }
+
+.event-card-halloween.event-card-active { color: #f6ecd7; background: #33243e; border-color: #80607c; }
+.event-card-halloween.event-card-active .event-card-header p { color: #d2bcd1; }
+.event-card-halloween .event-active-badge { background: #ed914f; color: #33243e; }
+.event-card-halloween.event-card-active .center-letter-big { color: #ed914f; }
+.event-card-halloween.event-card-active .outer-letters-big { color: #e2cbe2; }
+.event-card-halloween.event-card-active .progress-text-big { color: #d2bcd1; }
+
+@media (max-width: 380px) {
+  .halloween-card-meta { font-size: 9px; letter-spacing: .3px; }
+  .menu-btn-special-halloween .menu-btn-title { font-size: 32px; }
+  .special-game-theme-halloween .puzzle-title { font-size: 25px; }
+  .special-game-theme-halloween .found-header h2 { font-size: 19px; }
+}

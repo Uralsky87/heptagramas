@@ -1,4 +1,5 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import type { EventPuzzleTheme } from '../lib/specialPuzzles';
 
 interface HeptagramBoardSvgProps {
   center: string;
@@ -7,7 +8,7 @@ interface HeptagramBoardSvgProps {
   successAnimation?: boolean;
   onShuffleOuter?: (shuffled: string[]) => void;
   extraLetterIndices?: Set<number>;
-  variant?: 'default' | 'mothers-day' | 'christmas' | 'summer';
+  variant?: EventPuzzleTheme;
 }
 
 const SVG_SIZE = 300;
@@ -94,6 +95,7 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
   const isMothersDay = variant === 'mothers-day';
   const isChristmas = variant === 'christmas';
   const isSummer = variant === 'summer';
+  const isHalloween = variant === 'halloween';
   const variantClass = variant !== 'default' ? `heptagram-section-${variant}` : '';
 
   useEffect(() => {
@@ -114,28 +116,28 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
     shuffle: shuffleOuter,
   }));
 
-  const centerStart = isMothersDay
+  const centerStart = isHalloween ? '#ffb56e' : isMothersDay
     ? '#e84d93'
     : isChristmas
       ? '#d6a642'
       : isSummer
         ? '#ffd166'
         : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-start').trim();
-  const centerEnd = isMothersDay
+  const centerEnd = isHalloween ? '#e07a43' : isMothersDay
     ? '#8b3bb4'
     : isChristmas
       ? '#8f1d24'
       : isSummer
         ? '#f6a21a'
         : getComputedStyle(document.documentElement).getPropertyValue('--theme-center-end').trim();
-  const outerStart = isMothersDay
+  const outerStart = isHalloween ? '#7b5c87' : isMothersDay
     ? '#f59abb'
     : isChristmas
       ? '#1f7a49'
       : isSummer
         ? '#18afc7'
         : getComputedStyle(document.documentElement).getPropertyValue('--theme-outer-start').trim();
-  const outerEnd = isMothersDay
+  const outerEnd = isHalloween ? '#63466e' : isMothersDay
     ? '#a45cc7'
     : isChristmas
       ? '#0f3f2b'
@@ -170,8 +172,8 @@ const HeptagramBoardSvg = forwardRef<HeptagramBoardHandle, HeptagramBoardSvgProp
               <stop offset="100%" style={{ stopColor: outerEnd, stopOpacity: 1 }} />
             </linearGradient>
             <linearGradient id="trapExtraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: lightenColor(outerStart, 0.1), stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: lightenColor(outerEnd, 0.1), stopOpacity: 1 }} />
+              <stop offset="0%" style={{ stopColor: isHalloween ? '#9ba77d' : lightenColor(outerStart, 0.1), stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: isHalloween ? '#68724e' : lightenColor(outerEnd, 0.1), stopOpacity: 1 }} />
             </linearGradient>
           </defs>
 

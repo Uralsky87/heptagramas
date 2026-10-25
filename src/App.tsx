@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
+import './styles/halloween.css';
+import './styles/baseStyle.css';
 import Home from './components/Home';
 import Game from './components/Game';
 import DailyScreen from './components/DailyScreen';
@@ -21,7 +23,9 @@ import { applyFont } from './lib/fonts';
 import { runAppVersionMigrations } from './lib/appVersionMigrations';
 import { migrateFromLocalStorage, getPlayerState, openDatabase, setPlayerState } from './storage';
 import { preloadExoticsRun } from './lib/exoticsStorage';
-import { loadPuzzleProgress, savePuzzleProgress } from './lib/storageAdapter';
+import { loadPuzzleProgress } from './lib/storageAdapter';
+import { prepareEventEntry } from './lib/eventEntry';
+import PageContainer from './components/layout/PageContainer';
 import { getEventProgressId, getEventPuzzleAvailability, getEventPuzzleById, MOTHERS_DAY_PROGRESS_ID } from './lib/specialPuzzles';
 
 // Importar tests solo en desarrollo (disponibles en consola)
@@ -52,6 +56,8 @@ export default function App() {
   const [puzzles, setPuzzles] = useState<Puzzle[] | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [navigationStack, setNavigationStack] = useState<Screen[]>(['home']);
+  const [eventEntry, setEventEntry] = useState<{ eventId: string; play: boolean; error: string | null } | null>(null);
+  const eventEntryController = useRef<AbortController | null>(null);
   const { updateAvailable, isUpdating, handleUpdate, showPersistentMessage } = useUpdateChecker();
   const { language, t } = useLanguage();
   const screenNeedsDictionary =
@@ -84,7 +90,16 @@ export default function App() {
     }
   };
 
+  const cancelEventEntry = useCallback(() => {
+    eventEntryController.current?.abort();
+    eventEntryController.current = null;
+    setEventEntry(null);
+  }, []);
+
+  useEffect(() => () => { eventEntryController.current?.abort(); }, []);
+
   const updateScreenFromHistory = useCallback((historyState: AppHistoryState | null) => {
+    cancelEventEntry();
     const nextScreen = historyState?.screen ?? 'home';
 
     setCurrentScreen(nextScreen);
@@ -163,7 +178,7 @@ export default function App() {
     }
 
     setNavigationStack(['home']);
-  }, [puzzles]);
+  }, [cancelEventEntry, puzzles]);
 
   const pushHistoryState = (state: AppHistoryState) => {
     window.history.pushState(state, '');
@@ -352,48 +367,45 @@ export default function App() {
     goBackOrFallback({ screen: 'event-detail', eventId: selectedEventId ?? MOTHERS_DAY_PROGRESS_ID });
   };
 
-  const handleNavigateToEventDetail = (eventId: string) => {
+  const openEvent = async (eventId: string, play: boolean) => {
+    if (eventEntryController.current) return;
     const event = getEventPuzzleById(eventId);
-    const progress = event ? loadPuzzleProgress(getEventProgressId(event)) : null;
+    if (!event) return;
 
-    if (!event || !getEventPuzzleAvailability(event, progress).canOpen) {
-      return;
+    const controller = new AbortController();
+    eventEntryController.current = controller;
+    setEventEntry({ eventId, play, error: null });
+    try {
+      const canOpen = await prepareEventEntry(event, { startNew: play, signal: controller.signal });
+      if (controller.signal.aborted) return;
+      if (!canOpen) {
+        setEventEntry({ eventId, play, error: 'Este evento no está activo y no hay una partida empezada para esta temporada.' });
+        return;
+      }
+
+      const screen = play ? 'event-game' : 'event-detail';
+      setSelectedEventId(eventId);
+      setCurrentScreen(screen);
+      setNavigationStack((prev) => [...prev, screen]);
+      pushHistoryState({ screen, eventId });
+      setEventEntry(null);
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      console.error('[App] No se pudo abrir el evento:', error);
+      setEventEntry({ eventId, play, error: 'No se pudo abrir el evento. Reintenta para continuar.' });
+    } finally {
+      if (eventEntryController.current === controller) eventEntryController.current = null;
     }
-
-    setSelectedEventId(eventId);
-    setCurrentScreen('event-detail');
-    setNavigationStack((prev) => [...prev, 'event-detail']);
-    pushHistoryState({ screen: 'event-detail', eventId });
   };
+
+  const handleNavigateToEventDetail = (eventId: string) => { void openEvent(eventId, false); };
 
   const handleBackToEvents = () => {
     goBackOrFallback({ screen: 'events' });
   };
 
   const handlePlayEvent = (eventId: string) => {
-    const event = getEventPuzzleById(eventId);
-    const progressId = event ? getEventProgressId(event) : eventId;
-    const progress = loadPuzzleProgress(progressId);
-
-    if (!event || !getEventPuzzleAvailability(event, progress).canOpen) {
-      return;
-    }
-
-    if (!progress) {
-      const now = new Date().toISOString();
-      savePuzzleProgress(progressId, {
-        foundWords: [],
-        score: 0,
-        superHeptaWords: [],
-        startedAt: now,
-        lastPlayedAt: now,
-      });
-    }
-
-    setSelectedEventId(eventId);
-    setCurrentScreen('event-game');
-    setNavigationStack((prev) => [...prev, 'event-game']);
-    pushHistoryState({ screen: 'event-game', eventId });
+    void openEvent(eventId, true);
   };
 
   const handlePlaySpecial = () => {
@@ -431,9 +443,26 @@ export default function App() {
     ? getEventPuzzleAvailability(selectedEvent, selectedEventProgress)
     : null;
 
-  if (currentScreen === 'home') {
+  if (eventEntry) {
+    screenContent = (
+      <PageContainer>
+        <div className="game-screen">
+          <p role={eventEntry.error ? 'alert' : 'status'}>
+            {eventEntry.error ?? 'Cargando tu progreso…'}
+          </p>
+          {eventEntry.error && (
+            <button className="btn-action" onClick={() => { void openEvent(eventEntry.eventId, eventEntry.play); }}>
+              Reintentar
+            </button>
+          )}
+          <button className="btn-action" onClick={cancelEventEntry}>Volver</button>
+        </div>
+      </PageContainer>
+    );
+  } else if (currentScreen === 'home') {
     screenContent = (
       <Home
+        puzzles={puzzles}
         onNavigate={handleNavigate}
         onNavigateToEvent={handleNavigateToEventDetail}
         onNavigateToSettings={handleNavigateToSettings}
@@ -552,7 +581,7 @@ export default function App() {
       />
     );
   } else {
-    screenContent = <Home onNavigate={handleNavigate} onNavigateToEvent={handleNavigateToEventDetail} onNavigateToSettings={handleNavigateToSettings} />;
+    screenContent = <Home puzzles={puzzles} onNavigate={handleNavigate} onNavigateToEvent={handleNavigateToEventDetail} onNavigateToSettings={handleNavigateToSettings} />;
   }
 
   return (

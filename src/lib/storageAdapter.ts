@@ -164,7 +164,7 @@ export function savePuzzleProgress(puzzleId: string, progress: PuzzleProgress): 
 /**
  * Precarga el progreso de un puzzle en el cache - ASYNC
  */
-export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
+export async function preloadPuzzleProgress(puzzleId: string, options: { throwOnError?: boolean } = {}): Promise<void> {
   try {
     progressCache.delete(puzzleId);
 
@@ -175,10 +175,10 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
       if (langDateMatch) {
         const lang = langDateMatch[1];
         const date = langDateMatch[2];
-        let daily = await getDailyProgress(`${lang}-${date}`);
+        let daily = await getDailyProgress(`${lang}-${date}`, options);
         if (!daily && lang === 'es') {
           // Migración: usar progreso legado (sin idioma) para español
-          daily = await getDailyProgress(date);
+          daily = await getDailyProgress(date, options);
         }
         if (daily) {
           const progress: PuzzleProgress = {
@@ -193,7 +193,7 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
         return;
       }
       if (legacyMatch) {
-        const daily = await getDailyProgress(legacyMatch[1]);
+        const daily = await getDailyProgress(legacyMatch[1], options);
         if (daily) {
           const progress: PuzzleProgress = {
             foundWords: daily.foundWords,
@@ -209,7 +209,7 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
     }
     
     // Es clásico
-    const classic = await getClassicProgress(puzzleId);
+    const classic = await getClassicProgress(puzzleId, options);
     if (classic) {
       const progress: PuzzleProgress = {
         foundWords: classic.foundWords,
@@ -223,6 +223,7 @@ export async function preloadPuzzleProgress(puzzleId: string): Promise<void> {
     }
   } catch (error) {
     console.error('[StorageAdapter] Error al precargar progreso:', error);
+    if (options.throwOnError) throw error;
   }
 }
 

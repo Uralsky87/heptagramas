@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Palabrarium · La calidez de siempre</title><link rel="stylesheet" href="./proposal.css"></head>
+<body>
+  <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="book" viewBox="0 0 32 32"><path d="M16 8C12 5 7 5 3 7v19c5-2 9-1 13 1 4-2 8-3 13-1V7c-4-2-9-2-13 1Zm0 0v19M7 11l5 1m-5 4 5 1m8-5 5-1m-5 6 5-1"/></symbol>
+    <symbol id="sun" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6"/><path d="M16 2v4m0 20v4M2 16h4m20 0h4M6 6l3 3m14 14 3 3M6 26l3-3M23 9l3-3"/></symbol>
+    <symbol id="gem" viewBox="0 0 32 32"><path d="m16 3 12 10-12 16L4 13 16 3Zm-12 10h24M16 3l5 10-5 16-5-16Z"/></symbol>
+    <symbol id="calendar" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="23" rx="3"/><path d="M4 13h24M10 3v7m12-7v7M10 19h3m6 0h3m-12 5h3"/></symbol>
+    <symbol id="settings" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6"/><path d="M16 3v5m0 16v5M3 16h5m16 0h5M7 7l4 4m10 10 4 4M7 25l4-4m10-10 4-4"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="m14 5-7 7 7 7"/></symbol>
+    <symbol id="shuffle" viewBox="0 0 32 32"><path d="M6 11h5c6 0 4 12 11 12h5m-5-5 5 5-5 5M6 23h5c2 0 3-2 5-6m4-5c1-1 3-1 7-1m-5-5 5 5-5 5"/></symbol>
+  </defs></svg>
+  <header class="study-header"><a href="#" class="study-brand">Palabrarium<span>cuaderno de diseño</span></a><span class="study-number">ESTUDIO 02 / JUEGO BASE</span><span class="proposal-badge">Propuesta · sin aplicar</span></header>
+  <main>
+    <section class="study-intro">
+      <div><div class="eyebrow">VERDE BOSQUE · PAPEL · TERRACOTA</div><h1>La calidez de siempre.<br><em>Un poco más de aire.</em></h1></div>
+      <div class="intro-copy"><p>Una evolución de lo que ya tiene Palabrarium: la calma de una biblioteca, el tacto del papel y el placer de encontrar una palabra.</p><div class="palette"><span style="--color:#243630" title="Verde bosque #243630"></span><span style="--color:#f0dfc3" title="Papel #f0dfc3"></span><span style="--color:#7c846f" title="Salvia #7c846f"></span><span style="--color:#9f4f32" title="Terracota #9f4f32"></span><span style="--color:#8f6d4d" title="Tinta café #8f6d4d"></span><small>Los colores del juego actual.</small></div></div>
+    </section>
+    <div class="study-controls"><p>Inicio, partida y clásicos: una misma familia visual.</p><div class="font-choice" role="group" aria-label="Tipografía de los títulos"><button id="font-serif" class="selected" aria-pressed="true">Títulos serif</button><button id="font-typewriter" aria-pressed="false">Máquina de escribir</button></div></div>
+
+    <section class="screens" aria-label="Tres pantallas de la propuesta">
+      <section class="screen-column"><div class="screen-label">01 <span>INICIO · UNA INVITACIÓN A JUGAR</span></div>
+        <div class="phone home-screen">
+          <header class="app-header"><span class="brand-mark" aria-hidden="true">✦</span><span class="app-brand">Palabrarium</span><button class="icon-button settings-trigger" aria-label="Ver propuesta de ajustes"><svg><use href="#settings"/></svg></button></header>
+          <div class="player-row"><span>Nivel 7 <span class="player-dot">·</span> Aprendiz</span><span>640 / 900 XP</span></div><div class="player-progress"><span></span></div>
+          <p class="home-greeting">Un momento para las palabras.</p>
+          <article class="daily-invitation">
+            <div class="card-eyebrow"><span>EL HEPTAGRAMA DE HOY</span><svg><use href="#sun"/></svg></div>
+            <div class="home-daily-body"><div><h2>Tu pequeña<br>pausa diaria.</h2><p>Siete letras.<br>Muchas posibilidades.</p></div><div id="mini-board" aria-hidden="true"></div></div>
+            <div class="daily-meta"><span>25 OCTUBRE</span><span id="daily-word-count">— palabras</span></div>
+            <button id="continue-daily" class="primary-button">Continuar jugando <span aria-hidden="true">→</span></button>
+            <p class="daily-progress-label"><span id="home-progress-count">— palabras encontradas</span><span>✧</span></p><div class="subtle-progress"><span id="home-progress"></span></div>
+          </article>
+          <div class="section-eyebrow">A TU RITMO</div>
+          <div class="home-menu">
+            <button id="show-classics" class="menu-row"><svg><use href="#book"/></svg><span><strong>Clásicos</strong><small>Tu colección de heptagramas</small></span><span class="row-arrow" aria-hidden="true">›</span></button>
+            <button id="show-exotics" class="menu-row"><svg><use href="#gem"/></svg><span><strong>Exóticos</strong><small>Nuevas letras, nuevos caminos</small></span><span class="row-arrow" aria-hidden="true">›</span></button>
+            <button id="show-events" class="menu-row"><svg><use href="#calendar"/></svg><span><strong>Eventos</strong><small>Palabras para cada ocasión</small></span><span class="row-arrow" aria-hidden="true">›</span></button>
+          </div>
+          <footer class="app-footer"><span>Hecho para jugar sin prisa.</span><button class="settings-trigger">Ajustes</button></footer>
+        </div>
+        <p class="screen-note"><b>El diario tiene su lugar.</b> El nivel acompaña; los demás modos siguen a un toque.</p>
+      </section>
+
+      <section class="screen-column" id="game-section"><div class="screen-label">02 <span>PARTIDA · LAS LETRAS EN PRIMER PLANO</span></div>
+        <div class="phone game-screen">
+          <header class="app-header"><button id="back-home" class="icon-button" aria-label="Volver al inicio de la propuesta"><svg><use href="#back"/></svg></button><span class="app-section-title" id="game-mode">Diario</span><span class="header-star" aria-hidden="true">✧</span></header>
+          <div class="game-title"><span class="card-eyebrow" id="game-date">DOMINGO, 25 DE OCTUBRE</span><h2>Una palabra lleva a otra.</h2><p>Incluye siempre la letra central.</p></div>
+          <div class="board" id="board" aria-label="Tablero de siete letras"></div>
+          <div class="word-entry"><output id="word-input" class="placeholder" aria-live="polite">Toca las letras del tablero…</output><button id="erase" aria-label="Borrar última letra">⌫</button></div>
+          <div class="word-actions"><button id="shuffle" class="secondary-button" aria-label="Mezclar letras"><svg><use href="#shuffle"/></svg><span>Mezclar</span></button><button id="submit" class="primary-button">Enviar <span aria-hidden="true">↵</span></button></div>
+          <p class="feedback" id="feedback" role="status">Cada palabra cuenta.</p>
+          <section class="word-collection"><div class="collection-heading"><h3>Palabras encontradas</h3><span id="counter"></span></div><div class="subtle-progress"><span id="game-progress"></span></div><div class="collection-meta"><span id="rank">Aprendiz</span><span>Toca una palabra para ver su definición</span></div><div id="found-words" class="found-words"></div></section>
+          <details class="stats" id="stats"><summary><span>El puzzle en detalle</span><span aria-hidden="true">+</span></summary><div id="stats-content"></div></details>
+          <p class="demo-note">Ejemplo interactivo · progreso de muestra sin guardado</p>
+        </div>
+        <p class="screen-note"><b>Menos marcos, más lectura.</b> Progreso tranquilo, palabras ligeras y controles claros.</p>
+      </section>
+
+      <section class="screen-column" id="classics-section"><div class="screen-label">03 <span>CLÁSICOS · UNA COLECCIÓN QUE APETECE ABRIR</span></div>
+        <div class="phone classics-screen">
+          <header class="app-header"><button id="back-classics" class="icon-button" aria-label="Volver al inicio de la propuesta"><svg><use href="#back"/></svg></button><span class="app-section-title">Clásicos</span><span class="header-star" aria-hidden="true">✧</span></header>
+          <div class="classic-intro"><span class="card-eyebrow">TU COLECCIÓN DE PALABRAS</span><h2>Siempre queda<br>algo por descubrir.</h2><p>Elige una sección y sigue a tu ritmo.</p></div>
+          <div class="tabs" role="tablist" aria-label="Colección de clásicos"><button id="tab-sections" class="active" role="tab" aria-selected="true" aria-controls="classic-sections">Secciones</button><button id="tab-long" role="tab" aria-selected="false" aria-controls="classic-sections">Largos</button></div>
+          <div id="classic-sections" class="classic-sections" role="tabpanel" aria-labelledby="tab-sections"></div>
+          <div class="library-note"><svg><use href="#book"/></svg><p>Una colección que siempre<br>te espera donde la dejaste.</p></div>
+          <div id="classic-message" role="status" class="classic-message">El progreso que ves es de muestra.</div>
+          <div class="classic-bottom"><span>✦</span> Unas letras, un mundo de posibilidades.</div>
+        </div>
+        <p class="screen-note"><b>La estructura que ya conoces.</b> Secciones y largos, con una jerarquía más reposada.</p>
+      </section>
+    </section>
+
+    <section class="review-section"><div class="review-heading"><span class="eyebrow">PEQUEÑOS AJUSTES, UNA EXPERIENCIA MÁS CUIDADA</span><h2>Lo que propongo afinar</h2></div><div class="review-grid">
+      <article><span>01</span><h3>Una superficie de papel</h3><p>Conservar el verde de fondo y suavizar las capas de marcos y sombras. Bordes finos y luz cálida donde ayuda a leer.</p></article>
+      <article><span>02</span><h3>Una jerarquía más clara</h3><p>El diario como invitación principal; nivel y progreso discretos. Accesos secundarios compactos, con iconos de la misma familia.</p></article>
+      <article><span>03</span><h3>Letras con espacio</h3><p>La misma forma y los mismos tonos del heptagrama. Objetivos táctiles cómodos, instrucciones precisas y mensajes serenos.</p></article>
+      <article><span>04</span><h3>Detalles que acompañan</h3><p>Fichas de palabras suaves, definiciones de papel y estadísticas desplegables. Títulos serif opcionales, conservando la fuente elegida.</p></article>
+    </div></section>
+  </main>
+  <footer class="study-footer"><span>PALABRARIUM / ESTUDIO DE ESTILO</span><p>Maqueta independiente. No modifica los colores, las fuentes elegidas ni las partidas del juego.</p><span>OCTUBRE 2026</span></footer>
+
+  <dialog id="definition-dialog"><button id="close-definition" class="dialog-close" aria-label="Cerrar definición">×</button><span class="card-eyebrow">EL PLACER DE LAS PALABRAS</span><h2 id="definition-word"></h2><p id="definition-text"></p><span class="definition-footer">Palabrarium · una palabra más en tu biblioteca</span></dialog>
+  <dialog id="settings-dialog"><button id="close-settings" class="dialog-close" aria-label="Cerrar ajustes">×</button><span class="card-eyebrow">TODO A TU GUSTO</span><h2>Ajustes</h2><div class="settings-row"><div><strong>Sonidos</strong><p>Un pequeño acento al encontrar palabras.</p></div><button id="sound-toggle" role="switch" aria-checked="false" aria-label="Sonidos de muestra"><span></span></button></div><div class="settings-divider"></div><strong class="settings-subtitle">Tus partidas</strong><p class="settings-copy">Conservar el progreso también merece un lugar claro y cuidado.</p><div class="settings-buttons"><button id="demo-export">Exportar copia</button><button id="demo-import">Importar copia</button></div><p id="settings-feedback" class="settings-feedback" role="status">Estos botones solo muestran el estilo propuesto.</p><p class="settings-footnote">Las operaciones de datos no están conectadas en esta maqueta.</p></dialog>
+  <script type="module" src="./proposal.js"></script>
+</body>
+</html>

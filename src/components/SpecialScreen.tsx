@@ -5,6 +5,7 @@ import PageContainer from './layout/PageContainer';
 import TopBar from './TopBar';
 import BackChevronIcon from './icons/BackChevronIcon';
 import { useLanguage } from '../contexts/useLanguage';
+import HalloweenArtwork from './HalloweenArtwork';
 
 interface SpecialScreenProps {
   event?: EventPuzzle;
@@ -22,15 +23,16 @@ export default function SpecialScreen({ event, puzzle, onBack, onPlay }: Special
     : null;
   const playLabel = availability && !availability.active && availability.canContinue
     ? t('daily.continue')
-    : t('events.play');
+    : event?.theme === 'halloween' ? 'Entrar en Halloween' : t('events.play');
   const themeClass = event?.theme && event.theme !== 'default' ? `special-detail-${event.theme}` : '';
   const isSummer = event?.theme === 'summer';
+  const isHalloween = event?.theme === 'halloween';
 
   return (
     <PageContainer className={themeClass ? `special-page-theme ${themeClass}` : ''}>
       <TopBar
         onSettingsClick={() => {}}
-        title={title}
+        title={isHalloween ? 'Halloween' : title}
         showThemeButton={false}
         showSettingsButton={false}
         leftButton={
@@ -42,8 +44,9 @@ export default function SpecialScreen({ event, puzzle, onBack, onPlay }: Special
 
       <div className={`special-content ${themeClass}`}>
         <section className="special-card">
+          {isHalloween && <><span className="halloween-detail-eyebrow">31 OCTUBRE — 30 NOVIEMBRE · CADA AÑO</span><HalloweenArtwork /></>}
           <div className="special-card-header">
-            <span className="special-card-icon" aria-hidden="true">
+            {!isHalloween && <span className="special-card-icon" aria-hidden="true">
               {isSummer ? (
                 <svg className="home-icon home-icon-summer" viewBox="0 0 48 48">
                   <circle className="summer-sun" cx="30" cy="15" r="6" />
@@ -63,7 +66,7 @@ export default function SpecialScreen({ event, puzzle, onBack, onPlay }: Special
                   <path d="M16 24H32" />
                 </svg>
               )}
-            </span>
+            </span>}
             <div>
               <h2>{title}</h2>
               <p>{description}</p>
@@ -80,6 +83,7 @@ export default function SpecialScreen({ event, puzzle, onBack, onPlay }: Special
               <button className="btn-play-today" onClick={onPlay}>
                 {playLabel}
               </button>
+              {isHalloween && <p className="halloween-detail-hint">Encuentra 50 palabras para abrir un regalo y descubrir una nueva letra.</p>}
             </>
           ) : (
             <p className="special-pending">{t('special.pending')}</p>

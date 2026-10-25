@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 240"><defs>
+      <linearGradient id="pumpkin" x2=".8" y2="1"><stop stop-color="#ffbc6b"/><stop offset=".45" stop-color="#ee793d"/><stop offset="1" stop-color="#bb432e"/></linearGradient>
+      <linearGradient id="smallPumpkin" x2="1" y2="1"><stop stop-color="#eec487"/><stop offset="1" stop-color="#c16e43"/></linearGradient>
+      <symbol id="bat" viewBox="0 0 90 40"><path d="M45 24C35 5 20 12 0 0c8 20 8 21 17 19 1 10 8 10 15 6 3 9 9 10 13 13 4-3 10-4 13-13 7 4 14 4 15-6 9 2 9 1 17-19-20 12-35 5-45 24Z" fill="currentColor"/></symbol>
+      <symbol id="scene" viewBox="0 0 330 240">
+        <circle cx="246" cy="61" r="37" fill="#f3dfab"/><circle cx="260" cy="49" r="33" fill="#33243e"/>
+        <g stroke="#796087" stroke-width=".7" fill="none" opacity=".5"><path d="M0 0 88 0M0 0 77 44M0 0 39 80M0 0 0 86"/><path d="M28 0Q20 12 24 14Q17 22 13 27Q2 24 0 29M54 0Q36 25 46 26Q29 36 25 52Q5 44 0 56M82 0Q64 36 69 39Q44 57 37 77Q11 68 0 84"/></g>
+        <use href="#bat" x="158" y="50" width="51" height="23" style="color:#9c81ac" transform="rotate(-14 180 60)"/>
+        <use href="#bat" x="268" y="96" width="29" height="14" style="color:#9c81ac" transform="rotate(15 280 100)"/>
+        <g fill="#e9b177"><path d="m100 40 2 7 7 2-7 2-2 7-2-7-7-2 7-2Z"/><circle cx="70" cy="103" r="1.5"/><circle cx="303" cy="35" r="1.5"/><circle cx="189" cy="110" r="1.5"/></g>
+        <ellipse cx="169" cy="218" rx="111" ry="11" fill="#1d1426" opacity=".5"/>
+        <path d="M140 104q-9-30 8-38l12 4q-16 8-11 34" fill="#91a17b"/>
+        <path d="M147 84q31-28 46-3-27 15-46 3" fill="#7b8b69"/>
+        <path d="M138 101C94 80 67 118 75 165c5 37 39 60 70 48 35 17 73-14 76-53 3-42-36-75-68-58Z" fill="url(#pumpkin)"/>
+        <path d="M141 105c-36 8-36 91 3 108M153 104c35 12 35 88-1 109" fill="none" stroke="#b64a30" stroke-width="2.5" opacity=".6"/>
+        <path d="m99 146 22-14 6 19Zm61 5 8-21 24 17Z" fill="#42283a"/>
+        <path d="M108 169q35 37 72-1l-9 29-18-5-9 9-12-11-15 5Z" fill="#42283a"/>
+        <path d="m145 158-6 10 13 0Z" fill="#42283a"/>
+        <path d="M228 162q-2-16 9-19l6 5q-10 3-9 15" fill="#8b9b75"/>
+        <path d="M229 163c-27-12-44 8-38 31 4 22 24 30 40 22 18 10 40-8 38-29-1-19-18-30-37-22Z" fill="url(#smallPumpkin)"/>
+        <path d="M231 165c-17 6-18 41 0 51M237 165c16 10 14 38 0 51" fill="none" stroke="#ad6240" stroke-width="1.5"/>
+        <path d="M61 224q-12-25-3-50 15 17 6 40M272 224q9-19 29-20-5 18-29 20" fill="#7a8b6e"/>
+        <path d="M78 218q-19-7-30 0 15 13 30 0" fill="#c78956"/>
+      </symbol>
+      <symbol id="back" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="gift" viewBox="0 0 40 40"><path d="M9 18h22v17H9zM6 13h28v7H6z" stroke="currentColor" fill="none" stroke-width="1.5"/><path d="M20 13v22M20 13C5 13 10 0 16 6Zm0 0C35 13 30 0 24 6Z" stroke="currentColor" fill="none" stroke-width="1.5"/></symbol>
+    </defs><use href="#scene"/></svg>

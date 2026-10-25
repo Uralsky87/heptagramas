@@ -106,13 +106,14 @@ export async function setDailySessions(sessions: DailySessionsMap): Promise<void
 // Daily Progress
 // ========================================
 
-export async function getDailyProgress(date: string): Promise<DailyProgress | null> {
+export async function getDailyProgress(date: string, options: { throwOnError?: boolean } = {}): Promise<DailyProgress | null> {
   try {
     const db = await openDatabase();
     const progress = await db.get('progress_daily', date);
     return progress || null;
   } catch (error) {
     console.error(`[Storage] Error al leer daily progress "${date}":`, error);
+    if (options.throwOnError) throw error;
     return null;
   }
 }
@@ -149,13 +150,14 @@ export async function listDailyProgress(limit?: number): Promise<DailyProgress[]
 // Classic Progress
 // ========================================
 
-export async function getClassicProgress(id: string): Promise<ClassicProgress | null> {
+export async function getClassicProgress(id: string, options: { throwOnError?: boolean } = {}): Promise<ClassicProgress | null> {
   try {
     const db = await openDatabase();
     const progress = await db.get('progress_classic', id);
     return progress || null;
   } catch (error) {
     console.error(`[Storage] Error al leer classic progress "${id}":`, error);
+    if (options.throwOnError) throw error;
     return null;
   }
 }
@@ -166,6 +168,20 @@ export async function setClassicProgress(progress: ClassicProgress): Promise<voi
     await db.put('progress_classic', progress);
   } catch (error) {
     console.error(`[Storage] Error al guardar classic progress:`, error);
+  }
+}
+
+/** Create a started event without ever replacing a record that already exists. */
+export async function createClassicProgressIfMissing(progress: ClassicProgress): Promise<void> {
+  const db = await openDatabase();
+  const tx = db.transaction('progress_classic', 'readwrite');
+  try {
+    const existing = await tx.store.get(progress.id);
+    if (!existing) await tx.store.add(progress);
+    await tx.done;
+  } catch (error) {
+    await tx.done.catch(() => {});
+    throw error;
   }
 }
 

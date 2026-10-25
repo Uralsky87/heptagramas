@@ -3,9 +3,10 @@ import type { Puzzle, PuzzleProgress } from '../types';
 export const MOTHERS_DAY_PROGRESS_ID = 'special-mothers-day-2026';
 export const CHRISTMAS_EVENT_ID = 'special-christmas';
 export const SUMMER_EVENT_ID = 'special-summer';
+export const HALLOWEEN_EVENT_ID = 'special-halloween';
 export const MOTHERS_DAY_PERSONAL_DEFINITION = 'Madre más guapa del mundo.';
 
-export type EventPuzzleTheme = 'default' | 'mothers-day' | 'christmas' | 'summer';
+export type EventPuzzleTheme = 'default' | 'mothers-day' | 'christmas' | 'summer' | 'halloween';
 
 export interface FixedEventSchedule {
   kind: 'fixed';
@@ -30,6 +31,8 @@ export interface EventPuzzle {
   schedule: EventPuzzleSchedule;
   puzzle: Puzzle;
   theme: EventPuzzleTheme;
+  // Keep legacy route IDs while using stable prefixes for annual saves.
+  progressIdPrefix?: string;
   extraSolutions?: string[];
   allowMissingCenterWords?: string[];
   highlightedWords?: string[];
@@ -144,18 +147,50 @@ export const SUMMER_DEFINITIONS: Record<string, string> = {
   veraneo: 'Temporada o estancia dedicada a pasar el verano fuera de casa.',
 };
 
+export const HALLOWEEN_PUZZLE: Puzzle = {
+  id: HALLOWEEN_EVENT_ID,
+  title: 'Una noche de palabras',
+  center: 'a',
+  outer: ['b', 'c', 'l', 'o', 's', 'z'],
+  mode: 'special',
+  minLen: 3,
+  allowEnye: true,
+  solutionCount: 280,
+};
+
 export const EVENT_PUZZLES: EventPuzzle[] = [
+  {
+    id: HALLOWEEN_EVENT_ID,
+    title: 'Una noche de palabras',
+    description: 'Calabazas encendidas, escobas y un poco de magia en cada letra.',
+    schedule: { kind: 'annual', startMonth: 10, startDay: 31, endMonth: 11, endDay: 30 },
+    puzzle: HALLOWEEN_PUZZLE,
+    theme: 'halloween',
+    highlightedWords: ['calabaza', 'calabozo'],
+    customDefinitions: {
+      calabaza: 'Fruto de otoño que, tallado e iluminado, se convierte en la linterna más reconocible de Halloween.',
+      calabozo: 'Celda oscura y apartada, habitual en castillos y relatos de misterio.',
+      escoba: 'Utensilio para barrer y vehículo de las brujas en los cuentos y las leyendas.',
+    },
+    unlockAtWordCount: 50,
+    unlockedExtraLetter: 'e',
+    unlockedSolutionCount: 482,
+    unlockedHighlightedWords: ['escoba'],
+  },
   {
     id: MOTHERS_DAY_PROGRESS_ID,
     title: 'Especial día de la madre',
     description: 'Un heptagrama preparado para celebrar este día.',
     schedule: {
-      kind: 'fixed',
-      activeFrom: '2026-05-01',
-      activeTo: '2026-05-31',
+      kind: 'annual',
+      startMonth: 5,
+      startDay: 1,
+      endMonth: 5,
+      endDay: 31,
     },
     puzzle: MOTHERS_DAY_PUZZLE,
     theme: 'mothers-day',
+    progressIdPrefix: 'special-mothers-day',
     extraSolutions: MOTHERS_DAY_EXTRA_SOLUTIONS,
     allowMissingCenterWords: MOTHERS_DAY_ALLOW_MISSING_CENTER,
     highlightedWords: MOTHERS_DAY_HIGHLIGHT_WORDS,
@@ -260,7 +295,7 @@ export function getEventProgressId(event: EventPuzzle, dateKey = getLocalDateKey
     return event.id;
   }
 
-  return `${event.id}-${getAnnualScheduleSeasonStartYear(event.schedule, dateKey)}`;
+  return `${event.progressIdPrefix ?? event.id}-${getAnnualScheduleSeasonStartYear(event.schedule, dateKey)}`;
 }
 
 export function getActiveEventPuzzles(dateKey = getLocalDateKey()): EventPuzzle[] {

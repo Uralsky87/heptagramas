@@ -67,6 +67,7 @@ export default function FoundWordsList({
           )}
         </div>
       </div>
+      <div className="found-progress" role="progressbar" aria-label="Palabras encontradas" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.min(100, percentage)} aria-valuetext={`${words.length} de ${total} palabras`}><span style={{ width: `${Math.min(100, percentage)}%` }} /></div>
       <p className="found-hint">{t('game.hint_click_definition')}</p>
 
       {words.length === 0 ? (
