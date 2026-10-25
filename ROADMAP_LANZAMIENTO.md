@@ -113,6 +113,25 @@ de forma destructiva como parte de una correccion.
 - Capturas reales en `design/base/integrado.png`; partida sin desbordamientos
   a 320/390/768 px. Cambios locales, sin publicar.
 
+## Navegacion desde el inicio de pantalla (2026-10-25)
+
+- Al cambiar de pantalla o partida se reinicia el desplazamiento antes de pintar.
+- Se desactiva la restauracion automatica de scroll del navegador mientras la app
+  esta montada: Atras tambien abre la pantalla desde arriba.
+- Las pestanas y secciones internas de Clasicos siguen el mismo criterio.
+- Sin cambios en almacenamiento. Build y 24 escenarios de regresion correctos;
+  la nueva prueba verifica scroll y conservacion de todos los registros al navegar.
+
+## Version 0.8.0 y acceso inferior a Ajustes (2026-10-25)
+
+- Version actualizada en appInfo, package.json y package-lock.json a 0.8.0.
+- Inicio conserva Ajustes en el pie y elimina la rueda de la cabecera.
+- No se altera la migracion existente ni el esquema de guardado. Se comprueba
+  la actualizacion desde 0.7.3: todos los registros de IndexedDB permanecen iguales.
+- Build correcto y 25 escenarios de regresion correctos, incluido el acceso inferior.
+- Incluye la correccion de scroll. Version como referencia de desarrollo;
+  se reserva 1.0 para cuando el juego este listo.
+
 ## Contexto
 
 Esta hoja de ruta resume la revision tecnica y de producto realizada sobre la app con objetivo de prepararla para un lanzamiento publico.

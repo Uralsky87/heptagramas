@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import type { Puzzle, PuzzleProgress } from '../types';
 import { loadPuzzleProgress, preloadPuzzleProgress, saveActivePuzzleId } from '../lib/storageAdapter';
 import PageContainer from './layout/PageContainer';
@@ -26,6 +26,10 @@ export default function ClassicList({ puzzles, onSelectPuzzle, onBack }: Classic
   const [activeMenu, setActiveMenu] = useState<ClassicMenu>('sections');
   const [selectedSectionIndex, setSelectedSectionIndex] = useState<number | null>(null);
   const PUZZLES_PER_SECTION = 20;
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeMenu, selectedSectionIndex]);
 
   const classicPuzzles = useMemo(() => puzzles.filter((puzzle) => puzzle.mode === 'classic'), [puzzles]);
 

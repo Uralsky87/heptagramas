@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './App.css';
 import './styles/halloween.css';
 import './styles/baseStyle.css';
@@ -60,6 +60,18 @@ export default function App() {
   const eventEntryController = useRef<AbortController | null>(null);
   const { updateAvailable, isUpdating, handleUpdate, showPersistentMessage } = useUpdateChecker();
   const { language, t } = useLanguage();
+
+  // Screen changes share one document, so the browser must not restore an old offset.
+  useLayoutEffect(() => {
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    return () => { window.history.scrollRestoration = previous; };
+  }, []);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [currentScreen, selectedClassicPuzzle?.id, selectedDailyDateKey, selectedEventId]);
+
   const screenNeedsDictionary =
     currentScreen === 'daily' ||
     currentScreen === 'daily-game' ||

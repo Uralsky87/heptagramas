@@ -13,6 +13,7 @@ import type { EventPuzzle } from '../src/lib/specialPuzzles';
 import { prepareEventEntry } from '../src/lib/eventEntry';
 import { createClassicProgressIfMissing } from '../src/storage/api';
 import { solvePuzzle } from '../src/lib/solvePuzzle';
+import { APP_VERSION } from '../src/lib/appInfo';
 
 // Served only by the development test runner, in a disposable browser profile.
 // The application and IndexedDB are real; only definitions and failures are stubbed.
@@ -475,6 +476,53 @@ async function run() {
     await db.put('kv', playerRecord);
     if (originalSessions) await db.put('kv', originalSessions);
     else await db.delete('kv', 'dailySessions');
+
+    const beforeNavigation = {
+      classic: await db.getAll('progress_classic'), daily: await db.getAll('progress_daily'), kv: await db.getAll('kv'),
+    };
+    const scrollDown = async () => {
+      window.scrollTo({ top: 200, behavior: 'instant' });
+      await sleep(25);
+      assert(window.scrollY > 0, 'Navigation test needs a scrolled source screen');
+    };
+    await scrollDown();
+    click('.menu-btn-classic');
+    await until(() => document.querySelector('.classic-section-card'), 'Classics did not open');
+    equal(window.scrollY, 0, 'Classics inherited the Home scroll');
+    await scrollDown();
+    click('.classic-section-card');
+    await until(() => document.querySelector('.puzzle-card'), 'Classic section did not open');
+    equal(window.scrollY, 0, 'Classic section inherited the list scroll');
+    await scrollDown();
+    click('.top-bar-btn-left');
+    await until(() => document.querySelector('.classic-section-card'), 'Classic section back failed');
+    equal(window.scrollY, 0, 'Classic list inherited the section scroll');
+    await scrollDown();
+    window.history.back();
+    await until(() => document.querySelector('.home-menu'), 'History back did not open Home');
+    await sleep(50);
+    equal(window.scrollY, 0, 'Browser history restored the old Home scroll');
+    await scrollDown();
+    click('.menu-btn-exotic');
+    await until(() => document.querySelector('.exotics-home-container'), 'Exotics did not open');
+    equal(window.scrollY, 0, 'Exotics inherited the Home scroll');
+    equal({
+      classic: await db.getAll('progress_classic'), daily: await db.getAll('progress_daily'), kv: await db.getAll('kv'),
+    }, beforeNavigation, 'Scroll navigation changed stored data');
+    passed.push('Navigation resets scroll for Classics, sections, Exotics and browser Back without changing saved data');
+
+    // Exercise the existing version migration as an upgrade from the previous release.
+    localStorage.setItem('heptagramas_last_app_version', '0.7.3');
+    await mountApp();
+    equal(localStorage.getItem('heptagramas_last_app_version'), APP_VERSION, 'Upgrade did not record the new app version');
+    assert(document.querySelector('.app-version')?.textContent?.includes(`v${APP_VERSION}`), 'Home displays the wrong version');
+    assert(!document.querySelector('.home-screen .top-bar-btn-right'), 'Home still shows the settings wheel');
+    click('.home-footer .menu-btn-settings');
+    await until(() => document.querySelector('.settings-container'), 'Footer settings did not open');
+    equal({
+      classic: await db.getAll('progress_classic'), daily: await db.getAll('progress_daily'), kv: await db.getAll('kv'),
+    }, beforeNavigation, 'Version upgrade or footer settings changed saved data');
+    passed.push('Upgrade from 0.7.3 preserves saved records, displays the current version and keeps footer settings accessible');
   } finally {
     window.Date = RealDate;
     db.get = nativeGet;

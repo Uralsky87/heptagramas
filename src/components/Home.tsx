@@ -45,7 +45,7 @@ export default function Home({ puzzles = [], onNavigate, onNavigateToEvent, onNa
       <div className="home-screen">
         <TopBar 
           onSettingsClick={onNavigateToSettings || (() => {})}
-          showSettingsButton
+          showSettingsButton={false}
         />
 
         <header className="home-header">

@@ -26,8 +26,12 @@ al continuar fuera de temporada. El runner genera una captura movil de la partid
 en `design/halloween/juego-integrado.png`. Algunos escenarios agrupan varias
 comprobaciones. La página de pruebas está fuera de `public` y del build de producción.
 
-Son 23 escenarios, incluidos el respeto a la fuente guardada y la miniatura del
+Son 25 escenarios, incluidos el respeto a la fuente guardada y la miniatura del
 diario en Inicio: conserva el puzzle fijado sin reescribir su sesión.
+La navegación comprueba que Clásicos, sus secciones, Exóticos y Atrás abren desde
+arriba y conservan los registros guardados.
+También se verifica la actualización desde 0.7.3, la versión visible y el acceso
+inferior a Ajustes, conservando todos los registros de IndexedDB.
 
 Para revisar el estilo base integrado, con Vite en el puerto 5174, ejecutar
 `node scripts/previewBaseStyle.mjs --integrated`. Genera capturas reales en
