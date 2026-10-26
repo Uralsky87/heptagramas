@@ -163,7 +163,7 @@ export const EVENT_PUZZLES: EventPuzzle[] = [
     id: HALLOWEEN_EVENT_ID,
     title: 'Una noche de palabras',
     description: 'Calabazas encendidas, escobas y un poco de magia en cada letra.',
-    schedule: { kind: 'annual', startMonth: 10, startDay: 31, endMonth: 11, endDay: 30 },
+    schedule: { kind: 'annual', startMonth: 10, startDay: 26, endMonth: 11, endDay: 26 },
     puzzle: HALLOWEEN_PUZZLE,
     theme: 'halloween',
     highlightedWords: ['calabaza', 'calabozo'],

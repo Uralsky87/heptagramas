@@ -381,13 +381,13 @@ async function run() {
     const halloween = EVENT_PUZZLES.find((event) => event.id === HALLOWEEN_EVENT_ID)!;
     assert(halloween, 'Halloween is missing');
     for (const year of [2026, 2027]) {
-      assert(!isEventActive(halloween, `${year}-10-30`), 'Halloween starts too early');
-      assert(isEventActive(halloween, `${year}-10-31`), 'Halloween misses October 31');
-      assert(isEventActive(halloween, `${year}-11-30`), 'Halloween misses November 30');
-      assert(!isEventActive(halloween, `${year}-12-01`), 'Halloween ends too late');
-      equal(getEventProgressId(halloween, `${year}-10-31`), `special-halloween-${year}`, 'Halloween season ID is unstable');
+      assert(!isEventActive(halloween, `${year}-10-25`), 'Halloween starts too early');
+      assert(isEventActive(halloween, `${year}-10-26`), 'Halloween misses October 26');
+      assert(isEventActive(halloween, `${year}-11-26`), 'Halloween misses November 26');
+      assert(!isEventActive(halloween, `${year}-11-27`), 'Halloween ends too late');
+      equal(getEventProgressId(halloween, `${year}-10-26`), `special-halloween-${year}`, 'Halloween season ID is unstable');
     }
-    passed.push('Halloween repeats October 31–November 30 with independent annual IDs');
+    passed.push('Halloween repeats October 26–November 26 with independent annual IDs');
 
     useFullDictionary = true;
     const fullDictionary = await loadDictionary(await (await originalFetch(`${import.meta.env.BASE_URL}wordlist_normalizado.txt`)).text());
@@ -399,10 +399,10 @@ async function run() {
     assert(!initialSolutions.includes('escoba') && expandedSolutions.includes('escoba'), 'Escoba does not unlock with E');
     passed.push('Halloween solver validates 280 → 482 and the three thematic words');
 
-    fixedNow = new RealDate('2026-10-30T12:00:00').getTime();
+    fixedNow = new RealDate('2026-10-25T12:00:00').getTime();
     await mountApp();
-    assert(!document.querySelector('.menu-btn-special-halloween'), 'Halloween is visible before October 31');
-    fixedNow = new RealDate('2026-10-31T12:00:00').getTime();
+    assert(!document.querySelector('.menu-btn-special-halloween'), 'Halloween is visible before October 26');
+    fixedNow = new RealDate('2026-10-26T12:00:00').getTime();
     await mountApp();
     click('.menu-btn-special-halloween');
     await until(() => document.querySelector('.special-detail-halloween .btn-play-today'), 'Halloween detail did not open');
@@ -443,7 +443,7 @@ async function run() {
     equal(await db.get('progress_classic', motherSave.id), motherSave, 'Halloween modified another event');
     passed.push('Real App: Halloween preserves words and unlocks/saves E at 50, including escoba');
 
-    fixedNow = new RealDate('2026-12-01T12:00:00').getTime();
+    fixedNow = new RealDate('2026-11-27T12:00:00').getTime();
     await mountApp();
     assert(!document.querySelector('.menu-btn-special-halloween'), 'Expired Halloween still appears on Home');
     click('.menu-btn-events');
@@ -454,7 +454,9 @@ async function run() {
     await ready(halloween.puzzle.title!);
     assert(words().includes('escoba') && document.querySelector('.event-gift-panel-open'), 'Expired Halloween lost its gift or words');
     equal(await db.get('progress_classic', halloweenProgressId), halloweenSave, 'Continuing expired Halloween rewrote the save');
-    passed.push('Real App: started Halloween continues after November 30 with its saved reward');
+    passed.push('Real App: started Halloween continues after November 26 with its saved reward');
+
+    fixedNow = new RealDate('2026-12-01T12:00:00').getTime();
 
     // Styling must not migrate an existing font preference or recreate daily sessions.
     const playerRecord = await db.get('kv', 'playerState');

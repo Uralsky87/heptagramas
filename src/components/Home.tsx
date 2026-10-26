@@ -78,7 +78,7 @@ export default function Home({ puzzles = [], onNavigate, onNavigateToEvent, onNa
                   <span className="menu-btn-title">{event.title}</span>
                   <span className="menu-btn-desc">Hay un poco de magia en cada letra.</span>
                   <span className="halloween-enter">Entrar en Halloween <span aria-hidden="true">→</span></span>
-                  <span className="halloween-dates">31 OCT — 30 NOV</span>
+                  <span className="halloween-dates">26 OCT — 26 NOV</span>
                 </button>
               );
             }

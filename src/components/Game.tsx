@@ -404,7 +404,7 @@ export default function Game({
       />
 
       <header className="header game-header">
-        {isHalloweenEvent && <p className="halloween-dates">31 OCT — 30 NOV</p>}
+        {isHalloweenEvent && <p className="halloween-dates">26 OCT — 26 NOV</p>}
         <div className="game-header-row">
           <p className="puzzle-title">{currentPuzzle.title}</p>
           {mode === 'classic' && (

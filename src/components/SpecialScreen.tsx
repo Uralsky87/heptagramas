@@ -44,7 +44,7 @@ export default function SpecialScreen({ event, puzzle, onBack, onPlay }: Special
 
       <div className={`special-content ${themeClass}`}>
         <section className="special-card">
-          {isHalloween && <><span className="halloween-detail-eyebrow">31 OCTUBRE — 30 NOVIEMBRE · CADA AÑO</span><HalloweenArtwork /></>}
+          {isHalloween && <><span className="halloween-detail-eyebrow">26 OCTUBRE — 26 NOVIEMBRE · CADA AÑO</span><HalloweenArtwork /></>}
           <div className="special-card-header">
             {!isHalloween && <span className="special-card-icon" aria-hidden="true">
               {isSummer ? (
